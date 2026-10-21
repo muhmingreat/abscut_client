@@ -1,0 +1,676 @@
+.custom-location-picker {
+  --map-green: #0b3d2e;
+  --map-green-dark: #10251d;
+  --map-green-light: #174c39;
+  --map-gold: #c9a227;
+  --map-gold-dark: #9b7919;
+  --map-cream: #f8f5ed;
+  --map-text: #1e2924;
+  --map-muted: #66736d;
+  --map-border: #dedbd2;
+  --map-danger: #a9322b;
+
+  width: 100%;
+  min-width: 0;
+  padding: 22px;
+  color: var(--map-text);
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(201, 162, 39, 0.09),
+      transparent 33%
+    ),
+    linear-gradient(145deg, #fffefa, #f8f5ed);
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  border-radius: 20px;
+  box-shadow:
+    0 10px 30px rgba(16, 37, 29, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  font-family: inherit;
+  animation: absMapPickerEnter 0.5s ease both;
+}
+
+.custom-location-picker *,
+.custom-location-picker *::before,
+.custom-location-picker *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.custom-location-picker-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 19px;
+  padding: 0 0 17px;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.28);
+}
+
+.custom-location-picker-header > div {
+  min-width: 0;
+}
+
+.custom-location-picker-header h4 {
+  position: relative;
+  margin: 0;
+  padding-left: 14px;
+  color: var(--map-green);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2.5vw, 25px);
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  line-height: 1.3;
+}
+
+.custom-location-picker-header h4::before {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  width: 4px;
+  background: linear-gradient(
+    180deg,
+    #e6ca69,
+    var(--map-gold-dark)
+  );
+  border-radius: 999px;
+  content: "";
+}
+
+.custom-location-picker-header p {
+  max-width: 570px;
+  margin: 9px 0 0;
+  color: var(--map-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   MAP FRAME
+   ========================================================= */
+
+.custom-location-map-wrapper {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 370px;
+  min-height: 280px;
+  overflow: hidden;
+  background: #e9ede6;
+  border: 1px solid rgba(11, 61, 46, 0.17);
+  border-radius: 16px;
+  box-shadow:
+    0 8px 22px rgba(16, 37, 29, 0.1),
+    0 0 0 4px rgba(201, 162, 39, 0.07);
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.custom-location-map-wrapper:hover {
+  border-color: rgba(201, 162, 39, 0.55);
+  box-shadow:
+    0 12px 28px rgba(16, 37, 29, 0.13),
+    0 0 0 4px rgba(201, 162, 39, 0.1);
+}
+
+.custom-location-map {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  background: #e9ede6;
+  font-family: inherit;
+}
+
+/* Leaflet must retain its own positioning and stacking. */
+.custom-location-map .leaflet-pane,
+.custom-location-map .leaflet-control {
+  font-family: inherit;
+}
+
+.custom-location-map .leaflet-tile {
+  filter: saturate(0.88) contrast(0.98);
+}
+
+/* =========================================================
+   LEAFLET ZOOM CONTROLS
+   ========================================================= */
+
+.custom-location-map .leaflet-control-zoom {
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.55) !important;
+  border-radius: 11px !important;
+  box-shadow: 0 4px 14px rgba(16, 37, 29, 0.14) !important;
+}
+
+.custom-location-map .leaflet-control-zoom a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px !important;
+  height: 34px !important;
+  color: var(--map-green) !important;
+  background: #fffefa !important;
+  border: 0 !important;
+  font-family: Arial, sans-serif;
+  font-size: 21px !important;
+  font-weight: 600;
+  line-height: 34px !important;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.custom-location-map .leaflet-control-zoom a:first-child {
+  border-bottom: 1px solid #e9e3d5 !important;
+}
+
+.custom-location-map .leaflet-control-zoom a:hover {
+  color: #fff !important;
+  background: var(--map-green) !important;
+}
+
+.custom-location-map .leaflet-control-zoom a:focus-visible {
+  position: relative;
+  z-index: 2;
+  outline: 2px solid var(--map-gold);
+  outline-offset: -3px;
+}
+
+/* =========================================================
+   MAP ATTRIBUTION
+   ========================================================= */
+
+.custom-location-map .leaflet-control-attribution {
+  max-width: 90%;
+  padding: 4px 7px;
+  color: #4d5b52;
+  background: rgba(255, 254, 250, 0.91);
+  border-top-left-radius: 7px;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.custom-location-map .leaflet-control-attribution a {
+  color: var(--map-green);
+  text-decoration-color: rgba(11, 61, 46, 0.35);
+}
+
+.custom-location-map .leaflet-control-attribution a:hover {
+  color: var(--map-gold-dark);
+}
+
+/* =========================================================
+   SELECTED MARKER
+   ========================================================= */
+
+.custom-location-map .leaflet-marker-icon {
+  transition: filter 0.2s ease;
+}
+
+.custom-location-map .leaflet-marker-icon:hover {
+  filter: drop-shadow(0 3px 4px rgba(11, 61, 46, 0.25));
+}
+
+.custom-location-map .leaflet-marker-draggable {
+  cursor: grab;
+}
+
+.custom-location-map .leaflet-marker-draggable:active {
+  cursor: grabbing;
+}
+
+/* =========================================================
+   MAP POPUP
+   ========================================================= */
+
+.custom-location-map .leaflet-popup-content-wrapper {
+  color: var(--map-text);
+  background: #fffefa;
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 13px;
+  box-shadow: 0 8px 25px rgba(16, 37, 29, 0.15);
+}
+
+.custom-location-map .leaflet-popup-content {
+  min-width: 150px;
+  max-width: 250px;
+  margin: 14px 17px;
+  color: var(--map-muted);
+  font-size: 11px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.custom-location-map .leaflet-popup-content strong {
+  color: var(--map-green);
+  font-weight: 800;
+}
+
+.custom-location-map .leaflet-popup-tip {
+  background: #fffefa;
+}
+
+.custom-location-map .leaflet-popup-close-button {
+  color: var(--map-green) !important;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.custom-location-map .leaflet-popup-close-button:hover {
+  color: var(--map-gold-dark) !important;
+  transform: scale(1.08);
+}
+
+/* =========================================================
+   INSTRUCTION
+   ========================================================= */
+
+.custom-map-instruction {
+  position: relative;
+  margin-top: 15px;
+  padding: 12px 15px 12px 40px;
+  color: #526258;
+  background: rgba(11, 61, 46, 0.045);
+  border: 1px solid rgba(11, 61, 46, 0.1);
+  border-radius: 11px;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.custom-map-instruction::before {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  display: grid;
+  width: 17px;
+  height: 17px;
+  place-items: center;
+  color: var(--map-gold-dark);
+  content: "✦";
+  font-size: 14px;
+  transform: translateY(-50%);
+}
+
+/* =========================================================
+   LOCATION ACTIONS
+   ========================================================= */
+
+.custom-location-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 11px;
+  margin-top: 18px;
+}
+
+.custom-location-button,
+.custom-location-clear-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 45px;
+  padding: 11px 18px;
+  border-radius: 11px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.4;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    color 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.custom-location-button {
+  color: #fff;
+  background: linear-gradient(
+    125deg,
+    var(--map-green),
+    var(--map-green-light)
+  );
+  border: 1px solid var(--map-gold);
+  box-shadow: 0 5px 14px rgba(11, 61, 46, 0.12);
+}
+
+.custom-location-button::before {
+  content: "◎";
+  color: #f1d982;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.custom-location-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: linear-gradient(
+    125deg,
+    var(--map-green-light),
+    var(--map-green)
+  );
+  box-shadow: 0 9px 20px rgba(11, 61, 46, 0.19);
+}
+
+.custom-location-button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.custom-location-button:disabled {
+  color: rgba(255, 255, 255, 0.76);
+  background: #73877b;
+  border-color: #a9b0a5;
+  box-shadow: none;
+  cursor: wait;
+}
+
+.custom-location-clear-button {
+  color: #7c3a31;
+  background: #fff9f5;
+  border: 1px solid #e9c9be;
+}
+
+.custom-location-clear-button:hover {
+  transform: translateY(-2px);
+  color: #fff;
+  background: #a94337;
+  border-color: #a94337;
+  box-shadow: 0 7px 16px rgba(169, 67, 55, 0.14);
+}
+
+.custom-location-button:focus-visible,
+.custom-location-clear-button:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.65);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   LOCATION ERROR
+   ========================================================= */
+
+.custom-location-error {
+  position: relative;
+  margin-top: 14px;
+  padding: 12px 14px 12px 16px;
+  color: var(--map-danger);
+  background: #fff0ed;
+  border: 1px solid #f0c7c1;
+  border-left: 4px solid var(--map-danger);
+  border-radius: 10px;
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  animation: absMapErrorEnter 0.3s ease both;
+}
+
+/* =========================================================
+   SELECTED LOCATION DETAILS
+   ========================================================= */
+
+.custom-location-selected {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  min-width: 0;
+  margin-top: 18px;
+  padding: 17px;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(201, 162, 39, 0.075),
+      rgba(255, 255, 255, 0.82)
+    );
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  border-radius: 13px;
+  animation: absMapDetailsEnter 0.4s ease both;
+}
+
+.custom-location-selected > strong {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--map-green);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.custom-location-selected > strong::before {
+  display: inline-block;
+  width: 4px;
+  height: 19px;
+  background: linear-gradient(
+    180deg,
+    #e5c65e,
+    var(--map-gold-dark)
+  );
+  border-radius: 999px;
+  content: "";
+}
+
+.custom-location-coordinates {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  color: #58655c;
+  font-size: 11px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.custom-location-coordinates span {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.custom-location-coordinates strong {
+  color: var(--map-green);
+  font-weight: 800;
+}
+
+.custom-location-coordinates:empty {
+  display: none;
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .custom-location-picker {
+    padding: 18px;
+    border-radius: 17px;
+  }
+
+  .custom-location-picker-header {
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+  }
+
+  .custom-location-map-wrapper {
+    border-radius: 13px;
+  }
+
+  .custom-location-actions {
+    gap: 9px;
+  }
+
+  .custom-location-button,
+  .custom-location-clear-button {
+    min-height: 43px;
+    padding: 10px 14px;
+  }
+
+  .custom-location-selected {
+    padding: 15px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .custom-location-picker {
+    padding: 13px;
+    border-radius: 14px;
+  }
+
+  .custom-location-picker-header h4 {
+    font-size: 21px;
+  }
+
+  .custom-location-picker-header p {
+    font-size: 11px;
+  }
+
+  .custom-location-map-wrapper {
+    height: 320px !important;
+    min-height: 280px !important;
+    border-radius: 12px;
+  }
+
+  .custom-location-map {
+    min-height: 280px !important;
+  }
+
+  .custom-location-map .leaflet-control-zoom {
+    margin: 8px !important;
+  }
+
+  .custom-location-map .leaflet-control-zoom a {
+    width: 31px !important;
+    height: 31px !important;
+    line-height: 31px !important;
+  }
+
+  .custom-location-map .leaflet-control-attribution {
+    max-width: 92%;
+    font-size: 8px;
+  }
+
+  .custom-map-instruction {
+    margin-top: 12px;
+    padding: 11px 10px 11px 34px;
+    font-size: 10px;
+  }
+
+  .custom-map-instruction::before {
+    left: 11px;
+  }
+
+  .custom-location-actions {
+    align-items: stretch;
+    flex-direction: column;
+    margin-top: 14px;
+  }
+
+  .custom-location-button,
+  .custom-location-clear-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .custom-location-selected {
+    gap: 10px;
+    margin-top: 14px;
+    padding: 13px;
+  }
+
+  .custom-location-selected > strong {
+    font-size: 15px;
+  }
+
+  .custom-location-coordinates {
+    font-size: 10px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 340px) {
+  .custom-location-picker {
+    padding: 10px;
+  }
+
+  .custom-location-map-wrapper {
+    height: 280px !important;
+    min-height: 260px !important;
+  }
+
+  .custom-location-map {
+    min-height: 260px !important;
+  }
+
+  .custom-location-picker-header h4 {
+    font-size: 19px;
+  }
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes absMapPickerEnter {
+  from {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes absMapDetailsEnter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes absMapErrorEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-location-picker,
+  .custom-location-picker *,
+  .custom-location-picker *::before,
+  .custom-location-picker *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

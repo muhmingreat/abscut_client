@@ -1,0 +1,102 @@
+
+/* =========================================================
+   ABS CUT — SHARED ANIMATION LIBRARY
+========================================================= */
+
+/* Gentle page entrance */
+@keyframes absPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger-friendly card entrance */
+@keyframes absCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Subtle floating motion */
+@keyframes absFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Gold shimmer */
+@keyframes absGoldShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Loading spinner */
+@keyframes absSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Soft breathing glow */
+@keyframes absBreathingGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(201, 162, 39, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(201, 162, 39, 0.2);
+  }
+}
+
+/* Reusable animation classes */
+.abs-page-enter {
+  animation: absPageEnter 0.55s ease both;
+}
+
+.abs-card-enter {
+  animation: absCardEnter 0.6s ease both;
+}
+
+.abs-float {
+  animation: absFloat 4s ease-in-out infinite;
+}
+
+.abs-spin {
+  animation: absSpin 0.8s linear infinite;
+}
+
+.abs-breathing-glow {
+  animation: absBreathingGlow 3s ease-in-out infinite;
+}
+
+/* Accessibility: respect reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+  .abs-page-enter,
+  .abs-card-enter,
+  .abs-float,
+  .abs-spin,
+  .abs-breathing-glow {
+    animation: none !important;
+  }
+}

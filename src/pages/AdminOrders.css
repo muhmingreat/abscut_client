@@ -1,0 +1,670 @@
+.admin-dashboard-page:has(.admin-orders-list-panel) {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 90% 5%,
+      rgba(201, 162, 39, 0.08),
+      transparent 28%
+    ),
+    var(--background, #f8f5ed);
+  color: var(--text, #1e2924);
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-dashboard-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-main {
+  flex: 1;
+  min-width: 0;
+  padding: 34px;
+  animation: adminOrdersEnter 0.55s ease both;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid rgba(11, 61, 46, 0.12);
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--secondary, #c9a227);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-header h1 {
+  margin: 0;
+  color: var(--primary, #0b3d2e);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-header p {
+  margin: 10px 0 0;
+  color: var(--muted, #66736d);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-header-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 17px;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 162, 39, 0.13),
+    rgba(201, 162, 39, 0.04)
+  );
+  color: var(--primary, #0b3d2e);
+  font-size: 0.83rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-header-badge span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--secondary, #c9a227);
+  box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.13);
+}
+
+/* =========================================================
+   ORDERS PANEL
+========================================================= */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-list-panel {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(11, 61, 46, 0.09);
+  border-radius: 20px;
+  background: var(--surface, #fff);
+  box-shadow: 0 12px 35px rgba(16, 37, 29, 0.055);
+  animation: adminOrdersPanelEnter 0.65s 0.08s ease both;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 27px;
+  border-bottom: 1px solid var(--border-light, #efede7);
+  background:
+    linear-gradient(
+      110deg,
+      rgba(11, 61, 46, 0.035),
+      transparent 70%
+    );
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-panel-header > div > span {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--secondary-dark, #9b7919);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-panel-header h2 {
+  margin: 0;
+  color: var(--primary, #0b3d2e);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+/* =========================================================
+   ORDERS TABLE
+========================================================= */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #c9a227 #f3f0e7;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table {
+  width: 100%;
+  min-width: 950px;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table thead {
+  background: #f8f6f0;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table th {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border, #dedbd2);
+  color: var(--muted, #66736d);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table td {
+  padding: 19px 18px;
+  border-bottom: 1px solid rgba(222, 219, 210, 0.65);
+  color: var(--text, #1e2924);
+  font-size: 0.84rem;
+  vertical-align: middle;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table tbody tr {
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+  animation: adminOrderRowEnter 0.4s ease both;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table tbody tr:nth-child(2) {
+  animation-delay: 0.04s;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table tbody tr:nth-child(3) {
+  animation-delay: 0.08s;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table tbody tr:nth-child(4) {
+  animation-delay: 0.12s;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table tbody tr:hover {
+  background: #fbfaf5;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table td strong {
+  color: var(--primary, #0b3d2e);
+  font-weight: 750;
+}
+
+/* Order number */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-table td:first-child strong {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid rgba(201, 162, 39, 0.24);
+  border-radius: 8px;
+  background: rgba(201, 162, 39, 0.08);
+  font-size: 0.8rem;
+  letter-spacing: 0.035em;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   CUSTOMER INFORMATION
+========================================================= */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-customer-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 145px;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-customer-cell strong {
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-customer-cell span {
+  color: var(--muted, #66736d);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   PAYMENT AND ORDER STATUS BADGES
+========================================================= */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.69rem;
+  font-weight: 800;
+  line-height: 1.35;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+/* Payment status */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-paid,
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-success,
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-completed {
+  border-color: #c5e6d1;
+  background: #e8f6ed;
+  color: #176443;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-pending,
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-partially-paid {
+  border-color: #f0dfaa;
+  background: #fff5d9;
+  color: #8b6509;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-failed,
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-rejected,
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-unpaid {
+  border-color: #f2c8c2;
+  background: #ffebe8;
+  color: #a52e29;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .payment-refunded {
+  border-color: #d8d0f3;
+  background: #f1edff;
+  color: #6650a4;
+}
+
+/* Order status */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-pending {
+  border-color: #f0dfaa;
+  background: #fff5d9;
+  color: #8b6509;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-confirmed,
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-processing {
+  border-color: #cbdcf5;
+  background: #edf4ff;
+  color: #245b91;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-shipped,
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-out-for-delivery {
+  border-color: #d8d0f3;
+  background: #f1edff;
+  color: #6650a4;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-delivered,
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-completed {
+  border-color: #c5e6d1;
+  background: #e8f6ed;
+  color: #176443;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-cancelled,
+.admin-dashboard-page:has(.admin-orders-list-panel) .order-canceled {
+  border-color: #f2c8c2;
+  background: #ffebe8;
+  color: #a52e29;
+}
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-order-date {
+  display: inline-block;
+  min-width: 125px;
+  color: var(--muted, #66736d);
+  font-size: 0.77rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   VIEW ORDER BUTTON
+========================================================= */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-view-order-btn {
+  position: relative;
+  overflow: hidden;
+  min-width: 78px;
+  padding: 10px 15px;
+  border: 1px solid var(--primary, #0b3d2e);
+  border-radius: 8px;
+  background: var(--primary, #0b3d2e);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-view-order-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--secondary, #c9a227);
+  background: var(--secondary, #c9a227);
+  color: var(--primary-dark, #10251d);
+  box-shadow: 0 7px 16px rgba(201, 162, 39, 0.22);
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-view-order-btn:active {
+  transform: translateY(0);
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-view-order-btn:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.55);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 310px;
+  padding: 48px 24px;
+  text-align: center;
+  animation: adminOrdersEnter 0.5s ease both;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-empty-state > div {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  margin-bottom: 20px;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 22px;
+  background: linear-gradient(
+    145deg,
+    rgba(201, 162, 39, 0.17),
+    rgba(11, 61, 46, 0.06)
+  );
+  color: var(--secondary-dark, #9b7919);
+  font-size: 2rem;
+  animation: adminOrdersFloat 3.5s ease-in-out infinite;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-empty-state h3 {
+  margin: 0;
+  color: var(--primary, #0b3d2e);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+}
+
+.admin-dashboard-page:has(.admin-orders-list-panel) .admin-empty-state p {
+  max-width: 360px;
+  margin: 11px 0 0;
+  color: var(--muted, #66736d);
+  font-size: 0.88rem;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   ERROR STATE
+========================================================= */
+
+.admin-dashboard-page:has(.admin-error-card) {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(201, 162, 39, 0.12),
+      transparent 30%
+    ),
+    var(--background, #f8f5ed);
+}
+
+.admin-dashboard-page:has(.admin-error-card) .admin-error-card {
+  width: min(100%, 480px);
+  padding: 42px 34px;
+  border: 1px solid rgba(11, 61, 46, 0.1);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 20px 55px rgba(16, 37, 29, 0.1);
+  text-align: center;
+  animation: adminOrdersEnter 0.5s ease both;
+}
+
+.admin-dashboard-page:has(.admin-error-card) .admin-error-icon {
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  margin: 0 auto 20px;
+  border: 1px solid #f2c8c2;
+  border-radius: 18px;
+  background: #ffebe8;
+  color: #a52e29;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.admin-dashboard-page:has(.admin-error-card) .admin-error-card h1 {
+  margin: 0;
+  color: var(--primary, #0b3d2e);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+
+.admin-dashboard-page:has(.admin-error-card) .admin-error-card p {
+  margin: 14px 0 24px;
+  color: var(--muted, #66736d);
+  font-size: 0.9rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.admin-dashboard-page:has(.admin-error-card) .admin-error-card button {
+  padding: 13px 22px;
+  border: 1px solid var(--primary, #0b3d2e);
+  border-radius: 9px;
+  background: var(--primary, #0b3d2e);
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-dashboard-page:has(.admin-error-card) .admin-error-card button:hover {
+  transform: translateY(-2px);
+  border-color: var(--secondary, #c9a227);
+  background: var(--secondary, #c9a227);
+  color: var(--primary-dark, #10251d);
+  box-shadow: 0 7px 18px rgba(201, 162, 39, 0.2);
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes adminOrdersEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminOrdersPanelEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes adminOrderRowEnter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes adminOrdersFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-main {
+    padding: 27px 22px;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-header {
+    margin-bottom: 25px;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-panel-header {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-main {
+    padding: 23px 15px;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 17px;
+    padding-bottom: 22px;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-header-badge {
+    align-self: flex-start;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-orders-list-panel {
+    border-radius: 15px;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-panel-header {
+    padding: 21px 18px;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-panel-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-empty-state {
+    min-height: 270px;
+    padding: 35px 20px;
+  }
+
+  .admin-dashboard-page:has(.admin-error-card) .admin-error-card {
+    padding: 34px 24px;
+  }
+}
+
+@media (max-width: 420px) {
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-main {
+    padding: 18px 11px;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-header p {
+    font-size: 0.86rem;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-panel-header {
+    padding: 18px 15px;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-empty-state h3 {
+    font-size: 1.3rem;
+  }
+
+  .admin-dashboard-page:has(.admin-orders-list-panel) .admin-empty-state > div {
+    width: 62px;
+    height: 62px;
+  }
+
+  .admin-dashboard-page:has(.admin-error-card) .admin-error-card {
+    padding: 30px 19px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-dashboard-page:has(.admin-orders-list-panel) *,
+  .admin-dashboard-page:has(.admin-error-card) * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

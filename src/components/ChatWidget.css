@@ -1,0 +1,484 @@
+
+.abs-chat-widget {
+  --chat-primary: var(--primary, #0b3d2e);
+  --chat-primary-dark: var(--primary-dark, #10251d);
+  --chat-gold: var(--secondary, #c9a227);
+  --chat-cream: var(--background, #f8f5ed);
+
+  position: fixed;
+  right: 26px;
+  bottom: 25px;
+  z-index: 1200;
+  font-family: inherit;
+}
+
+/* =========================================================
+   FLOATING LAUNCHER
+========================================================= */
+
+.abs-chat-launcher {
+  position: relative;
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  padding: 0;
+  color: #fffdf5;
+  background: linear-gradient(
+    145deg,
+    #14543d,
+    var(--chat-primary),
+    var(--chat-primary-dark)
+  );
+  border: 2px solid rgba(201, 162, 39, 0.8);
+  border-radius: 22px;
+  box-shadow:
+    0 10px 30px rgba(11, 61, 46, 0.3),
+    0 0 0 5px rgba(201, 162, 39, 0.09);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: absChatLauncherEnter 0.65s ease both,
+    absChatLauncherFloat 4s ease-in-out 0.65s infinite;
+  transition:
+    background 0.3s ease,
+    border-radius 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.abs-chat-launcher::before {
+  position: absolute;
+  inset: -7px;
+  content: "";
+  border: 1px solid rgba(201, 162, 39, 0.38);
+  border-radius: 27px;
+  pointer-events: none;
+  animation: absChatPulse 3s ease-out infinite;
+}
+
+.abs-chat-launcher:hover {
+  background: linear-gradient(
+    145deg,
+    #1b674a,
+    #0b3d2e
+  );
+  border-color: #f0d77e;
+  border-radius: 50%;
+  box-shadow:
+    0 14px 35px rgba(11, 61, 46, 0.36),
+    0 0 25px rgba(201, 162, 39, 0.2);
+  transform: translateY(-4px) scale(1.04);
+}
+
+.abs-chat-launcher svg {
+  display: block;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.abs-chat-launcher:hover svg {
+  transform: scale(1.08);
+}
+
+.abs-chat-launcher.is-open {
+  color: #f5df94;
+  background: linear-gradient(
+    145deg,
+    #153d2e,
+    #10251d
+  );
+  border-radius: 50%;
+  animation: absChatCloseEnter 0.3s ease both;
+}
+
+.abs-chat-launcher.is-open::before {
+  animation: none;
+  opacity: 0;
+}
+
+.abs-chat-launcher.is-open svg {
+  transform: rotate(90deg);
+}
+
+.abs-chat-launcher:focus-visible,
+.abs-chat-popup-close:focus-visible {
+  outline: 3px solid var(--chat-gold);
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   CHAT POPUP
+========================================================= */
+
+.abs-chat-popup {
+  position: absolute;
+  right: 0;
+  bottom: 82px;
+  display: flex;
+  flex-direction: column;
+  width: min(390px, calc(100vw - 36px));
+  height: min(590px, calc(100dvh - 145px));
+  min-height: 320px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(201, 162, 39, 0.42);
+  border-radius: 21px;
+  box-shadow:
+    0 24px 75px rgba(16, 37, 29, 0.22),
+    0 5px 18px rgba(16, 37, 29, 0.08);
+  transform-origin: bottom right;
+  animation: absChatPopupEnter 0.35s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* =========================================================
+   POPUP HEADER
+========================================================= */
+
+.abs-chat-popup-topbar {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 88px;
+  padding: 17px 19px;
+  color: #fffdf5;
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(201, 162, 39, 0.2),
+      transparent 45%
+    ),
+    linear-gradient(
+      125deg,
+      #14513b,
+      var(--chat-primary),
+      var(--chat-primary-dark)
+    );
+  border-bottom: 3px solid var(--chat-gold);
+}
+
+.abs-chat-popup-topbar::after {
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  left: 0;
+  height: 3px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #f2dc8c,
+    var(--chat-gold),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: absChatGoldFlow 5s ease-in-out infinite;
+}
+
+.abs-chat-popup-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.abs-chat-popup-logo {
+  display: grid;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  color: var(--chat-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(
+    145deg,
+    #f4e4a5,
+    #c9a227
+  );
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 15px 5px 15px 5px;
+  box-shadow: 0 4px 13px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.3s ease,
+    border-radius 0.3s ease;
+}
+
+.abs-chat-popup-brand:hover .abs-chat-popup-logo {
+  transform: rotate(-4deg);
+  border-radius: 5px 15px 5px 15px;
+}
+
+.abs-chat-popup-brand > div {
+  min-width: 0;
+}
+
+.abs-chat-popup-brand h3 {
+  margin: 0 0 5px;
+  color: #fffdf5;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.abs-chat-popup-brand p {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: rgba(255, 253, 245, 0.77);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.abs-chat-popup-brand p::before {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  content: "";
+  background: #8fdaa7;
+  border-radius: 50%;
+  box-shadow: 0 0 9px rgba(143, 218, 167, 0.4);
+}
+
+/* Close button */
+
+.abs-chat-popup-close {
+  display: grid;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  padding: 0;
+  color: rgba(255, 253, 245, 0.85);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 11px;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.abs-chat-popup-close:hover {
+  color: var(--chat-primary-dark);
+  background: var(--chat-gold);
+  border-color: #f1d982;
+  transform: rotate(90deg);
+}
+
+/* =========================================================
+   CHAT CONTENT
+========================================================= */
+
+.abs-chat-popup-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(201, 162, 39, 0.055),
+      transparent 35%
+    ),
+    #fbfaf6;
+}
+
+/*
+  CustomerChat renders the actual messages, composer and
+  connection status. This container lets that component
+  use the remaining popup height without overflowing.
+*/
+
+.abs-chat-popup-content > * {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes absChatLauncherEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes absChatLauncherFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes absChatPulse {
+  0% {
+    opacity: 0.65;
+    transform: scale(0.94);
+  }
+
+  75%,
+  100% {
+    opacity: 0;
+    transform: scale(1.13);
+  }
+}
+
+@keyframes absChatPopupEnter {
+  from {
+    opacity: 0;
+    transform: translateY(13px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes absChatCloseEnter {
+  from {
+    transform: rotate(-45deg) scale(0.9);
+  }
+
+  to {
+    transform: rotate(0) scale(1);
+  }
+}
+
+@keyframes absChatGoldFlow {
+  0%,
+  100% {
+    background-position: 100% 0;
+  }
+
+  50% {
+    background-position: 0 0;
+  }
+}
+
+/* =========================================================
+   TABLET AND MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .abs-chat-widget {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .abs-chat-launcher {
+    width: 57px;
+    height: 57px;
+    border-radius: 19px;
+  }
+
+  .abs-chat-launcher svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .abs-chat-popup {
+    right: -4px;
+    bottom: 72px;
+    width: min(380px, calc(100vw - 24px));
+    height: min(570px, calc(100dvh - 110px));
+    border-radius: 18px;
+  }
+
+  .abs-chat-popup-topbar {
+    min-height: 80px;
+    padding: 14px 15px;
+  }
+
+  .abs-chat-popup-logo {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+/* Extra-small phones */
+
+@media (max-width: 360px) {
+  .abs-chat-widget {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .abs-chat-popup {
+    right: -3px;
+    width: calc(100vw - 18px);
+    height: min(540px, calc(100dvh - 95px));
+    min-height: 280px;
+  }
+
+  .abs-chat-popup-brand h3 {
+    font-size: 15px;
+  }
+
+  .abs-chat-popup-brand p {
+    font-size: 10px;
+  }
+}
+
+/* Short screens */
+
+@media (max-height: 500px) and (min-width: 601px) {
+  .abs-chat-popup {
+    height: calc(100dvh - 115px);
+    min-height: 220px;
+  }
+
+  .abs-chat-popup-topbar {
+    min-height: 68px;
+    padding: 10px 15px;
+  }
+
+  .abs-chat-popup-logo {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-chat-launcher,
+  .abs-chat-launcher::before,
+  .abs-chat-popup,
+  .abs-chat-popup-topbar::after {
+    animation: none !important;
+  }
+
+  .abs-chat-launcher,
+  .abs-chat-launcher svg,
+  .abs-chat-popup-logo,
+  .abs-chat-popup-close {
+    transition: none !important;
+  }
+}

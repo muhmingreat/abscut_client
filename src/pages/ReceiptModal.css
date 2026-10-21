@@ -1,0 +1,1138 @@
+.receipt-modal-overlay {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: rgba(9, 25, 18, 0.76);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  animation: receiptOverlayEnter 0.25s ease both;
+}
+
+/* =====================================================
+   MAIN MODAL
+===================================================== */
+
+.receipt-modal {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  max-height: calc(100vh - 56px);
+  max-height: calc(100dvh - 56px);
+  margin: auto;
+  padding: clamp(24px, 4vw, 46px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid rgba(201, 162, 39, 0.38);
+  border-top: 5px solid var(--secondary, #c9a227);
+  border-radius: 20px;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(201, 162, 39, 0.07),
+      transparent 28%
+    ),
+    #ffffff;
+  color: var(--text, #1e2924);
+  box-shadow:
+    0 35px 100px rgba(0, 0, 0, 0.28),
+    0 8px 28px rgba(11, 61, 46, 0.12);
+  animation: receiptModalEnter 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.receipt-modal-close {
+  position: absolute;
+  z-index: 2;
+  top: 17px;
+  right: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--border, #dedbd2);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--primary, #0b3d2e);
+  font-family: inherit;
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.receipt-modal-close:hover {
+  transform: rotate(90deg);
+  border-color: var(--primary, #0b3d2e);
+  background: var(--primary, #0b3d2e);
+  color: #fff;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.receipt-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 48px 27px 0;
+  border-bottom: 1px solid var(--border, #dedbd2);
+}
+
+.receipt-modal-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+}
+
+.receipt-modal-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  border: 1px solid rgba(201, 162, 39, 0.65);
+  border-radius: 13px;
+  background: linear-gradient(
+    145deg,
+    #174c39,
+    #10251d
+  );
+  color: #e6c65b;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  box-shadow: 0 7px 20px rgba(11, 61, 46, 0.15);
+}
+
+.receipt-modal-brand h2 {
+  margin: 0 0 7px;
+  color: var(--primary, #0b3d2e);
+  font-size: clamp(21px, 3vw, 28px);
+  font-weight: 900;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.receipt-modal-brand p {
+  margin: 0;
+  color: var(--muted, #66736d);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.receipt-modal-title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 11px;
+  padding-top: 6px;
+  text-align: right;
+}
+
+.receipt-modal-title > span {
+  color: var(--muted, #66736d);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.receipt-modal-title > strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border: 1px solid #c6e6d2;
+  border-radius: 999px;
+  background: #e8f6ed;
+  color: #176443;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1.3px;
+}
+
+.receipt-modal-title > strong::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #218454;
+  content: "";
+  box-shadow: 0 0 0 3px rgba(33, 132, 84, 0.12);
+}
+
+/* =====================================================
+   CUSTOMER / ORDER / PAYMENT DETAILS
+===================================================== */
+
+.receipt-modal-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  margin: 28px 0 34px;
+}
+
+.receipt-modal-details > div {
+  min-width: 0;
+  padding: 19px 17px;
+  border: 1px solid var(--border, #dedbd2);
+  border-radius: 13px;
+  background: linear-gradient(
+    145deg,
+    #fffefa,
+    #f8f5ed
+  );
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.receipt-modal-details > div:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 162, 39, 0.55);
+  box-shadow: 0 8px 20px rgba(16, 37, 29, 0.06);
+}
+
+.receipt-modal-details > div > span {
+  display: block;
+  margin-bottom: 11px;
+  color: var(--secondary-dark, #9b7919);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.receipt-modal-details > div > strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--primary, #0b3d2e);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.receipt-modal-details > div > p {
+  margin: 4px 0 0;
+  color: var(--muted, #66736d);
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   PRODUCTS SECTION
+===================================================== */
+
+.receipt-modal-products {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.receipt-modal-products-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 60px 125px;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--primary, #0b3d2e);
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(
+    110deg,
+    #10251d,
+    #0b3d2e
+  );
+  color: #fff;
+}
+
+.receipt-modal-products-heading span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+.receipt-modal-products-heading span:nth-child(2) {
+  text-align: center;
+}
+
+.receipt-modal-products-heading span:nth-child(3) {
+  text-align: right;
+}
+
+.receipt-modal-product {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 60px 125px;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px;
+  border-right: 1px solid var(--border-light, #efede7);
+  border-bottom: 1px solid var(--border, #dedbd2);
+  border-left: 1px solid var(--border-light, #efede7);
+  background: #fff;
+  transition: background 0.2s ease;
+}
+
+.receipt-modal-product:last-child {
+  border-radius: 0 0 10px 10px;
+}
+
+.receipt-modal-product:hover {
+  background: #fdfbf5;
+}
+
+.receipt-modal-product-info {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+
+.receipt-modal-product-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 66px;
+  height: 72px;
+  flex: 0 0 66px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 10px;
+  background:
+    radial-gradient(
+      circle,
+      rgba(201, 162, 39, 0.13),
+      transparent 75%
+    ),
+    #f8f5ed;
+  color: var(--primary, #0b3d2e);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.receipt-modal-product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+}
+
+.receipt-modal-product:hover .receipt-modal-product-image img {
+  transform: scale(1.06);
+}
+
+.receipt-modal-product-info > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.receipt-modal-product-info > div:last-child > strong {
+  color: var(--primary-dark, #10251d);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.receipt-modal-product-info > div:last-child > span {
+  color: var(--muted, #66736d);
+  font-size: 11px;
+}
+
+.receipt-modal-product > span {
+  color: var(--text, #1e2924);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.receipt-modal-product > strong {
+  color: var(--primary, #0b3d2e);
+  font-size: 13px;
+  font-weight: 850;
+  text-align: right;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =====================================================
+   PAYMENT SUMMARY
+===================================================== */
+
+.receipt-modal-summary {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 0 30px auto;
+  padding: 20px 22px;
+  border: 1px solid var(--border, #dedbd2);
+  border-radius: 13px;
+  background: #fffefa;
+}
+
+.receipt-modal-summary > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 11px 0;
+}
+
+.receipt-modal-summary > div > span {
+  color: var(--muted, #66736d);
+  font-size: 13px;
+}
+
+.receipt-modal-summary > div > strong {
+  color: var(--primary-dark, #10251d);
+  font-size: 13px;
+  font-weight: 750;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.receipt-modal-summary .receipt-modal-total {
+  position: relative;
+  margin-top: 12px;
+  padding: 19px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  border-radius: 10px;
+  background: linear-gradient(
+    115deg,
+    #10251d,
+    #0b3d2e
+  );
+}
+
+.receipt-modal-total > span {
+  color: rgba(255, 255, 255, 0.88) !important;
+  font-size: 10px !important;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+.receipt-modal-summary .receipt-modal-total > strong {
+  color: #e7c85f;
+  font-size: clamp(15px, 2.5vw, 20px);
+  font-weight: 900;
+}
+
+/* =====================================================
+   DELIVERY INFORMATION
+===================================================== */
+
+.receipt-modal-delivery {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 22px 24px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-left: 4px solid var(--secondary, #c9a227);
+  border-radius: 0 12px 12px 0;
+  background: linear-gradient(
+    110deg,
+    #f8f5ed,
+    #fffefa
+  );
+}
+
+.receipt-modal-delivery > span {
+  color: var(--secondary-dark, #9b7919);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.receipt-modal-delivery > strong {
+  color: var(--primary, #0b3d2e);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.receipt-modal-delivery > p {
+  margin: 0;
+  color: var(--muted, #66736d);
+  font-size: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.receipt-modal-footer {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border, #dedbd2);
+}
+
+.receipt-modal-footer > p {
+  margin: 0 0 22px;
+  color: var(--primary, #0b3d2e);
+  font-size: 15px;
+  font-weight: 750;
+  text-align: center;
+}
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.receipt-modal-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 11px;
+}
+
+.receipt-modal-actions button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 47px;
+  padding: 12px 10px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.6px;
+  line-height: 1.5;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform 0.22s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.receipt-modal-actions button:not(:disabled):hover {
+  transform: translateY(-3px);
+}
+
+.receipt-modal-actions button:not(:disabled):active {
+  transform: translateY(0) scale(0.98);
+}
+
+.receipt-modal-actions button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.receipt-print-button {
+  border-color: var(--primary, #0b3d2e) !important;
+  background: var(--primary, #0b3d2e);
+  color: #fff;
+}
+
+.receipt-print-button:not(:disabled):hover {
+  background: var(--primary-dark, #10251d);
+  box-shadow: 0 7px 18px rgba(11, 61, 46, 0.18);
+}
+
+.receipt-download-button {
+  border-color: rgba(201, 162, 39, 0.6) !important;
+  background: #fff9e8;
+  color: var(--secondary-dark, #9b7919);
+}
+
+.receipt-download-button:not(:disabled):hover {
+  border-color: var(--secondary, #c9a227) !important;
+  background: #fff0c4;
+  box-shadow: 0 7px 18px rgba(201, 162, 39, 0.14);
+}
+
+.receipt-share-button {
+  border-color: rgba(11, 61, 46, 0.22) !important;
+  background: #eef5f0;
+  color: var(--primary, #0b3d2e);
+}
+
+.receipt-share-button:not(:disabled):hover {
+  border-color: var(--primary, #0b3d2e) !important;
+  background: #deeee3;
+}
+
+.receipt-close-button {
+  border-color: var(--border, #dedbd2) !important;
+  background: #f5f4f0;
+  color: var(--muted, #66736d);
+}
+
+.receipt-close-button:not(:disabled):hover {
+  border-color: #b43732 !important;
+  background: #ffebe8;
+  color: #b43732;
+}
+
+/* =====================================================
+   LOADING STATE
+===================================================== */
+
+.receipt-modal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 420px;
+  min-height: 320px;
+  padding: 42px 30px;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-top: 5px solid var(--secondary, #c9a227);
+  border-radius: 20px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(201, 162, 39, 0.1),
+      transparent 55%
+    ),
+    #fff;
+  text-align: center;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.22);
+  animation: receiptModalEnter 0.35s ease both;
+}
+
+.receipt-modal-loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 66px;
+  height: 66px;
+  margin-bottom: 24px;
+  border: 3px solid rgba(201, 162, 39, 0.18);
+  border-top-color: var(--secondary, #c9a227);
+  border-right-color: var(--primary, #0b3d2e);
+  border-radius: 50%;
+  animation: receiptSpinnerRotate 0.9s linear infinite;
+}
+
+.receipt-modal-loading-spinner > div {
+  width: 39px;
+  height: 39px;
+  border: 3px solid rgba(11, 61, 46, 0.12);
+  border-bottom-color: var(--primary, #0b3d2e);
+  border-radius: 50%;
+  animation: receiptSpinnerRotate 0.65s linear infinite reverse;
+}
+
+.receipt-modal-loading h2 {
+  margin: 0 0 11px;
+  color: var(--primary, #0b3d2e);
+  font-size: 23px;
+  font-weight: 850;
+}
+
+.receipt-modal-loading p {
+  margin: 0;
+  color: var(--muted, #66736d);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =====================================================
+   ERROR STATE
+===================================================== */
+
+.receipt-modal-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 440px;
+  padding: 38px 32px;
+  border: 1px solid rgba(180, 55, 50, 0.2);
+  border-top: 5px solid #b43732;
+  border-radius: 19px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.22);
+  animation: receiptModalEnter 0.35s ease both;
+}
+
+.receipt-modal-error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 21px;
+  border: 1px solid #f2c8c4;
+  border-radius: 50%;
+  background: #ffebe8;
+  color: #b43732;
+  font-size: 30px;
+  font-weight: 800;
+  animation: receiptErrorPulse 2s ease-in-out infinite;
+}
+
+.receipt-modal-error h2 {
+  margin: 0 0 12px;
+  color: var(--primary-dark, #10251d);
+  font-size: 23px;
+  font-weight: 850;
+}
+
+.receipt-modal-error p {
+  margin: 0 0 24px;
+  color: var(--muted, #66736d);
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.receipt-modal-error button {
+  min-width: 140px;
+  min-height: 45px;
+  padding: 12px 24px;
+  border: 1px solid var(--primary, #0b3d2e);
+  border-radius: 9px;
+  background: var(--primary, #0b3d2e);
+  color: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.receipt-modal-error button:hover {
+  transform: translateY(-2px);
+  background: var(--primary-dark, #10251d);
+}
+
+/* =====================================================
+   KEYBOARD ACCESSIBILITY
+===================================================== */
+
+.receipt-modal button:focus-visible,
+.receipt-modal-error button:focus-visible {
+  outline: 3px solid var(--secondary, #c9a227);
+  outline-offset: 4px;
+}
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes receiptOverlayEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes receiptModalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes receiptSpinnerRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes receiptErrorPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(180, 55, 50, 0.08);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(180, 55, 50, 0.04);
+  }
+}
+
+/* =====================================================
+   RESPONSIVE — TABLETS
+===================================================== */
+
+@media (max-width: 760px) {
+  .receipt-modal-overlay {
+    padding: 18px;
+  }
+
+  .receipt-modal {
+    max-height: calc(100vh - 36px);
+    max-height: calc(100dvh - 36px);
+    padding: 25px;
+    border-radius: 16px;
+  }
+
+  .receipt-modal-details {
+    gap: 10px;
+  }
+
+  .receipt-modal-details > div {
+    padding: 15px 12px;
+  }
+
+  .receipt-modal-products-heading,
+  .receipt-modal-product {
+    grid-template-columns: minmax(0, 1fr) 43px 100px;
+    gap: 9px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .receipt-modal-product-image {
+    width: 55px;
+    height: 62px;
+    flex-basis: 55px;
+  }
+
+  .receipt-modal-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =====================================================
+   RESPONSIVE — MOBILE
+===================================================== */
+
+@media (max-width: 520px) {
+  .receipt-modal-overlay {
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .receipt-modal {
+    max-height: calc(100vh - 20px);
+    max-height: calc(100dvh - 20px);
+    padding: 22px 15px;
+    border-radius: 14px;
+  }
+
+  .receipt-modal-close {
+    top: 12px;
+    right: 12px;
+    width: 35px;
+    height: 35px;
+    font-size: 24px;
+  }
+
+  .receipt-modal-header {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 0 21px;
+  }
+
+  .receipt-modal-brand {
+    gap: 11px;
+    padding-right: 35px;
+  }
+
+  .receipt-modal-logo {
+    width: 51px;
+    height: 51px;
+    flex-basis: 51px;
+    border-radius: 10px;
+    font-size: 15px;
+  }
+
+  .receipt-modal-brand h2 {
+    font-size: 22px;
+  }
+
+  .receipt-modal-brand p {
+    font-size: 10px;
+  }
+
+  .receipt-modal-title {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 0;
+    text-align: left;
+  }
+
+  .receipt-modal-title > span {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+
+  .receipt-modal-details {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    margin: 20px 0 26px;
+  }
+
+  .receipt-modal-details > div {
+    padding: 14px;
+  }
+
+  .receipt-modal-details > div > span {
+    margin-bottom: 7px;
+  }
+
+  .receipt-modal-details > div > strong {
+    font-size: 12px;
+  }
+
+  .receipt-modal-products-heading {
+    grid-template-columns: minmax(0, 1fr) 35px 88px;
+    gap: 6px;
+    padding: 12px 9px;
+  }
+
+  .receipt-modal-products-heading span {
+    font-size: 8px;
+    letter-spacing: 0.6px;
+  }
+
+  .receipt-modal-product {
+    grid-template-columns: minmax(0, 1fr) 35px 88px;
+    gap: 6px;
+    padding: 12px 8px;
+  }
+
+  .receipt-modal-product-info {
+    gap: 8px;
+  }
+
+  .receipt-modal-product-image {
+    width: 43px;
+    height: 51px;
+    flex-basis: 43px;
+    border-radius: 7px;
+  }
+
+  .receipt-modal-product-info > div:last-child > strong {
+    font-size: 10px;
+  }
+
+  .receipt-modal-product-info > div:last-child > span {
+    font-size: 10px;
+  }
+
+  .receipt-modal-product > span {
+    font-size: 11px;
+  }
+
+  .receipt-modal-product > strong {
+    font-size: 10px;
+  }
+
+  .receipt-modal-summary {
+    padding: 14px;
+  }
+
+  .receipt-modal-summary > div {
+    gap: 10px;
+  }
+
+  .receipt-modal-summary > div > span,
+  .receipt-modal-summary > div > strong {
+    font-size: 12px;
+  }
+
+  .receipt-modal-summary .receipt-modal-total {
+    gap: 8px;
+    padding: 14px 10px;
+  }
+
+  .receipt-modal-total > span {
+    font-size: 9px !important;
+    letter-spacing: 0.5px;
+  }
+
+  .receipt-modal-summary .receipt-modal-total > strong {
+    font-size: 15px;
+  }
+
+  .receipt-modal-delivery {
+    padding: 17px;
+  }
+
+  .receipt-modal-footer > p {
+    font-size: 13px;
+  }
+
+  .receipt-modal-actions {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+  }
+
+  .receipt-modal-actions button {
+    min-height: 46px;
+    font-size: 10px;
+  }
+
+  .receipt-modal-loading,
+  .receipt-modal-error {
+    padding: 30px 20px;
+  }
+}
+
+/* =====================================================
+   PRINT — PRINT / SAVE PDF
+===================================================== */
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .receipt-modal-overlay,
+  .receipt-modal-overlay * {
+    visibility: visible !important;
+  }
+
+  .receipt-modal-overlay {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    backdrop-filter: none !important;
+  }
+
+  .receipt-modal {
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: none !important;
+    border-top: 4px solid #c9a227 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    animation: none !important;
+  }
+
+  .receipt-modal-close,
+  .receipt-modal-actions {
+    display: none !important;
+  }
+
+  .receipt-modal-header,
+  .receipt-modal-details,
+  .receipt-modal-products,
+  .receipt-modal-summary,
+  .receipt-modal-delivery,
+  .receipt-modal-footer {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .receipt-modal-product {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .receipt-modal-details > div,
+  .receipt-modal-product,
+  .receipt-modal-summary,
+  .receipt-modal-delivery {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .receipt-modal-products-heading,
+  .receipt-modal-summary .receipt-modal-total,
+  .receipt-modal-logo,
+  .receipt-modal-title > strong {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .receipt-modal-overlay,
+  .receipt-modal,
+  .receipt-modal-loading,
+  .receipt-modal-error,
+  .receipt-modal-error-icon,
+  .receipt-modal-loading-spinner,
+  .receipt-modal-loading-spinner > div {
+    animation: none !important;
+  }
+
+  .receipt-modal *,
+  .receipt-modal *::before,
+  .receipt-modal *::after,
+  .receipt-modal-overlay *,
+  .receipt-modal-error * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

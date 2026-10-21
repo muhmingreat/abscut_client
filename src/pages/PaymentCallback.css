@@ -1,0 +1,368 @@
+.payment-callback-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  color: var(--text, #1e2924);
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(201, 162, 39, 0.14),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 90% 85%,
+      rgba(11, 61, 46, 0.12),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #fbf9f3 0%,
+      var(--background, #f8f5ed) 55%,
+      #f0ecdf 100%
+    );
+  animation: paymentCallbackPageEnter 0.6s ease both;
+}
+
+.payment-callback-page *,
+.payment-callback-page *::before,
+.payment-callback-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   VERIFICATION ERROR CARD
+========================================================= */
+
+.payment-callback-card {
+  position: relative;
+  width: 100%;
+  max-width: 550px;
+  padding: 43px 38px;
+  overflow: hidden;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(201, 162, 39, 0.09),
+      transparent 43%
+    ),
+    rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(201, 162, 39, 0.27);
+  border-radius: 24px;
+  box-shadow:
+    0 24px 65px rgba(16, 37, 29, 0.10),
+    0 4px 14px rgba(16, 37, 29, 0.035);
+  animation: paymentCallbackCardEnter 0.7s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.payment-callback-card::before {
+  position: absolute;
+  top: 0;
+  left: 8%;
+  width: 84%;
+  height: 3px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--secondary, #c9a227),
+    var(--primary, #0b3d2e),
+    var(--secondary, #c9a227),
+    transparent
+  );
+}
+
+.payment-callback-card::after {
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 200px;
+  height: 200px;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(201, 162, 39, 0.09),
+    transparent 70%
+  );
+}
+
+/* =========================================================
+   WARNING ICON
+========================================================= */
+
+.payment-callback-icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 25px;
+  color: #fff;
+  background: linear-gradient(
+    145deg,
+    #bd8d23,
+    #936817
+  );
+  border: 5px solid rgba(201, 162, 39, 0.19);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 8px rgba(201, 162, 39, 0.07),
+    0 12px 28px rgba(147, 104, 23, 0.19);
+  font-size: 2.35rem;
+  font-weight: 800;
+  line-height: 1;
+  animation: paymentWarningEnter 0.7s 0.15s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* =========================================================
+   HEADING AND MESSAGE
+========================================================= */
+
+.payment-callback-card h1 {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 15px;
+  color: var(--primary-dark, #10251d);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.75rem, 4vw, 2.3rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+}
+
+.payment-callback-card p {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 27px;
+  color: var(--muted, #66736d);
+  font-size: 0.96rem;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.payment-callback-card button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 51px;
+  margin-top: 12px;
+  padding: 14px 19px;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(
+    110deg,
+    var(--primary-dark, #10251d),
+    var(--primary, #0b3d2e),
+    #176343
+  );
+  background-size: 200% 100%;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  box-shadow: 0 6px 16px rgba(11, 61, 46, 0.12);
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.075em;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-position 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.payment-callback-card button::before {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 65%;
+  height: 100%;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.17),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+}
+
+.payment-callback-card button:hover::before {
+  left: 150%;
+}
+
+.payment-callback-card button:hover {
+  background-position: 100% 0;
+  box-shadow: 0 10px 24px rgba(11, 61, 46, 0.20);
+  transform: translateY(-2px);
+}
+
+.payment-callback-card button:active {
+  transform: translateY(0) scale(0.985);
+}
+
+.payment-callback-card button:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.7);
+  outline-offset: 4px;
+}
+
+/* Secondary action: My Orders */
+
+.payment-callback-card button:nth-of-type(2) {
+  color: var(--primary, #0b3d2e);
+  background: rgba(201, 162, 39, 0.11);
+  border-color: rgba(201, 162, 39, 0.34);
+  box-shadow: none;
+}
+
+.payment-callback-card button:nth-of-type(2):hover {
+  background: rgba(201, 162, 39, 0.2);
+  border-color: var(--secondary, #c9a227);
+  box-shadow: 0 7px 18px rgba(16, 37, 29, 0.06);
+}
+
+/* Final action: Return Home */
+
+.payment-callback-card button:nth-of-type(3) {
+  color: var(--muted, #66736d);
+  background: transparent;
+  border-color: var(--border, #dedbd2);
+  box-shadow: none;
+}
+
+.payment-callback-card button:nth-of-type(3):hover {
+  color: var(--primary, #0b3d2e);
+  background: rgba(11, 61, 46, 0.045);
+  border-color: rgba(11, 61, 46, 0.25);
+  box-shadow: none;
+}
+
+/* =========================================================
+   ENTRY ANIMATIONS
+========================================================= */
+
+@keyframes paymentCallbackPageEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes paymentCallbackCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes paymentWarningEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) rotate(-10deg);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.08) rotate(3deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+  .payment-callback-page {
+    padding: 22px 14px;
+  }
+
+  .payment-callback-card {
+    padding: 32px 20px 25px;
+    border-radius: 19px;
+  }
+
+  .payment-callback-icon {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 22px;
+    font-size: 2rem;
+  }
+
+  .payment-callback-card h1 {
+    font-size: 1.8rem;
+  }
+
+  .payment-callback-card p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+
+  .payment-callback-card button {
+    min-height: 49px;
+    padding: 13px 14px;
+    font-size: 0.73rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .payment-callback-page {
+    padding: 14px 10px;
+  }
+
+  .payment-callback-card {
+    padding: 27px 15px 21px;
+  }
+
+  .payment-callback-card h1 {
+    font-size: 1.55rem;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .payment-callback-page,
+  .payment-callback-card,
+  .payment-callback-icon {
+    animation: none !important;
+  }
+
+  .payment-callback-page *,
+  .payment-callback-page *::before,
+  .payment-callback-page *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

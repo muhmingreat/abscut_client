@@ -1,0 +1,417 @@
+
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  width: 270px;
+  min-width: 270px;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  color: #f8f5ed;
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(201, 162, 39, 0.13),
+      transparent 32%
+    ),
+    linear-gradient(165deg, #123d2e 0%, #0b2e23 55%, #10251d 100%);
+  border-right: 1px solid rgba(201, 162, 39, 0.22);
+  box-shadow: 8px 0 28px rgba(16, 37, 29, 0.08);
+  animation: adminSidebarEnter 0.55s ease both;
+}
+
+/* Brand */
+
+.admin-brand {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 13px;
+  min-height: 100px;
+  padding: 23px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.admin-brand::after {
+  position: absolute;
+  right: 22px;
+  bottom: -1px;
+  left: 22px;
+  height: 1px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 162, 39, 0.8),
+    transparent
+  );
+}
+
+.admin-brand-mark {
+  display: grid;
+  flex-shrink: 0;
+  width: 47px;
+  height: 47px;
+  place-items: center;
+  color: #10251d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 27px;
+  font-weight: 800;
+  background: linear-gradient(145deg, #f1d982, #c9a227 65%, #a68119);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 14px 5px 14px 5px;
+  box-shadow: 0 5px 18px rgba(201, 162, 39, 0.2);
+  transition:
+    transform 0.35s ease,
+    border-radius 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.admin-brand:hover .admin-brand-mark {
+  transform: rotate(-5deg) scale(1.06);
+  border-radius: 5px 14px 5px 14px;
+  box-shadow: 0 8px 24px rgba(201, 162, 39, 0.32);
+}
+
+.admin-brand > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.admin-brand strong {
+  color: #fffdf5;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  line-height: 1.2;
+}
+
+.admin-brand span {
+  color: #d9c47f;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+}
+
+/* Navigation */
+
+.admin-nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  padding: 25px 13px 22px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: rgba(201, 162, 39, 0.35) transparent;
+  scrollbar-width: thin;
+}
+
+.admin-nav::-webkit-scrollbar {
+  width: 5px;
+}
+
+.admin-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-nav::-webkit-scrollbar-thumb {
+  background: rgba(201, 162, 39, 0.35);
+  border-radius: 20px;
+}
+
+.admin-nav-link {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 47px;
+  padding: 11px 14px;
+  overflow: hidden;
+  color: rgba(248, 245, 237, 0.76);
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.45;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-nav-link::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background: linear-gradient(
+    100deg,
+    rgba(201, 162, 39, 0.13),
+    rgba(201, 162, 39, 0.025)
+  );
+  opacity: 0;
+  transform: translateX(-12px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.admin-nav-link > span {
+  display: grid;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  color: #d3b95f;
+  font-size: 19px;
+  line-height: 1;
+  transition:
+    color 0.25s ease,
+    transform 0.3s ease;
+}
+
+.admin-nav-link:hover {
+  color: #fffdf5;
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(201, 162, 39, 0.13);
+  transform: translateX(3px);
+}
+
+.admin-nav-link:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.admin-nav-link:hover > span {
+  color: #f1d982;
+  transform: scale(1.12);
+}
+
+/* Active route */
+
+.admin-nav-link.active {
+  color: #fffdf5;
+  font-weight: 700;
+  background: linear-gradient(
+    110deg,
+    rgba(201, 162, 39, 0.2),
+    rgba(201, 162, 39, 0.075)
+  );
+  border-color: rgba(201, 162, 39, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 4px 13px rgba(0, 0, 0, 0.08);
+}
+
+.admin-nav-link.active::before {
+  background: linear-gradient(
+    100deg,
+    rgba(201, 162, 39, 0.1),
+    transparent
+  );
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.admin-nav-link.active::after {
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  left: -1px;
+  width: 3px;
+  content: "";
+  background: linear-gradient(
+    180deg,
+    #f1d982,
+    #c9a227
+  );
+  border-radius: 0 5px 5px 0;
+  box-shadow: 0 0 12px rgba(201, 162, 39, 0.3);
+}
+
+.admin-nav-link.active > span {
+  color: #f1d982;
+}
+
+/* Keyboard accessibility */
+
+.admin-nav-link:focus-visible,
+.admin-store-link:focus-visible {
+  outline: 2px solid #f1d982;
+  outline-offset: 3px;
+}
+
+/* Sidebar footer */
+
+.admin-sidebar-footer {
+  flex-shrink: 0;
+  padding: 17px 15px 22px;
+  background: rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.admin-store-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 11px 15px;
+  color: #e9d99e;
+  font-size: 12px;
+  font-weight: 650;
+  text-align: center;
+  text-decoration: none;
+  background: rgba(201, 162, 39, 0.075);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 10px;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-store-link:hover {
+  color: #10251d;
+  background: linear-gradient(135deg, #f1d982, #c9a227);
+  border-color: #e3c65e;
+  box-shadow: 0 5px 17px rgba(201, 162, 39, 0.17);
+  transform: translateY(-2px);
+}
+
+/* Entry animation */
+
+@keyframes adminSidebarEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Short screens */
+
+@media (max-height: 650px) {
+  .admin-brand {
+    min-height: 82px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .admin-nav {
+    gap: 3px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .admin-nav-link {
+    min-height: 42px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .admin-sidebar-footer {
+    padding-top: 12px;
+    padding-bottom: 13px;
+  }
+}
+
+/* Tablet and mobile:
+   Sidebar becomes a horizontal navigation strip.
+   If your layout has a dedicated mobile drawer, its
+   parent layout may override these rules. */
+
+@media (max-width: 900px) {
+  .admin-sidebar {
+    position: relative;
+    top: auto;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    overflow: visible;
+    border-right: none;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.25);
+    box-shadow: 0 5px 20px rgba(16, 37, 29, 0.08);
+  }
+
+  .admin-brand {
+    min-height: 76px;
+    padding: 14px 20px;
+  }
+
+  .admin-brand-mark {
+    width: 42px;
+    height: 42px;
+    font-size: 24px;
+  }
+
+  .admin-nav {
+    flex: none;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 8px;
+    padding: 12px 15px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+  }
+
+  .admin-nav-link {
+    flex: 0 0 auto;
+    min-height: 42px;
+    white-space: nowrap;
+  }
+
+  .admin-nav-link:hover {
+    transform: translateY(-2px);
+  }
+
+  .admin-nav-link.active::after {
+    top: auto;
+    right: 10px;
+    bottom: -1px;
+    left: 10px;
+    width: auto;
+    height: 3px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .admin-sidebar-footer {
+    padding: 10px 15px 14px;
+  }
+
+  .admin-store-link {
+    min-height: 40px;
+  }
+}
+
+/* Reduced motion accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-sidebar,
+  .admin-brand-mark,
+  .admin-nav-link,
+  .admin-nav-link::before,
+  .admin-nav-link > span,
+  .admin-store-link {
+    animation: none !important;
+    transition: none !important;
+  }
+}

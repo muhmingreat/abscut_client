@@ -1,0 +1,951 @@
+
+/* =========================================================
+   ABS CUT — ADMIN CUSTOM ORDERS
+   Luxury forest green, gold and warm cream styling
+========================================================= */
+
+.admin-custom-orders-header,
+.admin-custom-orders-summary,
+.admin-custom-orders-card,
+.admin-custom-orders-error,
+.admin-custom-orders-loading,
+.admin-custom-orders-empty {
+  animation: absCustomOrdersEnter 0.65s ease both;
+}
+
+.admin-custom-orders-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 30px;
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(201, 162, 39, 0.16),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #10251d, #0b3d2e);
+  border: 1px solid rgba(201, 162, 39, 0.25);
+  border-radius: 20px;
+  color: #fff;
+  box-shadow: 0 15px 35px rgba(16, 37, 29, 0.13);
+}
+
+.admin-custom-orders-header::after {
+  content: "";
+  position: absolute;
+  right: -55px;
+  bottom: -95px;
+  width: 230px;
+  height: 230px;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.admin-custom-orders-header > div:first-child {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-custom-orders-header .admin-eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #dfc46b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+}
+
+.admin-custom-orders-header h1 {
+  margin: 0 0 12px;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+}
+
+.admin-custom-orders-header p {
+  max-width: 600px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.admin-custom-orders-header-stat {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 0 0 155px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px;
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(201, 162, 39, 0.38);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.admin-custom-orders-header-stat span {
+  color: #dfc46b;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-align: center;
+}
+
+.admin-custom-orders-header-stat strong {
+  margin-top: 10px;
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+.admin-custom-orders-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+  animation-delay: 0.08s;
+}
+
+.admin-custom-summary-card {
+  position: relative;
+  min-width: 0;
+  padding: 25px 24px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #fff, #fcfbf7);
+  border: 1px solid #e6e1d5;
+  border-radius: 17px;
+  box-shadow: 0 6px 20px rgba(16, 37, 29, 0.045);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.admin-custom-summary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #c9a227, #e7d58d);
+  transform: scaleY(0.45);
+  transform-origin: top;
+  transition: transform 0.35s ease;
+}
+
+.admin-custom-summary-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(201, 162, 39, 0.6);
+  box-shadow: 0 15px 30px rgba(16, 37, 29, 0.09);
+}
+
+.admin-custom-summary-card:hover::before {
+  transform: scaleY(1);
+}
+
+.admin-custom-summary-card > span {
+  display: block;
+  color: #66736d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.35px;
+}
+
+.admin-custom-summary-card > strong {
+  display: block;
+  margin: 16px 0 9px;
+  color: #0b3d2e;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.admin-custom-summary-card > small {
+  color: #7b857f;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.admin-custom-orders-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding: 20px 22px;
+  background: #fff1ef;
+  border: 1px solid #f1c9c4;
+  border-left: 4px solid #b43732;
+  border-radius: 13px;
+  animation: absCustomOrdersEnter 0.4s ease both;
+}
+
+.admin-custom-orders-error > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-custom-orders-error strong {
+  color: #982c28;
+  font-size: 14px;
+}
+
+.admin-custom-orders-error span {
+  color: #77534f;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.admin-custom-orders-error button {
+  flex-shrink: 0;
+  padding: 11px 16px;
+  color: #fff;
+  background: #a9322d;
+  border: 1px solid #a9322d;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-custom-orders-error button:hover {
+  background: #84231f;
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   LOADING STATE
+========================================================= */
+
+.admin-custom-orders-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 310px;
+  padding: 40px 20px;
+  background: #fff;
+  border: 1px solid #e6e1d5;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.admin-custom-orders-spinner {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 22px;
+  border: 4px solid #e9e5d9;
+  border-top-color: #c9a227;
+  border-right-color: #0b3d2e;
+  border-radius: 50%;
+  animation: absCustomOrdersSpin 0.85s linear infinite;
+}
+
+.admin-custom-orders-loading h2 {
+  margin: 0 0 10px;
+  color: #10251d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.admin-custom-orders-loading p {
+  max-width: 390px;
+  margin: 0;
+  color: #66736d;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.admin-custom-orders-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 340px;
+  padding: 45px 25px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(201, 162, 39, 0.08),
+      transparent 45%
+    ),
+    #fff;
+  border: 1px dashed #d9d2c2;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.admin-custom-orders-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 22px;
+  color: #c9a227;
+  background: #f8f5ed;
+  border: 1px solid #e9dfbd;
+  border-radius: 50%;
+  font-size: 37px;
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease;
+}
+
+.admin-custom-orders-empty:hover .admin-custom-orders-empty-icon {
+  transform: rotate(-8deg) scale(1.06);
+  background: #f2e8c8;
+}
+
+.admin-custom-orders-empty h2 {
+  margin: 0 0 12px;
+  color: #10251d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.admin-custom-orders-empty p {
+  max-width: 430px;
+  margin: 0;
+  color: #758078;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   ORDERS TABLE CARD
+========================================================= */
+
+.admin-custom-orders-card {
+  min-width: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e5e0d5;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(16, 37, 29, 0.055);
+  animation-delay: 0.12s;
+}
+
+.admin-custom-orders-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 25px 27px;
+  background: linear-gradient(110deg, #fff, #fbfaf6);
+  border-bottom: 1px solid #eae6dd;
+}
+
+.admin-custom-orders-card-header > div > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #a18423;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+.admin-custom-orders-card-header h2 {
+  margin: 0;
+  color: #10251d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.admin-custom-orders-refresh {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  flex-shrink: 0;
+  padding: 11px 15px;
+  color: #0b3d2e;
+  background: #fff;
+  border: 1px solid #d9d4c7;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-custom-orders-refresh:hover {
+  color: #fff;
+  background: #0b3d2e;
+  border-color: #0b3d2e;
+  box-shadow: 0 6px 15px rgba(11, 61, 46, 0.15);
+  transform: translateY(-2px);
+}
+
+.admin-custom-orders-refresh > span {
+  display: inline-block;
+  font-size: 19px;
+  line-height: 0.8;
+  transition: transform 0.4s ease;
+}
+
+.admin-custom-orders-refresh:hover > span {
+  transform: rotate(180deg);
+}
+
+/* =========================================================
+   TABLE LAYOUT
+========================================================= */
+
+.admin-custom-orders-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-color: #c9a227 #f3f0e8;
+  scrollbar-width: thin;
+}
+
+.admin-custom-orders-table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.admin-custom-orders-table-wrapper::-webkit-scrollbar-track {
+  background: #f3f0e8;
+}
+
+.admin-custom-orders-table-wrapper::-webkit-scrollbar-thumb {
+  background: #c9a227;
+  border: 2px solid #f3f0e8;
+  border-radius: 20px;
+}
+
+.admin-custom-orders-table {
+  width: 100%;
+  min-width: 1050px;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+}
+
+.admin-custom-orders-table thead {
+  background: #f8f6f0;
+}
+
+.admin-custom-orders-table th {
+  padding: 16px 17px;
+  color: #6c766f;
+  border-bottom: 1px solid #e8e3d8;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-custom-orders-table td {
+  padding: 19px 17px;
+  color: #35443c;
+  border-bottom: 1px solid #f0ede6;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.admin-custom-orders-table tbody tr {
+  transition: background 0.22s ease;
+}
+
+.admin-custom-orders-table tbody tr:hover {
+  background: #fcfaf3;
+}
+
+.admin-custom-orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* =========================================================
+   CUSTOMER INFORMATION
+========================================================= */
+
+.admin-custom-customer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 205px;
+}
+
+.admin-custom-avatar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 43px;
+  height: 43px;
+  color: #f5e4a5;
+  background: linear-gradient(145deg, #174c39, #10251d);
+  border: 2px solid #e8d79c;
+  border-radius: 50%;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(16, 37, 29, 0.1);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.admin-custom-orders-table tbody tr:hover .admin-custom-avatar {
+  transform: scale(1.06);
+  box-shadow: 0 5px 14px rgba(201, 162, 39, 0.2);
+}
+
+.admin-custom-customer > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.admin-custom-customer strong {
+  color: #20352a;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+.admin-custom-customer span,
+.admin-custom-customer small {
+  color: #7a847d;
+  font-size: 10px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   OUTFIT, SERVICE AND MATERIAL
+========================================================= */
+
+.admin-custom-outfit {
+  display: inline-block;
+  max-width: 155px;
+  color: #20372b;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.6;
+}
+
+.admin-custom-service {
+  display: inline-block;
+  max-width: 165px;
+  padding: 7px 10px;
+  color: #245740;
+  background: #eaf4ed;
+  border: 1px solid #d8e8db;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.admin-custom-material {
+  display: inline-block;
+  color: #6c6250;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.admin-custom-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 180px;
+  padding: 7px 10px;
+  color: #76580a;
+  background: #fff5d9;
+  border: 1px solid #f0e1b0;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.admin-custom-status i {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.admin-custom-status.pending,
+.admin-custom-status.pending-review,
+.admin-custom-status.awaiting-payment {
+  color: #8a6508;
+  background: #fff5d9;
+  border-color: #f0e1b0;
+}
+
+.admin-custom-status.confirmed,
+.admin-custom-status.paid,
+.admin-custom-status.completed,
+.admin-custom-status.delivered {
+  color: #176443;
+  background: #e8f6ed;
+  border-color: #cce8d5;
+}
+
+.admin-custom-status.in-progress,
+.admin-custom-status.in-production,
+.admin-custom-status.partially-paid,
+.admin-custom-status.processing {
+  color: #245b91;
+  background: #eaf3fc;
+  border-color: #d2e4f6;
+}
+
+.admin-custom-status.cancelled,
+.admin-custom-status.rejected,
+.admin-custom-status.failed {
+  color: #a52f2a;
+  background: #ffebe8;
+  border-color: #f2d0cb;
+}
+
+/* =========================================================
+   QUOTATION AND DATE
+========================================================= */
+
+.admin-custom-quotation {
+  display: inline-block;
+  color: #0b3d2e;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.admin-custom-date {
+  color: #68756d;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   VIEW BUTTON
+========================================================= */
+
+.admin-custom-view-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 88px;
+  padding: 10px 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #0b3d2e, #174c39);
+  border: 1px solid #0b3d2e;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(11, 61, 46, 0.1);
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.admin-custom-view-button:hover {
+  color: #10251d;
+  background: linear-gradient(135deg, #dfc46b, #c9a227);
+  border-color: #c9a227;
+  box-shadow: 0 7px 16px rgba(201, 162, 39, 0.22);
+  transform: translateY(-2px);
+}
+
+.admin-custom-view-button > span {
+  font-size: 17px;
+  line-height: 0.8;
+  transition: transform 0.25s ease;
+}
+
+.admin-custom-view-button:hover > span {
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   KEYBOARD ACCESSIBILITY
+========================================================= */
+
+.admin-custom-orders-refresh:focus-visible,
+.admin-custom-orders-error button:focus-visible,
+.admin-custom-view-button:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.65);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes absCustomOrdersEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes absCustomOrdersSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+  .admin-custom-orders-header {
+    padding: 25px;
+  }
+
+  .admin-custom-orders-summary {
+    gap: 14px;
+  }
+
+  .admin-custom-summary-card {
+    padding: 22px 19px;
+  }
+
+  .admin-custom-orders-card-header {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-custom-orders-header {
+    align-items: flex-start;
+    padding: 23px;
+  }
+
+  .admin-custom-orders-header-stat {
+    flex-basis: 112px;
+    min-height: 105px;
+    padding: 15px 10px;
+  }
+
+  .admin-custom-orders-header-stat strong {
+    font-size: 34px;
+  }
+
+  .admin-custom-orders-header-stat span {
+    font-size: 9px;
+    line-height: 1.5;
+  }
+
+  .admin-custom-orders-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-custom-summary-card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .admin-custom-orders-card-header {
+    align-items: flex-start;
+  }
+
+  .admin-custom-orders-card-header h2 {
+    font-size: 21px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 520px) {
+  .admin-custom-orders-header {
+    flex-direction: column;
+    gap: 22px;
+    padding: 23px 20px;
+    border-radius: 15px;
+  }
+
+  .admin-custom-orders-header h1 {
+    font-size: 30px;
+  }
+
+  .admin-custom-orders-header p {
+    font-size: 13px;
+  }
+
+  .admin-custom-orders-header-stat {
+    align-items: flex-start;
+    width: 100%;
+    min-height: auto;
+    padding: 15px 17px;
+  }
+
+  .admin-custom-orders-header-stat strong {
+    margin-top: 8px;
+    font-size: 31px;
+  }
+
+  .admin-custom-orders-header-stat span {
+    text-align: left;
+  }
+
+  .admin-custom-orders-summary {
+    gap: 11px;
+  }
+
+  .admin-custom-summary-card {
+    padding: 19px 15px;
+    border-radius: 13px;
+  }
+
+  .admin-custom-summary-card > span {
+    font-size: 9px;
+    letter-spacing: 0.8px;
+    line-height: 1.6;
+  }
+
+  .admin-custom-summary-card > strong {
+    margin: 13px 0 8px;
+    font-size: 32px;
+  }
+
+  .admin-custom-summary-card > small {
+    font-size: 11px;
+  }
+
+  .admin-custom-orders-error {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 17px;
+  }
+
+  .admin-custom-orders-error button {
+    width: 100%;
+  }
+
+  .admin-custom-orders-card {
+    border-radius: 13px;
+  }
+
+  .admin-custom-orders-card-header {
+    flex-direction: column;
+    gap: 17px;
+    padding: 20px 17px;
+  }
+
+  .admin-custom-orders-card-header h2 {
+    font-size: 21px;
+  }
+
+  .admin-custom-orders-refresh {
+    width: 100%;
+  }
+
+  .admin-custom-orders-table {
+    min-width: 1000px;
+  }
+
+  .admin-custom-orders-table th {
+    padding: 14px 13px;
+    font-size: 9px;
+  }
+
+  .admin-custom-orders-table td {
+    padding: 15px 13px;
+  }
+
+  .admin-custom-orders-empty {
+    min-height: 300px;
+    padding: 32px 20px;
+  }
+
+  .admin-custom-orders-empty h2 {
+    font-size: 22px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-custom-orders-header,
+  .admin-custom-orders-summary,
+  .admin-custom-orders-card,
+  .admin-custom-orders-error,
+  .admin-custom-orders-loading,
+  .admin-custom-orders-empty {
+    animation: none;
+  }
+
+  .admin-custom-orders-spinner {
+    animation-duration: 2s;
+  }
+
+  .admin-custom-orders-header *,
+  .admin-custom-orders-summary *,
+  .admin-custom-orders-card *,
+  .admin-custom-orders-error *,
+  .admin-custom-orders-empty * {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms !important;
+  }
+}

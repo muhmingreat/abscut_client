@@ -1,0 +1,324 @@
+
+.abs-image-showcase {
+  --showcase-green: #0b3d2e;
+  --showcase-dark: #10251d;
+  --showcase-gold: #c9a227;
+  --showcase-cream: #f8f5ed;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 280px;
+  padding: clamp(14px, 2.5vw, 30px);
+
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.22);
+  border-radius: 24px;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 42%,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(248, 245, 237, 0.94) 48%,
+      rgba(11, 61, 46, 0.07) 100%
+    ),
+    var(--showcase-cream);
+
+  box-shadow:
+    0 16px 42px rgba(16, 37, 29, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+
+  animation: absShowcaseEnter 0.8s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Elegant gold detail at the top */
+
+.abs-image-showcase::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 50%;
+  width: clamp(70px, 15%, 150px);
+  height: 3px;
+
+  transform: translateX(-50%);
+  border-radius: 0 0 8px 8px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--showcase-gold),
+    #e8d58c,
+    var(--showcase-gold),
+    transparent
+  );
+
+  opacity: 0.9;
+}
+
+/* Soft decorative glow */
+
+.abs-image-showcase::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 65%;
+  aspect-ratio: 1;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    rgba(201, 162, 39, 0.12) 0%,
+    rgba(201, 162, 39, 0.04) 42%,
+    transparent 72%
+  );
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   IMAGE FRAME
+   ========================================================= */
+
+.abs-image-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 1000px;
+  min-width: 0;
+  height: clamp(240px, 38vw, 540px);
+
+  overflow: hidden;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.32);
+
+  animation: absProductImageReveal 0.85s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* The product image itself */
+
+.abs-showcase-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+
+  object-fit: contain;
+  object-position: center;
+
+  border-radius: inherit;
+
+  filter: drop-shadow(0 12px 18px rgba(16, 37, 29, 0.09));
+
+  transform: scale(1);
+  opacity: 1;
+
+  transition:
+    transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.5s ease,
+    opacity 0.35s ease;
+
+  animation: absProductImageSettle 1s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Subtle movement when the showcase is hovered */
+
+@media (hover: hover) and (pointer: fine) {
+  .abs-image-showcase:hover .abs-showcase-image {
+    transform: scale(1.035);
+    filter: drop-shadow(0 18px 24px rgba(16, 37, 29, 0.15));
+  }
+}
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+
+.abs-image-loading {
+  position: relative;
+  width: min(76%, 680px);
+  height: clamp(200px, 32vw, 430px);
+
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.18);
+  border-radius: 16px;
+
+  background: linear-gradient(
+    135deg,
+    rgba(11, 61, 46, 0.035),
+    rgba(255, 255, 255, 0.78),
+    rgba(201, 162, 39, 0.07)
+  );
+
+  animation: absLoadingPulse 1.8s ease-in-out infinite;
+}
+
+.abs-image-loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.85) 45%,
+    rgba(201, 162, 39, 0.12) 52%,
+    transparent 75%
+  );
+
+  transform: translateX(-100%);
+  animation: absLoadingShimmer 1.7s ease-in-out infinite;
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes absShowcaseEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes absProductImageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes absProductImageSettle {
+  from {
+    opacity: 0.65;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes absLoadingPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes absLoadingShimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .abs-image-showcase {
+    min-height: 240px;
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .abs-image-frame {
+    height: clamp(220px, 55vw, 390px);
+    border-radius: 12px;
+  }
+
+  .abs-showcase-image {
+    filter: drop-shadow(0 8px 14px rgba(16, 37, 29, 0.08));
+  }
+
+  .abs-image-loading {
+    width: 90%;
+    height: clamp(190px, 48vw, 330px);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .abs-image-showcase {
+    min-height: 205px;
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .abs-image-showcase::before {
+    width: 76px;
+  }
+
+  .abs-image-frame {
+    height: clamp(190px, 62vw, 290px);
+    border-radius: 10px;
+  }
+
+  .abs-showcase-image {
+    object-fit: contain;
+  }
+
+  .abs-image-loading {
+    width: 94%;
+    height: clamp(170px, 55vw, 250px);
+    border-radius: 12px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-image-showcase,
+  .abs-image-frame,
+  .abs-showcase-image,
+  .abs-image-loading,
+  .abs-image-loading::before {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .abs-showcase-image {
+    transform: none !important;
+  }
+}

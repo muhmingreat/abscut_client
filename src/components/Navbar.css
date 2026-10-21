@@ -1,0 +1,642 @@
+
+.abs-navbar {
+  --nav-green: var(--primary, #0b3d2e);
+  --nav-green-dark: var(--primary-dark, #10251d);
+  --nav-gold: var(--secondary, #c9a227);
+  --nav-text: var(--text, #1e2924);
+  --nav-muted: var(--muted, #66736d);
+
+  position: sticky;
+  z-index: 900;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  width: 100%;
+  min-height: 82px;
+  padding: 12px clamp(20px, 5vw, 76px);
+  border-bottom: 1px solid rgba(201, 162, 39, 0.24);
+  background: rgba(248, 245, 237, 0.96);
+  box-shadow: 0 5px 24px rgba(16, 37, 29, 0.055);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  animation: absNavbarEnter 0.55s ease both;
+}
+
+.abs-navbar,
+.abs-navbar * {
+  box-sizing: border-box;
+}
+
+/* =========================
+   BRAND LOGO
+========================= */
+
+.abs-navbar-logo {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 57px;
+  height: 57px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(11, 61, 46, 0.07);
+  transition:
+    border-radius 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+.abs-navbar-logo::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 25%,
+    rgba(201, 162, 39, 0.19) 48%,
+    transparent 68%
+  );
+  content: "";
+  opacity: 0;
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.abs-navbar-logo:hover {
+  border-color: var(--nav-gold);
+  border-radius: 50%;
+  box-shadow: 0 8px 23px rgba(201, 162, 39, 0.2);
+  transform: translateY(-2px);
+}
+
+.abs-navbar-logo:hover::after {
+  opacity: 1;
+  animation: absNavbarLogoShine 0.8s ease;
+}
+
+.abs-navbar-logo img {
+  display: block;
+  width: 48px;
+  height: 48px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.35s ease;
+}
+
+.abs-navbar-logo:hover img {
+  transform: scale(1.06);
+}
+
+/* =========================
+   MOBILE MENU TOGGLE
+========================= */
+
+.abs-navbar-toggle {
+  display: none;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(11, 61, 46, 0.15);
+  border-radius: 12px;
+  color: var(--nav-green);
+  background: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.abs-navbar-toggle:hover {
+  border-color: var(--nav-green);
+  color: #fff;
+  background: var(--nav-green);
+  transform: translateY(-1px);
+}
+
+.abs-navbar-toggle:active {
+  transform: scale(0.95);
+}
+
+/* =========================
+   NAVIGATION MENU
+========================= */
+
+.abs-navbar-menu {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-width: 0;
+}
+
+.abs-navbar-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.7vw, 25px);
+}
+
+.abs-navbar-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 2px;
+  color: #526058;
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.abs-navbar-link::after {
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  left: 0;
+  height: 2px;
+  border-radius: 5px;
+  background: var(--nav-gold);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.abs-navbar-link:hover {
+  color: var(--nav-green);
+  transform: translateY(-1px);
+}
+
+.abs-navbar-link:hover::after,
+.abs-navbar-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.abs-navbar-link.active {
+  color: var(--nav-green);
+  font-weight: 800;
+}
+
+/* =========================
+   CART AND AUTH ACTIONS
+========================= */
+
+.abs-navbar-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+.abs-navbar-cart {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 43px;
+  padding: 0 10px;
+  border-radius: 11px;
+  color: var(--nav-green);
+  font-size: 0.87rem;
+  font-weight: 750;
+  text-decoration: none;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.abs-navbar-cart > svg {
+  font-size: 1.05rem;
+  transition: transform 0.3s ease;
+}
+
+.abs-navbar-cart:hover,
+.abs-navbar-cart.active {
+  color: var(--nav-green-dark);
+  background: rgba(201, 162, 39, 0.12);
+}
+
+.abs-navbar-cart:hover > svg {
+  transform: translateY(-2px) rotate(-5deg);
+}
+
+.navbar-cart-badge {
+  position: absolute;
+  top: -3px;
+  left: 23px;
+  display: grid;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  place-items: center;
+  border: 2px solid var(--nav-green-dark);
+  border-radius: 999px;
+  color: #fff;
+  background: var(--nav-gold);
+  font-size: 0.65rem;
+  font-weight: 850;
+  line-height: 1;
+  animation: absCartBadgeEnter 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.abs-navbar-cart-label {
+  display: inline;
+}
+
+/* =========================
+   AUTHENTICATED USER
+========================= */
+
+.abs-navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.abs-navbar-greeting {
+  max-width: 130px;
+  overflow: hidden;
+  color: var(--nav-text);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-logout-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 39px;
+  padding: 0 14px;
+  border: 1px solid rgba(11, 61, 46, 0.18);
+  border-radius: 10px;
+  color: var(--nav-green);
+  background: transparent;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.navbar-logout-button:hover {
+  border-color: var(--nav-green);
+  color: #fff;
+  background: var(--nav-green);
+  transform: translateY(-1px);
+}
+
+/* =========================
+   GUEST ACTIONS
+========================= */
+
+.abs-navbar-guest {
+  gap: 9px;
+}
+
+.abs-navbar-login,
+.abs-navbar-register {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 41px;
+  padding: 0 15px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 750;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.abs-navbar-login {
+  border-color: rgba(11, 61, 46, 0.17);
+  color: var(--nav-green);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.abs-navbar-login:hover {
+  border-color: var(--nav-green);
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.abs-navbar-register {
+  border-color: var(--nav-green);
+  color: #fff;
+  background: var(--nav-green);
+  box-shadow: 0 5px 14px rgba(11, 61, 46, 0.12);
+}
+
+.abs-navbar-register:hover {
+  border-color: var(--nav-gold);
+  color: #fff;
+  background: var(--nav-green-dark);
+  box-shadow: 0 7px 19px rgba(11, 61, 46, 0.2);
+  transform: translateY(-2px);
+}
+
+/* =========================
+   ACCESSIBILITY
+========================= */
+
+.abs-navbar a:focus-visible,
+.abs-navbar button:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.8);
+  outline-offset: 4px;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes absNavbarEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes absNavbarLogoShine {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes absCartBadgeEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  70% {
+    transform: scale(1.15);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================
+   LAPTOP / COMPACT DESKTOP
+========================= */
+
+@media (max-width: 1200px) {
+  .abs-navbar {
+    gap: 20px;
+    padding-right: 25px;
+    padding-left: 25px;
+  }
+
+  .abs-navbar-menu {
+    gap: 15px;
+  }
+
+  .abs-navbar-links {
+    gap: 13px;
+  }
+
+  .abs-navbar-link {
+    font-size: 0.81rem;
+  }
+
+  .abs-navbar-actions {
+    gap: 10px;
+  }
+
+  .abs-navbar-greeting {
+    max-width: 95px;
+  }
+}
+
+/* =========================
+   MOBILE NAVIGATION
+========================= */
+
+@media (max-width: 980px) {
+  .abs-navbar {
+    min-height: 74px;
+    padding: 10px 22px;
+  }
+
+  .abs-navbar-logo {
+    width: 52px;
+    height: 52px;
+  }
+
+  .abs-navbar-logo img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .abs-navbar-toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .abs-navbar-menu {
+    position: absolute;
+    top: calc(100% + 1px);
+    right: 0;
+    left: 0;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 17px;
+    max-height: calc(100dvh - 74px);
+    padding: 0 22px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.25);
+    background: rgba(248, 245, 237, 0.99);
+    box-shadow: 0 18px 28px rgba(16, 37, 29, 0.11);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease,
+      visibility 0.25s ease,
+      padding 0.25s ease;
+  }
+
+  .abs-navbar-menu.is-open {
+    padding-top: 20px;
+    padding-bottom: 22px;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .abs-navbar-links {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 3px;
+    width: 100%;
+  }
+
+  .abs-navbar-link {
+    min-height: 46px;
+    padding: 0 12px;
+    border-radius: 9px;
+    font-size: 0.91rem;
+  }
+
+  .abs-navbar-link::after {
+    right: auto;
+    bottom: 7px;
+    left: 12px;
+    width: 28px;
+    transform-origin: left;
+  }
+
+  .abs-navbar-link:hover,
+  .abs-navbar-link.active {
+    background: rgba(11, 61, 46, 0.045);
+  }
+
+  .abs-navbar-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    padding-top: 16px;
+    border-top: 1px solid rgba(11, 61, 46, 0.1);
+  }
+
+  .abs-navbar-cart {
+    min-height: 42px;
+    padding-left: 12px;
+  }
+
+  .abs-navbar-auth {
+    flex-wrap: wrap;
+    gap: 9px;
+  }
+
+  .abs-navbar-greeting {
+    max-width: 150px;
+  }
+
+  .abs-navbar-guest {
+    margin-left: auto;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .abs-navbar {
+    min-height: 68px;
+    padding: 9px 15px;
+  }
+
+  .abs-navbar-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+  }
+
+  .abs-navbar-logo img {
+    width: 41px;
+    height: 41px;
+  }
+
+  .abs-navbar-toggle {
+    width: 42px;
+    height: 42px;
+  }
+
+  .abs-navbar-menu {
+    max-height: calc(100dvh - 68px);
+  }
+
+  .abs-navbar-actions {
+    align-items: flex-start;
+  }
+
+  .abs-navbar-auth {
+    justify-content: flex-end;
+    max-width: 72%;
+  }
+
+  .abs-navbar-greeting {
+    max-width: 110px;
+  }
+
+  .abs-navbar-login,
+  .abs-navbar-register,
+  .navbar-logout-button {
+    min-height: 38px;
+    padding: 0 11px;
+    font-size: 0.77rem;
+  }
+
+  .abs-navbar-cart-label {
+    font-size: 0.82rem;
+  }
+}
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-navbar,
+  .abs-navbar *,
+  .abs-navbar *::before,
+  .abs-navbar *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

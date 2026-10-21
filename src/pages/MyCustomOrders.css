@@ -1,0 +1,1028 @@
+.my-custom-orders-page {
+  --orders-green: var(--primary, #0b3d2e);
+  --orders-green-dark: var(--primary-dark, #10251d);
+  --orders-gold: var(--secondary, #c9a227);
+  --orders-cream: var(--background, #f8f5ed);
+  --orders-text: var(--text, #1e2924);
+  --orders-muted: var(--muted, #66736d);
+  --orders-border: var(--border, #dedbd2);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 75vh;
+  padding: clamp(32px, 5vw, 72px) clamp(18px, 6vw, 90px);
+  overflow: hidden;
+  color: var(--orders-text);
+  background:
+    radial-gradient(
+      circle at 5% 5%,
+      rgba(201, 162, 39, 0.1),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 95% 75%,
+      rgba(11, 61, 46, 0.07),
+      transparent 30%
+    ),
+    linear-gradient(135deg, #fbf9f3, var(--orders-cream));
+}
+
+.my-custom-orders-page::before {
+  position: absolute;
+  z-index: -1;
+  top: -150px;
+  right: -120px;
+  width: 340px;
+  height: 340px;
+  content: "";
+  border: 1px solid rgba(201, 162, 39, 0.16);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 24px rgba(201, 162, 39, 0.025),
+    0 0 0 50px rgba(201, 162, 39, 0.02);
+  pointer-events: none;
+}
+
+/* =========================================================
+   SECTION LABEL
+========================================================= */
+
+.custom-orders-label {
+  margin: 0 0 13px;
+  color: var(--orders-gold);
+  font-size: 0.73rem;
+  font-weight: 900;
+  letter-spacing: 0.19em;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   LOADING, ERROR AND EMPTY STATES
+========================================================= */
+
+.empty-custom-orders {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 760px;
+  min-height: 380px;
+  margin: 30px auto;
+  padding: clamp(28px, 5vw, 55px);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(201, 162, 39, 0.27);
+  border-radius: 22px;
+  box-shadow: 0 20px 55px rgba(16, 37, 29, 0.07);
+  text-align: center;
+  animation: customOrdersEnter 0.65s ease both;
+}
+
+.empty-custom-orders::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    var(--orders-green),
+    var(--orders-gold),
+    var(--orders-green)
+  );
+  background-size: 200% 100%;
+  animation: customOrdersGoldSweep 6s linear infinite;
+}
+
+.empty-custom-orders h1 {
+  margin: 8px 0 13px;
+  color: var(--orders-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+}
+
+.empty-custom-orders > p:not(.custom-orders-label) {
+  max-width: 500px;
+  margin: 0;
+  color: var(--orders-muted);
+  font-size: 0.96rem;
+  line-height: 1.9;
+}
+
+.custom-orders-loading {
+  display: grid;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  margin: 15px 0 18px;
+  background: rgba(201, 162, 39, 0.09);
+  border: 1px solid rgba(201, 162, 39, 0.24);
+  border-radius: 50%;
+}
+
+.custom-orders-spinner {
+  display: block;
+  width: 43px;
+  height: 43px;
+  border: 3px solid rgba(11, 61, 46, 0.12);
+  border-top-color: var(--orders-green);
+  border-right-color: var(--orders-gold);
+  border-radius: 50%;
+  animation: customOrdersSpin 0.85s linear infinite;
+}
+
+.custom-orders-error {
+  border-color: rgba(180, 55, 50, 0.24);
+}
+
+.custom-orders-error::before {
+  background: linear-gradient(90deg, #b43732, #dca49b, #b43732);
+}
+
+.custom-orders-error h1 {
+  color: #8e2d28;
+}
+
+/* =========================================================
+   PRIMARY ACTION BUTTON
+========================================================= */
+
+.custom-orders-create-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 51px;
+  margin-top: 25px;
+  padding: 14px 23px;
+  overflow: hidden;
+  color: #fffdf5;
+  background: linear-gradient(
+    115deg,
+    var(--orders-green-dark),
+    var(--orders-green)
+  );
+  border: 1px solid rgba(201, 162, 39, 0.65);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(11, 61, 46, 0.14);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.79rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-align: center;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.custom-orders-create-button:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(
+    115deg,
+    var(--orders-green),
+    #1b6045
+  );
+  box-shadow: 0 14px 28px rgba(11, 61, 46, 0.2);
+}
+
+.custom-orders-create-button:active {
+  transform: translateY(-1px);
+}
+
+.custom-orders-create-button:focus-visible,
+.view-custom-order-button:focus-visible,
+.new-custom-order-button:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.7);
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.my-custom-orders-header {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto 35px;
+  animation: customOrdersEnter 0.65s ease both;
+}
+
+.my-custom-orders-header .custom-orders-label {
+  margin-bottom: 10px;
+}
+
+.my-custom-orders-header h1 {
+  margin: 0;
+  color: var(--orders-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.35rem, 5vw, 4.25rem);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 1.1;
+}
+
+.my-custom-orders-header > span {
+  display: block;
+  margin-top: 15px;
+  color: var(--orders-muted);
+  font-size: 0.98rem;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
+.custom-orders-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 19px;
+  max-width: 1200px;
+  margin: 0 auto 38px;
+}
+
+.custom-orders-summary-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  min-height: 140px;
+  padding: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(11, 61, 46, 0.1);
+  border-radius: 17px;
+  box-shadow: 0 8px 24px rgba(16, 37, 29, 0.045);
+  animation: customOrdersCardEnter 0.65s ease both;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.custom-orders-summary-card:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.custom-orders-summary-card:nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.custom-orders-summary-card::after {
+  position: absolute;
+  right: -20px;
+  bottom: -35px;
+  width: 105px;
+  height: 105px;
+  content: "";
+  background: rgba(201, 162, 39, 0.08);
+  border: 1px solid rgba(201, 162, 39, 0.14);
+  border-radius: 50%;
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+
+.custom-orders-summary-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(201, 162, 39, 0.48);
+  box-shadow: 0 17px 34px rgba(16, 37, 29, 0.09);
+}
+
+.custom-orders-summary-card:hover::after {
+  transform: scale(1.25);
+}
+
+.custom-orders-summary-card > span {
+  position: relative;
+  z-index: 1;
+  color: var(--orders-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.custom-orders-summary-card > strong {
+  position: relative;
+  z-index: 1;
+  color: var(--orders-green);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* =========================================================
+   ORDERS LIST
+========================================================= */
+
+.custom-orders-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   INDIVIDUAL ORDER CARD
+========================================================= */
+
+.custom-order-card {
+  position: relative;
+  min-width: 0;
+  padding: clamp(22px, 3vw, 34px);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.91);
+  border: 1px solid rgba(11, 61, 46, 0.11);
+  border-radius: 19px;
+  box-shadow: 0 10px 30px rgba(16, 37, 29, 0.055);
+  animation: customOrdersCardEnter 0.6s ease both;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.custom-order-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  content: "";
+  background: linear-gradient(
+    180deg,
+    var(--orders-gold),
+    var(--orders-green)
+  );
+  transform: scaleY(0.45);
+  transform-origin: top;
+  transition: transform 0.35s ease;
+}
+
+.custom-order-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 162, 39, 0.4);
+  box-shadow: 0 19px 42px rgba(16, 37, 29, 0.095);
+}
+
+.custom-order-card:hover::before {
+  transform: scaleY(1);
+}
+
+/* =========================================================
+   ORDER CARD HEADER
+========================================================= */
+
+.custom-order-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 23px;
+  border-bottom: 1px solid rgba(11, 61, 46, 0.11);
+}
+
+.custom-order-card-top > div {
+  min-width: 0;
+}
+
+.custom-order-card-top > div > span,
+.custom-order-status > span {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--orders-muted);
+  font-size: 0.67rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.custom-order-card-top h2 {
+  margin: 0;
+  color: var(--orders-green-dark);
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.custom-order-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  max-width: 48%;
+  text-align: right;
+}
+
+.custom-order-status > strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.73rem;
+  font-weight: 800;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* Status badges */
+
+.custom-order-status .status-pending,
+.custom-order-status .status-pending-review,
+.custom-order-status .status-awaiting-payment,
+.custom-order-status .status-awaiting-quotation {
+  color: #805c0b;
+  background: #fff5d9;
+  border-color: #f0dfaa;
+}
+
+.custom-order-status .status-confirmed,
+.custom-order-status .status-paid,
+.custom-order-status .status-in-progress,
+.custom-order-status .status-processing,
+.custom-order-status .status-partially-paid {
+  color: #17583c;
+  background: #e8f6ed;
+  border-color: #c5e7d0;
+}
+
+.custom-order-status .status-completed {
+  color: #155b3b;
+  background: #dff3e5;
+  border-color: #b4dfc2;
+}
+
+.custom-order-status .status-cancelled,
+.custom-order-status .status-rejected {
+  color: #9b302b;
+  background: #ffebe8;
+  border-color: #f0c7c1;
+}
+
+.custom-order-status .status-awaiting-material,
+.custom-order-status .status-awaiting-customer-material,
+.custom-order-status .status-on-hold {
+  color: #245b91;
+  background: #eaf3fc;
+  border-color: #cbdff2;
+}
+
+/* =========================================================
+   ORDER INFORMATION GRID
+========================================================= */
+
+.custom-order-card-info {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: 10px 0;
+}
+
+.custom-order-card-info > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 18px 16px 18px 0;
+  border-bottom: 1px solid rgba(11, 61, 46, 0.07);
+}
+
+.custom-order-card-info > div:nth-child(3n + 2),
+.custom-order-card-info > div:nth-child(3n + 3) {
+  padding-left: 18px;
+  border-left: 1px solid rgba(11, 61, 46, 0.08);
+}
+
+.custom-order-card-info > div:nth-last-child(-n + 3) {
+  border-bottom: none;
+}
+
+.custom-order-card-info > div > span {
+  color: var(--orders-muted);
+  font-size: 0.77rem;
+  font-weight: 600;
+}
+
+.custom-order-card-info > div > strong {
+  color: var(--orders-green-dark);
+  font-size: 0.88rem;
+  font-weight: 800;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   PAYMENT SUMMARY
+========================================================= */
+
+.custom-order-payment-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 12px;
+  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(11, 61, 46, 0.045),
+    rgba(201, 162, 39, 0.075)
+  );
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 13px;
+}
+
+.custom-order-payment-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.custom-order-payment-summary > div > span {
+  color: var(--orders-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.custom-order-payment-summary > div > strong {
+  color: var(--orders-green);
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.custom-order-payment-summary > div:nth-child(3) > strong {
+  color: #926f13;
+}
+
+/* =========================================================
+   PAYMENT NOTICES
+========================================================= */
+
+.custom-order-card-payment-notice,
+.custom-order-card-payment-paid {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-top: 19px;
+  padding: 16px 18px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  animation: customOrdersNoticeEnter 0.4s ease both;
+}
+
+.custom-order-card-payment-notice {
+  color: #75520b;
+  background: linear-gradient(
+    115deg,
+    #fff8e5,
+    #fff3d1
+  );
+  border-color: #efdfad;
+}
+
+.custom-order-card-payment-paid {
+  color: #155b3b;
+  background: linear-gradient(
+    115deg,
+    #eff9f1,
+    #e3f4e8
+  );
+  border-color: #c8e6d0;
+}
+
+.custom-order-card-payment-notice > span,
+.custom-order-card-payment-paid > span {
+  display: grid;
+  flex: 0 0 34px;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.custom-order-card-payment-notice > span {
+  color: #77550b;
+  background: rgba(201, 162, 39, 0.17);
+}
+
+.custom-order-card-payment-paid > span {
+  color: #155b3b;
+  background: rgba(23, 100, 67, 0.11);
+}
+
+.custom-order-card-payment-notice > div,
+.custom-order-card-payment-paid > div {
+  min-width: 0;
+  padding-top: 1px;
+}
+
+.custom-order-card-payment-notice strong,
+.custom-order-card-payment-paid strong {
+  display: block;
+  font-size: 0.87rem;
+  font-weight: 900;
+}
+
+.custom-order-card-payment-notice p,
+.custom-order-card-payment-paid p {
+  margin: 5px 0 0;
+  font-size: 0.81rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   CARD ACTIONS
+========================================================= */
+
+.custom-order-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 21px;
+  border-top: 1px solid rgba(11, 61, 46, 0.1);
+}
+
+.view-custom-order-button,
+.new-custom-order-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 47px;
+  padding: 12px 19px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.045em;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.view-custom-order-button {
+  flex: 1 1 180px;
+  color: #fffdf5;
+  background: linear-gradient(
+    115deg,
+    var(--orders-green-dark),
+    var(--orders-green)
+  );
+  border-color: rgba(201, 162, 39, 0.55);
+  box-shadow: 0 6px 16px rgba(11, 61, 46, 0.12);
+}
+
+.view-custom-order-button:hover {
+  transform: translateY(-3px);
+  background: #174c39;
+  box-shadow: 0 11px 22px rgba(11, 61, 46, 0.2);
+}
+
+.new-custom-order-button {
+  flex: 1 1 150px;
+  color: var(--orders-green);
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(11, 61, 46, 0.2);
+}
+
+.new-custom-order-button:hover {
+  transform: translateY(-3px);
+  color: var(--orders-green-dark);
+  background: rgba(201, 162, 39, 0.12);
+  border-color: rgba(201, 162, 39, 0.65);
+}
+
+.view-custom-order-button:active,
+.new-custom-order-button:active {
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes customOrdersEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes customOrdersCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes customOrdersNoticeEnter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes customOrdersSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes customOrdersGoldSweep {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .my-custom-orders-page {
+    padding: 42px 25px;
+  }
+
+  .custom-orders-summary {
+    gap: 13px;
+  }
+
+  .custom-orders-summary-card {
+    min-height: 125px;
+    padding: 20px;
+  }
+
+  .custom-order-card-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .custom-order-card-info > div:nth-child(n) {
+    padding: 16px 12px;
+    border-bottom: 1px solid rgba(11, 61, 46, 0.07);
+    border-left: none;
+  }
+
+  .custom-order-card-info > div:nth-child(2n) {
+    padding-left: 18px;
+    border-left: 1px solid rgba(11, 61, 46, 0.08);
+  }
+
+  .custom-order-card-info > div:nth-last-child(-n + 2) {
+    border-bottom: none;
+  }
+
+  .custom-order-payment-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 19px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .my-custom-orders-page {
+    padding: 32px 15px 44px;
+  }
+
+  .my-custom-orders-header {
+    margin-bottom: 25px;
+  }
+
+  .my-custom-orders-header h1 {
+    font-size: clamp(2.25rem, 9vw, 3.3rem);
+  }
+
+  .my-custom-orders-header > span {
+    margin-top: 12px;
+    font-size: 0.9rem;
+  }
+
+  .custom-orders-summary {
+    gap: 10px;
+    margin-bottom: 26px;
+  }
+
+  .custom-orders-summary-card {
+    min-height: 112px;
+    gap: 11px;
+    padding: 15px 12px;
+    border-radius: 13px;
+  }
+
+  .custom-orders-summary-card > span {
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
+
+  .custom-orders-summary-card > strong {
+    font-size: 2rem;
+  }
+
+  .custom-orders-container {
+    gap: 17px;
+  }
+
+  .custom-order-card {
+    padding: 20px 16px;
+    border-radius: 15px;
+  }
+
+  .custom-order-card-top {
+    flex-direction: column;
+    gap: 18px;
+    padding-bottom: 18px;
+  }
+
+  .custom-order-status {
+    align-items: flex-start;
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .custom-order-card-top h2 {
+    font-size: 0.85rem;
+  }
+
+  .custom-order-card-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .custom-order-card-info > div:nth-child(n) {
+    padding: 14px 8px 14px 0;
+  }
+
+  .custom-order-card-info > div:nth-child(2n) {
+    padding-left: 12px;
+  }
+
+  .custom-order-card-info > div > span {
+    font-size: 0.72rem;
+  }
+
+  .custom-order-card-info > div > strong {
+    font-size: 0.81rem;
+  }
+
+  .custom-order-payment-summary {
+    gap: 16px 12px;
+    padding: 16px 12px;
+  }
+
+  .custom-order-payment-summary > div > span {
+    font-size: 0.68rem;
+  }
+
+  .custom-order-payment-summary > div > strong {
+    font-size: 0.79rem;
+  }
+
+  .custom-order-card-payment-notice,
+  .custom-order-card-payment-paid {
+    gap: 10px;
+    padding: 13px;
+  }
+
+  .custom-order-card-payment-notice p,
+  .custom-order-card-payment-paid p {
+    font-size: 0.77rem;
+  }
+
+  .custom-order-card-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 19px;
+    padding-top: 17px;
+  }
+
+  .view-custom-order-button,
+  .new-custom-order-button {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 47px;
+  }
+
+  .empty-custom-orders {
+    min-height: 320px;
+    margin: 15px auto;
+    padding: 30px 20px;
+    border-radius: 17px;
+  }
+
+  .empty-custom-orders h1 {
+    font-size: 2rem;
+  }
+
+  .empty-custom-orders > p:not(.custom-orders-label) {
+    font-size: 0.87rem;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL SCREENS
+========================================================= */
+
+@media (max-width: 360px) {
+  .my-custom-orders-page {
+    padding-right: 11px;
+    padding-left: 11px;
+  }
+
+  .custom-orders-summary-card {
+    padding: 13px 9px;
+  }
+
+  .custom-orders-summary-card > span {
+    font-size: 0.66rem;
+  }
+
+  .custom-orders-summary-card > strong {
+    font-size: 1.75rem;
+  }
+
+  .custom-order-card {
+    padding: 17px 12px;
+  }
+
+  .custom-order-payment-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .custom-order-payment-summary > div {
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(11, 61, 46, 0.08);
+  }
+
+  .custom-order-payment-summary > div:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .custom-order-card-info > div > strong {
+    font-size: 0.76rem;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .my-custom-orders-page *,
+  .my-custom-orders-page *::before,
+  .my-custom-orders-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,1078 @@
+.order-confirmation-page {
+  --confirmation-green: var(--primary, #0b3d2e);
+  --confirmation-green-dark: var(--primary-dark, #10251d);
+  --confirmation-gold: var(--secondary, #c9a227);
+  --confirmation-cream: var(--background, #f8f5ed);
+  --confirmation-text: var(--text, #1e2924);
+  --confirmation-muted: var(--muted, #66736d);
+  --confirmation-border: var(--border, #dedbd2);
+
+  min-height: 100vh;
+  padding: 54px 24px 90px;
+  color: var(--confirmation-text);
+  background:
+    radial-gradient(
+      circle at 10% 5%,
+      rgba(201, 162, 39, 0.10),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 95% 30%,
+      rgba(11, 61, 46, 0.08),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      #fbf9f3 0%,
+      var(--confirmation-cream) 48%,
+      #f1eee4 100%
+    );
+  animation: orderConfirmationEnter 0.7s ease both;
+}
+
+.order-confirmation-page *,
+.order-confirmation-page *::before,
+.order-confirmation-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   SUCCESS / ERROR HERO
+========================================================= */
+
+.order-confirmation-hero {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto 38px;
+  padding: 48px 30px 42px;
+  overflow: hidden;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(201, 162, 39, 0.13),
+      transparent 45%
+    ),
+    rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(201, 162, 39, 0.24);
+  border-radius: 26px;
+  box-shadow:
+    0 18px 50px rgba(16, 37, 29, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  animation: confirmationHeroEnter 0.8s 0.08s ease both;
+}
+
+.order-confirmation-hero::before {
+  position: absolute;
+  top: 0;
+  left: 12%;
+  width: 76%;
+  height: 3px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--confirmation-gold),
+    var(--confirmation-green),
+    var(--confirmation-gold),
+    transparent
+  );
+  transform-origin: center;
+  animation: confirmationAccentReveal 1s 0.3s ease both;
+}
+
+.order-confirmation-hero::after {
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 240px;
+  height: 240px;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(201, 162, 39, 0.10),
+    transparent 70%
+  );
+}
+
+.confirmation-success-icon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 23px;
+  color: #fff;
+  background: linear-gradient(
+    145deg,
+    #176b4b,
+    var(--confirmation-green)
+  );
+  border: 5px solid rgba(201, 162, 39, 0.22);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 8px rgba(201, 162, 39, 0.07),
+    0 12px 28px rgba(11, 61, 46, 0.2);
+  animation: confirmationIconEnter 0.7s 0.25s cubic-bezier(
+    0.2,
+    0.8,
+    0.2,
+    1
+  ) both;
+}
+
+.confirmation-success-icon span {
+  display: block;
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.confirmation-label {
+  margin: 0 0 12px;
+  color: var(--confirmation-gold);
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.27em;
+  text-transform: uppercase;
+}
+
+.order-confirmation-hero h1 {
+  margin: 0;
+  color: var(--confirmation-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.1rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.confirmation-message {
+  max-width: 590px;
+  margin: 17px auto 0;
+  color: var(--confirmation-muted);
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.confirmation-order-number {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 28px auto 0;
+  padding: 17px 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(11, 61, 46, 0.06),
+    rgba(201, 162, 39, 0.10)
+  );
+  border: 1px dashed rgba(11, 61, 46, 0.27);
+  border-radius: 14px;
+}
+
+.confirmation-order-number span {
+  color: var(--confirmation-muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.confirmation-order-number strong {
+  max-width: 100%;
+  color: var(--confirmation-green);
+  font-size: 0.95rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.confirmation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.confirmation-card {
+  min-width: 0;
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(11, 61, 46, 0.09);
+  border-radius: 19px;
+  box-shadow: 0 8px 26px rgba(16, 37, 29, 0.045);
+  animation: confirmationCardEnter 0.65s ease both;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.confirmation-card:hover {
+  border-color: rgba(201, 162, 39, 0.35);
+  box-shadow: 0 15px 35px rgba(16, 37, 29, 0.075);
+  transform: translateY(-2px);
+}
+
+.confirmation-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 25px;
+  padding-bottom: 19px;
+  border-bottom: 1px solid rgba(11, 61, 46, 0.10);
+}
+
+.confirmation-card-header > div > p,
+.confirmation-next-header > p {
+  margin: 0 0 7px;
+  color: var(--confirmation-gold);
+  font-size: 0.69rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+}
+
+.confirmation-card-header h2,
+.confirmation-next-header h2 {
+  margin: 0;
+  color: var(--confirmation-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   ORDER STATUS
+========================================================= */
+
+.confirmation-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 8px 13px;
+  color: var(--confirmation-green);
+  background: rgba(11, 61, 46, 0.08);
+  border: 1px solid rgba(11, 61, 46, 0.14);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-align: center;
+  text-transform: capitalize;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   ORDER METADATA
+========================================================= */
+
+.confirmation-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.confirmation-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  padding: 17px;
+  background: linear-gradient(
+    145deg,
+    rgba(248, 245, 237, 0.9),
+    rgba(255, 255, 255, 0.9)
+  );
+  border: 1px solid rgba(11, 61, 46, 0.075);
+  border-radius: 13px;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.confirmation-meta > div:hover {
+  background: rgba(201, 162, 39, 0.08);
+  border-color: rgba(201, 162, 39, 0.28);
+  transform: translateY(-2px);
+}
+
+.confirmation-meta span,
+.confirmation-detail-list span {
+  color: var(--confirmation-muted);
+  font-size: 0.8rem;
+  font-weight: 550;
+}
+
+.confirmation-meta strong {
+  color: var(--confirmation-green-dark);
+  font-size: 0.94rem;
+  font-weight: 800;
+  text-transform: capitalize;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   ORDERED PRODUCTS
+========================================================= */
+
+.confirmation-products {
+  display: flex;
+  flex-direction: column;
+}
+
+.confirmation-product {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 19px;
+  padding: 19px 0;
+  border-bottom: 1px solid rgba(11, 61, 46, 0.09);
+  animation: confirmationProductEnter 0.5s ease both;
+  transition: background 0.25s ease;
+}
+
+.confirmation-product:first-child {
+  padding-top: 0;
+}
+
+.confirmation-product:last-child {
+  border-bottom: none;
+}
+
+.confirmation-product-image {
+  display: grid;
+  width: 78px;
+  height: 88px;
+  place-items: center;
+  overflow: hidden;
+  color: var(--confirmation-gold);
+  background: linear-gradient(
+    145deg,
+    #eae5d7,
+    #f9f6ed
+  );
+  border: 1px solid rgba(201, 162, 39, 0.23);
+  border-radius: 12px;
+}
+
+.confirmation-product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+.confirmation-product:hover .confirmation-product-image img {
+  transform: scale(1.07);
+}
+
+.confirmation-product-image span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.confirmation-product-info {
+  min-width: 0;
+}
+
+.confirmation-product-info h3 {
+  margin: 0 0 8px;
+  color: var(--confirmation-green-dark);
+  font-size: 1rem;
+  font-weight: 750;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.confirmation-product-info p {
+  margin: 0;
+  color: var(--confirmation-muted);
+  font-size: 0.84rem;
+}
+
+.confirmation-product > strong {
+  color: var(--confirmation-green);
+  font-size: 0.96rem;
+  font-weight: 850;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.confirmation-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 10px;
+  padding: 22px 20px;
+  background: linear-gradient(
+    110deg,
+    rgba(11, 61, 46, 0.07),
+    rgba(201, 162, 39, 0.12)
+  );
+  border: 1px solid rgba(201, 162, 39, 0.22);
+  border-radius: 13px;
+}
+
+.confirmation-total span {
+  color: var(--confirmation-green-dark);
+  font-size: 0.95rem;
+  font-weight: 750;
+}
+
+.confirmation-total strong {
+  color: var(--confirmation-green);
+  font-size: clamp(1.15rem, 3vw, 1.55rem);
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   CUSTOMER AND DELIVERY DETAILS
+========================================================= */
+
+.confirmation-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 24px;
+}
+
+.confirmation-details-grid .confirmation-card {
+  height: 100%;
+}
+
+.confirmation-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.confirmation-detail-list > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(11, 61, 46, 0.075);
+}
+
+.confirmation-detail-list > div:first-child {
+  padding-top: 0;
+}
+
+.confirmation-detail-list > div:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.confirmation-detail-list strong {
+  max-width: 100%;
+  color: var(--confirmation-green-dark);
+  font-size: 0.91rem;
+  font-weight: 700;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* =========================================================
+   WHAT HAPPENS NEXT
+========================================================= */
+
+.confirmation-next {
+  position: relative;
+  padding: 30px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(201, 162, 39, 0.12),
+      transparent 40%
+    ),
+    linear-gradient(
+      135deg,
+      #fffef9,
+      #f5f1e6
+    );
+  border: 1px solid rgba(201, 162, 39, 0.22);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(16, 37, 29, 0.045);
+  animation: confirmationCardEnter 0.7s ease both;
+}
+
+.confirmation-next-header {
+  margin-bottom: 27px;
+}
+
+.confirmation-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.confirmation-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  min-width: 0;
+  padding: 19px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(11, 61, 46, 0.09);
+  border-radius: 14px;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.confirmation-step:hover {
+  border-color: rgba(201, 162, 39, 0.42);
+  box-shadow: 0 8px 20px rgba(16, 37, 29, 0.06);
+  transform: translateY(-3px);
+}
+
+.confirmation-step > span {
+  display: grid;
+  width: 43px;
+  height: 43px;
+  flex: 0 0 43px;
+  place-items: center;
+  color: var(--confirmation-green);
+  background: rgba(11, 61, 46, 0.075);
+  border: 1px solid rgba(11, 61, 46, 0.12);
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.confirmation-step:hover > span {
+  color: #fff;
+  background: var(--confirmation-green);
+  transform: rotate(-4deg) scale(1.05);
+}
+
+.confirmation-step.active > span {
+  color: #fff;
+  background: linear-gradient(
+    145deg,
+    var(--confirmation-green),
+    #176b4b
+  );
+  border-color: transparent;
+  box-shadow: 0 5px 13px rgba(11, 61, 46, 0.18);
+}
+
+.confirmation-step > div {
+  min-width: 0;
+}
+
+.confirmation-step strong {
+  display: block;
+  margin: 1px 0 7px;
+  color: var(--confirmation-green-dark);
+  font-size: 0.93rem;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.confirmation-step p {
+  margin: 0;
+  color: var(--confirmation-muted);
+  font-size: 0.82rem;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 13px;
+  padding-top: 5px;
+}
+
+.confirmation-primary,
+.confirmation-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  min-height: 51px;
+  padding: 14px 22px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  font-family: inherit;
+  font-size: 0.77rem;
+  font-weight: 850;
+  letter-spacing: 0.065em;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.confirmation-primary {
+  color: #fff;
+  background: linear-gradient(
+    115deg,
+    var(--confirmation-green-dark),
+    var(--confirmation-green),
+    #176343
+  );
+  background-size: 200% 100%;
+  box-shadow: 0 7px 17px rgba(11, 61, 46, 0.16);
+}
+
+.confirmation-primary::before {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+}
+
+.confirmation-primary:hover::before {
+  left: 150%;
+}
+
+.confirmation-primary:hover {
+  background-position: 100% 0;
+  box-shadow: 0 11px 25px rgba(11, 61, 46, 0.23);
+  transform: translateY(-3px);
+}
+
+.confirmation-primary span {
+  font-size: 1.15rem;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+.confirmation-primary:hover span {
+  transform: translateX(4px);
+}
+
+.confirmation-secondary {
+  color: var(--confirmation-green);
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(11, 61, 46, 0.19);
+}
+
+.confirmation-secondary:hover {
+  color: var(--confirmation-green-dark);
+  background: rgba(201, 162, 39, 0.12);
+  border-color: var(--confirmation-gold);
+  box-shadow: 0 7px 17px rgba(16, 37, 29, 0.06);
+  transform: translateY(-3px);
+}
+
+.confirmation-primary:focus-visible,
+.confirmation-secondary:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.65);
+  outline-offset: 4px;
+}
+
+.confirmation-primary:active,
+.confirmation-secondary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* =========================================================
+   ENTRY ANIMATIONS
+========================================================= */
+
+@keyframes orderConfirmationEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes confirmationHeroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes confirmationCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes confirmationIconEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) rotate(-12deg);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.08) rotate(3deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes confirmationAccentReveal {
+  from {
+    opacity: 0;
+    transform: scaleX(0.2);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes confirmationProductEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLETS
+========================================================= */
+
+@media (max-width: 900px) {
+  .order-confirmation-page {
+    padding: 38px 20px 70px;
+  }
+
+  .order-confirmation-hero {
+    padding: 40px 25px 35px;
+  }
+
+  .confirmation-card {
+    padding: 24px;
+  }
+
+  .confirmation-details-grid {
+    gap: 18px;
+  }
+
+  .confirmation-next {
+    padding: 25px;
+  }
+
+  .confirmation-steps {
+    gap: 12px;
+  }
+
+  .confirmation-step {
+    padding: 16px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .order-confirmation-page {
+    padding: 22px 13px 45px;
+  }
+
+  .order-confirmation-hero {
+    margin-bottom: 24px;
+    padding: 32px 17px 27px;
+    border-radius: 20px;
+  }
+
+  .confirmation-success-icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 19px;
+  }
+
+  .confirmation-success-icon span {
+    font-size: 32px;
+  }
+
+  .confirmation-label {
+    font-size: 0.69rem;
+  }
+
+  .order-confirmation-hero h1 {
+    font-size: clamp(1.9rem, 8vw, 2.65rem);
+  }
+
+  .confirmation-message {
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  .confirmation-order-number {
+    width: 100%;
+    padding: 15px 12px;
+  }
+
+  .confirmation-order-number strong {
+    font-size: 0.82rem;
+  }
+
+  .confirmation-content {
+    gap: 17px;
+  }
+
+  .confirmation-card {
+    padding: 19px 16px;
+    border-radius: 15px;
+  }
+
+  .confirmation-card-header {
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 19px;
+    padding-bottom: 15px;
+  }
+
+  .confirmation-card-header h2,
+  .confirmation-next-header h2 {
+    font-size: 1.35rem;
+  }
+
+  .confirmation-card-header > div > p,
+  .confirmation-next-header > p {
+    font-size: 0.63rem;
+  }
+
+  .confirmation-status {
+    max-width: 45%;
+    padding: 7px 9px;
+    font-size: 0.66rem;
+  }
+
+  .confirmation-meta {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .confirmation-meta > div {
+    gap: 5px;
+    padding: 13px;
+  }
+
+  .confirmation-product {
+    grid-template-columns: 62px minmax(0, 1fr);
+    gap: 12px;
+    padding: 16px 0;
+  }
+
+  .confirmation-product-image {
+    width: 62px;
+    height: 72px;
+  }
+
+  .confirmation-product-info h3 {
+    font-size: 0.9rem;
+  }
+
+  .confirmation-product-info p {
+    font-size: 0.79rem;
+  }
+
+  .confirmation-product > strong {
+    grid-column: 2;
+    margin-top: -3px;
+    font-size: 0.91rem;
+    text-align: left;
+  }
+
+  .confirmation-total {
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 17px 13px;
+  }
+
+  .confirmation-total span {
+    font-size: 0.84rem;
+  }
+
+  .confirmation-total strong {
+    font-size: 1.1rem;
+    text-align: right;
+  }
+
+  .confirmation-details-grid {
+    grid-template-columns: 1fr;
+    gap: 17px;
+  }
+
+  .confirmation-detail-list strong {
+    font-size: 0.87rem;
+  }
+
+  .confirmation-next {
+    padding: 21px 16px;
+    border-radius: 16px;
+  }
+
+  .confirmation-next-header {
+    margin-bottom: 19px;
+  }
+
+  .confirmation-steps {
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+
+  .confirmation-step {
+    padding: 15px;
+  }
+
+  .confirmation-step p {
+    font-size: 0.8rem;
+  }
+
+  .confirmation-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 11px;
+    padding-top: 0;
+  }
+
+  .confirmation-primary,
+  .confirmation-secondary {
+    width: 100%;
+    min-height: 49px;
+    padding: 14px 17px;
+    font-size: 0.75rem;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+  .order-confirmation-page {
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+
+  .confirmation-card {
+    padding: 16px 12px;
+  }
+
+  .confirmation-card-header h2,
+  .confirmation-next-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .confirmation-product {
+    grid-template-columns: 53px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .confirmation-product-image {
+    width: 53px;
+    height: 64px;
+  }
+
+  .confirmation-total {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .confirmation-total strong {
+    text-align: left;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .order-confirmation-page,
+  .order-confirmation-hero,
+  .confirmation-success-icon,
+  .confirmation-card,
+  .confirmation-next,
+  .confirmation-product,
+  .order-confirmation-hero::before {
+    animation: none !important;
+  }
+
+  .order-confirmation-page *,
+  .order-confirmation-page *::before,
+  .order-confirmation-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

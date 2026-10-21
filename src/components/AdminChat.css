@@ -1,0 +1,1734 @@
+
+.abs-admin-chat {
+  --aac-green: var(--primary, #0b3d2e);
+  --aac-green-dark: var(--primary-dark, #10251d);
+  --aac-green-light: var(--primary-light, #174c39);
+  --aac-gold: var(--secondary, #c9a227);
+  --aac-gold-dark: var(--secondary-dark, #9b7919);
+  --aac-cream: var(--background, #f8f5ed);
+  --aac-text: var(--text, #1e2924);
+  --aac-muted: var(--muted, #66736d);
+  --aac-border: var(--border, #dedbd2);
+
+  width: 100%;
+  max-width: 1700px;
+  min-height: 75vh;
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 42px);
+  color: var(--aac-text);
+  background:
+    radial-gradient(
+      circle at 4% 0%,
+      rgba(201, 162, 39, 0.09),
+      transparent 23%
+    ),
+    radial-gradient(
+      circle at 100% 28%,
+      rgba(11, 61, 46, 0.055),
+      transparent 24%
+    ),
+    var(--aac-cream);
+  animation: aacPageEnter 0.55s ease both;
+}
+
+.abs-admin-chat *,
+.abs-admin-chat *::before,
+.abs-admin-chat *::after {
+  box-sizing: border-box;
+}
+
+.abs-admin-chat button,
+.abs-admin-chat input,
+.abs-admin-chat textarea {
+  font: inherit;
+}
+
+.abs-admin-chat button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.abs-admin-chat button:focus-visible,
+.abs-admin-chat input:focus-visible,
+.abs-admin-chat textarea:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.65);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.aac-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+  animation: aacRiseIn 0.6s ease both;
+}
+
+.aac-page-header > div {
+  min-width: 0;
+}
+
+.aac-eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--aac-gold-dark);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.aac-page-header h1 {
+  margin: 0;
+  color: var(--aac-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.9rem, 3.7vw, 3.1rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.aac-page-header p {
+  max-width: 620px;
+  margin: 12px 0 0;
+  color: var(--aac-muted);
+  font-size: 0.93rem;
+  line-height: 1.8;
+}
+
+.aac-refresh-button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 45px;
+  padding: 11px 18px;
+  border: 1px solid rgba(201, 162, 39, 0.5);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--aac-green);
+  font-size: 0.82rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.aac-refresh-button > span {
+  display: inline-block;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.aac-refresh-button:hover:not(:disabled) {
+  border-color: var(--aac-gold);
+  background: #fff9e9;
+  box-shadow: 0 7px 18px rgba(201, 162, 39, 0.12);
+  transform: translateY(-2px);
+}
+
+.aac-refresh-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.aac-spin {
+  animation: aacRotate 0.9s linear infinite;
+}
+
+/* =========================================================
+   DASHBOARD STATISTICS
+   ========================================================= */
+
+.aac-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 23px;
+  animation: aacRiseIn 0.65s 0.08s ease both;
+}
+
+.aac-stat-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 0;
+  min-height: 108px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(222, 219, 210, 0.9);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 6px 20px rgba(16, 37, 29, 0.035);
+  transition:
+    transform 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.aac-stat-card::after {
+  position: absolute;
+  right: -22px;
+  bottom: -30px;
+  width: 85px;
+  height: 85px;
+  border: 1px solid rgba(201, 162, 39, 0.11);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.aac-stat-card:hover {
+  border-color: rgba(201, 162, 39, 0.4);
+  box-shadow: 0 12px 27px rgba(16, 37, 29, 0.075);
+  transform: translateY(-3px);
+}
+
+.aac-stat-icon {
+  display: grid;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  border-radius: 14px;
+  background: linear-gradient(
+    140deg,
+    rgba(201, 162, 39, 0.16),
+    rgba(201, 162, 39, 0.055)
+  );
+  color: var(--aac-green);
+  font-size: 1.35rem;
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease;
+}
+
+.aac-stat-card:hover .aac-stat-icon {
+  background: rgba(201, 162, 39, 0.22);
+  transform: scale(1.06) rotate(-4deg);
+}
+
+.aac-stat-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.aac-stat-label {
+  color: var(--aac-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.aac-stat-card strong {
+  color: var(--aac-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.55rem, 2.5vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.aac-stat-card .aac-connection-text {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.3;
+}
+
+.aac-connection-dot {
+  position: relative;
+  flex: 0 0 11px;
+  width: 11px;
+  height: 11px;
+  margin: 0 4px;
+  border-radius: 50%;
+  background: #d69a2d;
+  box-shadow: 0 0 0 4px rgba(214, 154, 45, 0.12);
+}
+
+.aac-connection-dot.is-connected {
+  background: #25845a;
+  box-shadow: 0 0 0 4px rgba(37, 132, 90, 0.12);
+  animation: aacConnectionPulse 2.5s ease-in-out infinite;
+}
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.aac-alert {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 17px;
+  padding: 14px 17px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 0.87rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  animation: aacRiseIn 0.3s ease both;
+}
+
+.aac-alert-error {
+  border-color: #f0c8c2;
+  background: #fff0ed;
+  color: #9d2f29;
+}
+
+.aac-alert-notice {
+  border-color: rgba(201, 162, 39, 0.35);
+  background: #fff7df;
+  color: #775a10;
+}
+
+.aac-alert > button {
+  display: grid;
+  flex: 0 0 27px;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  font-size: 1.35rem;
+  cursor: pointer;
+}
+
+.aac-alert > button:hover {
+  background: rgba(157, 47, 41, 0.08);
+}
+
+/* =========================================================
+   MAIN WORKSPACE
+   ========================================================= */
+
+.aac-workspace {
+  display: grid;
+  grid-template-columns: minmax(300px, 365px) minmax(0, 1fr);
+  gap: 20px;
+  min-width: 0;
+  min-height: 720px;
+  animation: aacRiseIn 0.7s 0.12s ease both;
+}
+
+/* =========================================================
+   INBOX PANEL
+   ========================================================= */
+
+.aac-inbox {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--aac-border);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.91);
+  box-shadow: 0 10px 30px rgba(16, 37, 29, 0.045);
+}
+
+.aac-inbox-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 22px 21px 19px;
+  border-bottom: 1px solid #eeece5;
+}
+
+.aac-inbox-heading h2 {
+  margin: 0;
+  color: var(--aac-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.55rem;
+  font-weight: 600;
+}
+
+.aac-inbox-heading > div > span {
+  display: block;
+  margin-top: 6px;
+  color: var(--aac-muted);
+  font-size: 0.76rem;
+}
+
+.aac-inbox-symbol {
+  display: grid;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 13px;
+  background: rgba(201, 162, 39, 0.09);
+  color: var(--aac-green);
+  font-size: 1.2rem;
+}
+
+.aac-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 17px 16px 12px;
+  padding: 0 13px;
+  border: 1px solid var(--aac-border);
+  border-radius: 11px;
+  background: #fbfaf7;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.aac-search:focus-within {
+  border-color: var(--aac-gold);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+}
+
+.aac-search > span {
+  color: var(--aac-gold-dark);
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.aac-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--aac-text);
+  font-size: 0.83rem;
+}
+
+.aac-search input::placeholder {
+  color: #939b94;
+}
+
+.aac-search input:focus-visible {
+  outline: 0;
+}
+
+.aac-search input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.aac-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 16px 15px;
+  border-bottom: 1px solid #eeece5;
+}
+
+.aac-filters button {
+  min-height: 32px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--aac-muted);
+  font-size: 0.69rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.aac-filters button:hover {
+  border-color: rgba(201, 162, 39, 0.35);
+  background: rgba(201, 162, 39, 0.07);
+  color: var(--aac-green);
+}
+
+.aac-filters button.is-active {
+  border-color: var(--aac-green);
+  background: var(--aac-green);
+  color: #fff;
+  box-shadow: 0 3px 9px rgba(11, 61, 46, 0.12);
+}
+
+.aac-filters button:focus-visible,
+.aac-conversation-item:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.65);
+  outline-offset: -3px;
+}
+
+/* =========================================================
+   CONVERSATION LIST
+   ========================================================= */
+
+.aac-conversation-list {
+  flex: 1;
+  min-height: 200px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 162, 39, 0.55) transparent;
+}
+
+.aac-conversation-list::-webkit-scrollbar,
+.aac-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.aac-conversation-list::-webkit-scrollbar-thumb,
+.aac-messages::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(201, 162, 39, 0.45);
+}
+
+.aac-conversation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 17px 15px;
+  border: 0;
+  border-bottom: 1px solid #f0eee8;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.aac-conversation-item:hover {
+  background: #faf8f1;
+}
+
+.aac-conversation-item.is-active {
+  border-left-color: var(--aac-gold);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(201, 162, 39, 0.12),
+      rgba(201, 162, 39, 0.025)
+    );
+}
+
+.aac-avatar {
+  display: grid;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 43px;
+  place-items: center;
+  border: 1px solid rgba(201, 162, 39, 0.34);
+  border-radius: 14px;
+  background: linear-gradient(
+    145deg,
+    #f8edc8,
+    #e9d99f
+  );
+  color: var(--aac-green-dark);
+  font-size: 0.79rem;
+  font-weight: 850;
+  letter-spacing: 0.03em;
+  user-select: none;
+  transition:
+    border-radius 0.25s ease,
+    transform 0.25s ease;
+}
+
+.aac-conversation-item:hover .aac-avatar {
+  border-radius: 12px;
+  transform: scale(1.04);
+}
+
+.aac-conversation-details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.aac-conversation-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+
+.aac-conversation-top > strong {
+  min-width: 0;
+  color: var(--aac-green-dark);
+  font-size: 0.84rem;
+  font-weight: 800;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.aac-conversation-top > time {
+  flex: 0 0 auto;
+  color: #8a938c;
+  font-size: 0.66rem;
+  line-height: 1.7;
+}
+
+.aac-subject {
+  color: var(--aac-gold-dark);
+  font-size: 0.72rem;
+  font-weight: 750;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.aac-last-message {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--aac-muted);
+  font-size: 0.77rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.aac-conversation-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.aac-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.61rem;
+  font-weight: 800;
+  line-height: 1.3;
+  text-transform: capitalize;
+  overflow-wrap: anywhere;
+}
+
+.aac-status-pill.status-open {
+  border-color: #bde4ca;
+  background: #e9f7ed;
+  color: #176443;
+}
+
+.aac-status-pill.status-resolved {
+  border-color: #c6dff3;
+  background: #edf6fd;
+  color: #245b91;
+}
+
+.aac-status-pill.status-closed {
+  border-color: #dedbd2;
+  background: #f1f0ec;
+  color: #646c66;
+}
+
+.aac-unread-badge {
+  display: grid;
+  flex: 0 0 23px;
+  min-width: 23px;
+  height: 23px;
+  place-items: center;
+  padding: 0 5px;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  border-radius: 999px;
+  background: var(--aac-green);
+  color: #fff;
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   LOADING AND EMPTY INBOX STATES
+   ========================================================= */
+
+.aac-list-message,
+.aac-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 210px;
+  padding: 28px 18px;
+  color: var(--aac-muted);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.aac-loader {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(201, 162, 39, 0.2);
+  border-top-color: var(--aac-green);
+  border-right-color: var(--aac-gold);
+  border-radius: 50%;
+  animation: aacRotate 0.8s linear infinite;
+}
+
+.aac-list-empty > span,
+.aac-empty-messages > span {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 17px;
+  background: rgba(201, 162, 39, 0.09);
+  color: var(--aac-green);
+  font-size: 1.5rem;
+}
+
+.aac-list-empty > strong {
+  color: var(--aac-green-dark);
+  font-size: 0.9rem;
+}
+
+.aac-list-empty > p {
+  margin: -6px 0 0;
+  font-size: 0.78rem;
+}
+
+/* =========================================================
+   CHAT PANEL
+   ========================================================= */
+
+.aac-chat-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 720px;
+  overflow: hidden;
+  border: 1px solid var(--aac-border);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.93);
+  box-shadow: 0 10px 30px rgba(16, 37, 29, 0.045);
+}
+
+/* Welcome / no conversation selected */
+
+.aac-welcome {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 540px;
+  padding: 45px 28px;
+  text-align: center;
+  animation: aacRiseIn 0.5s ease both;
+}
+
+.aac-welcome-icon {
+  display: grid;
+  width: 90px;
+  height: 90px;
+  place-items: center;
+  margin-bottom: 27px;
+  border: 1px solid rgba(201, 162, 39, 0.55);
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at 30% 20%,
+      rgba(201, 162, 39, 0.24),
+      transparent 55%
+    ),
+    linear-gradient(145deg, #0b3d2e, #174c39);
+  color: #f5d978;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: 0 13px 30px rgba(11, 61, 46, 0.17);
+  animation: aacWelcomeFloat 4s ease-in-out infinite;
+}
+
+.aac-welcome .aac-eyebrow {
+  margin-bottom: 12px;
+}
+
+.aac-welcome h2 {
+  max-width: 520px;
+  margin: 0;
+  color: var(--aac-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.aac-welcome > p {
+  max-width: 440px;
+  margin: 17px 0 0;
+  color: var(--aac-muted);
+  font-size: 0.91rem;
+  line-height: 1.9;
+}
+
+/* =========================================================
+   ACTIVE CHAT HEADER
+   ========================================================= */
+
+.aac-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px 25px;
+  border-bottom: 1px solid #eeece5;
+  background:
+    linear-gradient(
+      115deg,
+      rgba(201, 162, 39, 0.055),
+      transparent 50%
+    ),
+    #fff;
+}
+
+.aac-chat-customer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.aac-avatar-large {
+  flex-basis: 51px;
+  width: 51px;
+  height: 51px;
+  border-radius: 17px;
+  font-size: 0.88rem;
+}
+
+.aac-chat-customer > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.aac-chat-customer h2 {
+  margin: 0;
+  color: var(--aac-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.22rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.aac-chat-customer p {
+  margin: 0;
+  color: var(--aac-muted);
+  font-size: 0.77rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.aac-chat-header-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 7px;
+  flex: 0 0 auto;
+  color: var(--aac-muted);
+  font-size: 0.7rem;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.aac-chat-ref {
+  padding: 5px 9px;
+  border: 1px solid rgba(201, 162, 39, 0.25);
+  border-radius: 7px;
+  background: rgba(201, 162, 39, 0.07);
+  color: var(--aac-green);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   CHAT TOPIC BANNER
+   ========================================================= */
+
+.aac-chat-topic {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 17px 22px 0;
+  padding: 14px 16px;
+  border: 1px solid rgba(201, 162, 39, 0.23);
+  border-radius: 12px;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(201, 162, 39, 0.1),
+      rgba(201, 162, 39, 0.025)
+    );
+}
+
+.aac-chat-topic > span {
+  display: grid;
+  flex: 0 0 29px;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(201, 162, 39, 0.17);
+  color: var(--aac-gold-dark);
+  font-size: 0.9rem;
+}
+
+.aac-chat-topic > div {
+  min-width: 0;
+}
+
+.aac-chat-topic strong {
+  display: block;
+  color: var(--aac-green-dark);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.aac-chat-topic p {
+  margin: 3px 0 0;
+  color: var(--aac-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   MESSAGES AREA
+   ========================================================= */
+
+.aac-messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 300px;
+  max-height: 590px;
+  margin-top: 12px;
+  padding: 22px 25px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(201, 162, 39, 0.035),
+      transparent 25%
+    ),
+    #fbfaf7;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 162, 39, 0.45) transparent;
+}
+
+.aac-date-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 11px 0 21px;
+  color: #858e87;
+  font-size: 0.68rem;
+  font-weight: 750;
+  line-height: 1.6;
+}
+
+.aac-date-divider::before,
+.aac-date-divider::after {
+  width: min(90px, 15%);
+  height: 1px;
+  background: #e8e5dc;
+  content: "";
+}
+
+.aac-message-row {
+  display: flex;
+  width: 100%;
+  margin: 4px 0 12px;
+  animation: aacMessageEnter 0.25s ease both;
+}
+
+.aac-message-row.is-admin {
+  justify-content: flex-end;
+}
+
+.aac-message-row.is-customer {
+  justify-content: flex-start;
+}
+
+.aac-message-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: fit-content;
+  max-width: min(78%, 570px);
+  min-width: 90px;
+  padding: 13px 16px 10px;
+  border: 1px solid #e6e3db;
+  border-radius: 16px 16px 16px 5px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(16, 37, 29, 0.035);
+}
+
+.aac-message-row.is-admin .aac-message-bubble {
+  border-color: rgba(201, 162, 39, 0.24);
+  border-radius: 16px 16px 5px 16px;
+  background:
+    linear-gradient(
+      135deg,
+      #0b3d2e,
+      #174c39
+    );
+  box-shadow: 0 5px 15px rgba(11, 61, 46, 0.1);
+}
+
+.aac-message-sender {
+  color: var(--aac-gold-dark);
+  font-size: 0.67rem;
+  font-weight: 800;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.aac-message-row.is-admin .aac-message-sender {
+  color: #f1d783;
+}
+
+.aac-message-bubble > p {
+  margin: 0;
+  color: var(--aac-text);
+  font-size: 0.88rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.aac-message-row.is-admin .aac-message-bubble > p {
+  color: #fffdf7;
+}
+
+.aac-message-bubble > time {
+  align-self: flex-end;
+  color: #89918b;
+  font-size: 0.63rem;
+  line-height: 1.5;
+}
+
+.aac-message-row.is-admin .aac-message-bubble > time {
+  color: rgba(255, 255, 255, 0.67);
+}
+
+.aac-empty-messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 270px;
+  padding: 25px;
+  text-align: center;
+}
+
+.aac-empty-messages > span {
+  margin-bottom: 18px;
+}
+
+.aac-empty-messages h3 {
+  margin: 0;
+  color: var(--aac-green-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.aac-empty-messages p {
+  max-width: 350px;
+  margin: 10px 0 0;
+  color: var(--aac-muted);
+  font-size: 0.83rem;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   TYPING INDICATOR
+   ========================================================= */
+
+.aac-typing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 25px 12px;
+  background: #fbfaf7;
+  color: var(--aac-muted);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.aac-typing-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.aac-typing-dots i {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--aac-gold-dark);
+  animation: aacTypingDot 1.2s ease-in-out infinite;
+}
+
+.aac-typing-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.aac-typing-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* =========================================================
+   MESSAGE COMPOSER
+   ========================================================= */
+
+.aac-composer {
+  padding: 17px 22px 20px;
+  border-top: 1px solid #e9e6dd;
+  background: #fff;
+}
+
+.aac-composer > textarea {
+  display: block;
+  width: 100%;
+  min-height: 76px;
+  max-height: 190px;
+  padding: 14px 15px;
+  resize: vertical;
+  border: 1px solid var(--aac-border);
+  border-radius: 12px;
+  outline: none;
+  background: #fbfaf7;
+  color: var(--aac-text);
+  font-size: 0.87rem;
+  line-height: 1.8;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.aac-composer > textarea::placeholder {
+  color: #929991;
+}
+
+.aac-composer > textarea:focus {
+  border-color: var(--aac-gold);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.1);
+}
+
+.aac-composer > textarea:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.aac-composer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 13px;
+}
+
+.aac-composer-footer > span {
+  color: #89918a;
+  font-size: 0.68rem;
+  line-height: 1.7;
+}
+
+.aac-composer-footer > button {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 43px;
+  padding: 11px 18px;
+  border: 1px solid var(--aac-gold);
+  border-radius: 11px;
+  background: var(--aac-green);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 13px rgba(11, 61, 46, 0.1);
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease,
+    opacity 0.22s ease;
+}
+
+.aac-composer-footer > button > span {
+  font-size: 1rem;
+  transition: transform 0.22s ease;
+}
+
+.aac-composer-footer > button:hover:not(:disabled) {
+  background: var(--aac-green-dark);
+  box-shadow: 0 9px 20px rgba(11, 61, 46, 0.17);
+  transform: translateY(-2px);
+}
+
+.aac-composer-footer > button:hover:not(:disabled) > span {
+  transform: translate(2px, -2px);
+}
+
+.aac-composer-footer > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}
+
+.aac-closed-notice {
+  margin-top: auto;
+  padding: 19px 23px;
+  border-top: 1px solid #e9e6dd;
+  background: #f5f3ed;
+  color: var(--aac-muted);
+  font-size: 0.82rem;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes aacPageEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes aacRiseIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes aacRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes aacConnectionPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(37, 132, 90, 0.12);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(37, 132, 90, 0.045);
+  }
+}
+
+@keyframes aacMessageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes aacTypingDot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes aacWelcomeFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — LAPTOPS AND TABLETS
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .aac-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .aac-workspace {
+    grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .aac-stat-card {
+    min-height: 96px;
+  }
+
+  .aac-chat-header {
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .aac-messages {
+    padding-right: 19px;
+    padding-left: 19px;
+  }
+
+  .aac-composer {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALLER TABLETS
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .abs-admin-chat {
+    padding: 23px 18px;
+  }
+
+  .aac-workspace {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .aac-inbox {
+    max-height: 590px;
+  }
+
+  .aac-conversation-list {
+    min-height: 150px;
+    max-height: 365px;
+  }
+
+  .aac-chat-panel {
+    min-height: 650px;
+  }
+
+  .aac-messages {
+    min-height: 330px;
+    max-height: 530px;
+  }
+
+  .aac-welcome {
+    min-height: 440px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .abs-admin-chat {
+    padding: 20px 12px 32px;
+  }
+
+  .aac-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+
+  .aac-page-header h1 {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+  }
+
+  .aac-page-header p {
+    margin-top: 9px;
+    font-size: 0.85rem;
+  }
+
+  .aac-refresh-button {
+    width: 100%;
+  }
+
+  .aac-stats {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .aac-stat-card {
+    align-items: flex-start;
+    gap: 10px;
+    min-height: 100px;
+    padding: 14px 11px;
+    border-radius: 13px;
+  }
+
+  .aac-stat-icon {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
+
+  .aac-connection-dot {
+    flex-basis: 9px;
+    width: 9px;
+    height: 9px;
+    margin-top: 4px;
+  }
+
+  .aac-stat-card > div {
+    gap: 7px;
+  }
+
+  .aac-stat-label {
+    font-size: 0.65rem;
+    line-height: 1.45;
+  }
+
+  .aac-stat-card strong {
+    font-size: 1.55rem;
+  }
+
+  .aac-stat-card .aac-connection-text {
+    font-size: 0.8rem;
+    overflow-wrap: anywhere;
+  }
+
+  .aac-workspace {
+    gap: 14px;
+  }
+
+  .aac-inbox,
+  .aac-chat-panel {
+    border-radius: 16px;
+  }
+
+  .aac-inbox-heading {
+    padding: 18px 15px;
+  }
+
+  .aac-inbox-heading h2 {
+    font-size: 1.4rem;
+  }
+
+  .aac-search {
+    margin-right: 12px;
+    margin-left: 12px;
+  }
+
+  .aac-filters {
+    gap: 5px;
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .aac-filters button {
+    padding-right: 8px;
+    padding-left: 8px;
+    font-size: 0.64rem;
+  }
+
+  .aac-conversation-item {
+    gap: 10px;
+    padding: 14px 11px;
+  }
+
+  .aac-avatar {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    font-size: 0.73rem;
+  }
+
+  .aac-conversation-top > strong {
+    font-size: 0.8rem;
+  }
+
+  .aac-conversation-top > time {
+    font-size: 0.61rem;
+  }
+
+  .aac-subject {
+    font-size: 0.68rem;
+  }
+
+  .aac-last-message {
+    font-size: 0.73rem;
+  }
+
+  .aac-chat-panel {
+    min-height: 590px;
+  }
+
+  .aac-chat-header {
+    flex-direction: column;
+    gap: 14px;
+    padding: 17px 14px;
+  }
+
+  .aac-chat-customer {
+    gap: 11px;
+    width: 100%;
+  }
+
+  .aac-avatar-large {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .aac-chat-customer h2 {
+    font-size: 1.1rem;
+  }
+
+  .aac-chat-header-meta {
+    align-items: flex-start;
+    gap: 5px;
+    padding-left: 55px;
+    text-align: left;
+  }
+
+  .aac-chat-topic {
+    gap: 9px;
+    margin: 12px 12px 0;
+    padding: 12px;
+  }
+
+  .aac-chat-topic strong {
+    font-size: 0.77rem;
+  }
+
+  .aac-chat-topic p {
+    font-size: 0.7rem;
+  }
+
+  .aac-messages {
+    min-height: 280px;
+    max-height: 450px;
+    padding: 16px 12px;
+  }
+
+  .aac-date-divider {
+    margin: 9px 0 16px;
+    font-size: 0.63rem;
+  }
+
+  .aac-message-bubble {
+    max-width: 89%;
+    min-width: 75px;
+    padding: 11px 12px 9px;
+  }
+
+  .aac-message-bubble > p {
+    font-size: 0.83rem;
+    line-height: 1.75;
+  }
+
+  .aac-message-sender {
+    font-size: 0.63rem;
+  }
+
+  .aac-typing {
+    padding: 0 14px 10px;
+  }
+
+  .aac-composer {
+    padding: 13px 12px 14px;
+  }
+
+  .aac-composer > textarea {
+    min-height: 74px;
+    padding: 11px 12px;
+    font-size: 0.83rem;
+  }
+
+  .aac-composer-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .aac-composer-footer > span {
+    font-size: 0.65rem;
+  }
+
+  .aac-composer-footer > button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .aac-welcome {
+    min-height: 410px;
+    padding: 35px 19px;
+  }
+
+  .aac-welcome-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 23px;
+    font-size: 1.4rem;
+  }
+
+  .aac-welcome h2 {
+    font-size: 1.9rem;
+  }
+
+  .aac-welcome > p {
+    font-size: 0.85rem;
+  }
+
+  .aac-empty-messages {
+    padding: 18px 10px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — VERY NARROW PHONES
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .abs-admin-chat {
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+
+  .aac-stat-card {
+    flex-direction: column;
+    gap: 9px;
+    min-height: 120px;
+  }
+
+  .aac-stat-card > div {
+    gap: 5px;
+  }
+
+  .aac-stat-card strong {
+    font-size: 1.4rem;
+  }
+
+  .aac-stat-card .aac-connection-text {
+    font-size: 0.73rem;
+  }
+
+  .aac-conversation-top {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .aac-chat-header-meta {
+    padding-left: 0;
+  }
+
+  .aac-message-bubble {
+    max-width: 94%;
+  }
+
+  .aac-chat-topic {
+    margin-right: 9px;
+    margin-left: 9px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-admin-chat,
+  .aac-page-header,
+  .aac-stats,
+  .aac-workspace,
+  .aac-alert,
+  .aac-welcome,
+  .aac-message-row,
+  .aac-connection-dot.is-connected,
+  .aac-welcome-icon,
+  .aac-loader,
+  .aac-spin,
+  .aac-typing-dots i {
+    animation: none !important;
+  }
+
+  .abs-admin-chat *,
+  .abs-admin-chat *::before,
+  .abs-admin-chat *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

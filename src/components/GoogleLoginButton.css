@@ -1,0 +1,132 @@
+
+
+.google-login-button-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  margin: 12px 0;
+  animation: absGoogleButtonEnter 0.45s ease both;
+}
+
+/* Google renders its official button inside this container. */
+.google-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 380px;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0 auto;
+  padding: 3px;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 162, 39, 0.18),
+    rgba(255, 255, 255, 0.96) 42%,
+    rgba(11, 61, 46, 0.06)
+  );
+  border: 1px solid rgba(201, 162, 39, 0.42);
+  border-radius: 13px;
+  box-shadow:
+    0 4px 13px rgba(16, 37, 29, 0.045),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* Google controls the inner button and its iframe.
+   Keep it centered and responsive without overriding its internals. */
+.google-login-button > div {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.google-login-button iframe {
+  max-width: 100%;
+}
+
+.google-login-button-wrapper:hover .google-login-button {
+  transform: translateY(-1px);
+  border-color: rgba(201, 162, 39, 0.75);
+  box-shadow:
+    0 8px 20px rgba(16, 37, 29, 0.075),
+    0 0 0 3px rgba(201, 162, 39, 0.07);
+}
+
+/* Keyboard accessibility */
+.google-login-button-wrapper:focus-within .google-login-button {
+  border-color: #c9a227;
+  box-shadow:
+    0 0 0 3px rgba(201, 162, 39, 0.18),
+    0 5px 15px rgba(16, 37, 29, 0.06);
+}
+
+/* Loading / empty SDK container */
+.google-login-button:empty {
+  position: relative;
+  min-height: 46px;
+  background: linear-gradient(
+    90deg,
+    #f5f1e7 0%,
+    #fffdf7 45%,
+    #f5f1e7 100%
+  );
+  background-size: 200% 100%;
+  animation: absGoogleButtonShimmer 1.5s ease-in-out infinite;
+}
+
+/* =========================================================
+   RESPONSIVE LAYOUT
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .google-login-button-wrapper {
+    margin: 10px 0;
+  }
+
+  .google-login-button {
+    max-width: 100%;
+    border-radius: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .google-login-button-wrapper,
+  .google-login-button,
+  .google-login-button:empty {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes absGoogleButtonEnter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes absGoogleButtonShimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
