@@ -640,3 +640,156 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =========================================
+   ABS CUT — ANIMATED SVG BRAND LOGO
+========================================= */
+
+.abs-navbar-logo {
+  isolation: isolate;
+  overflow: hidden;
+  animation: absLogoBreath 4s ease-in-out infinite;
+}
+
+.abs-navbar-logo .abs-logo-svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 48px;
+  height: 48px;
+  overflow: visible;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 3px rgba(11, 61, 46, 0.1));
+  transition:
+    filter 0.4s ease,
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Continuous gold orbit */
+.abs-logo-orbit {
+  transform-box: view-box;
+  transform-origin: 32px 32px;
+  animation: absLogoOrbit 12s linear infinite;
+}
+
+/* Soft glow around the logo ring */
+.abs-logo-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: absLogoRingGlow 3.5s ease-in-out infinite;
+}
+
+/* Gentle movement on the gold tailoring flourish */
+.abs-logo-flourish {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: absLogoFlourish 3s ease-in-out infinite;
+}
+
+/* Small gold finishing point */
+.abs-logo-spark {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: absLogoSpark 2s ease-in-out infinite;
+}
+
+/* Logo hover interaction */
+.abs-navbar-logo:hover {
+  border-color: var(--nav-gold);
+  box-shadow:
+    0 0 0 4px rgba(201, 162, 39, 0.08),
+    0 8px 25px rgba(201, 162, 39, 0.22);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.abs-navbar-logo:hover .abs-logo-svg {
+  filter: drop-shadow(0 3px 6px rgba(201, 162, 39, 0.3));
+  transform: scale(1.06);
+}
+
+/* Infinite animations */
+@keyframes absLogoOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes absLogoBreath {
+  0%,
+  100% {
+    box-shadow: 0 5px 15px rgba(11, 61, 46, 0.07);
+  }
+
+  50% {
+    box-shadow:
+      0 5px 20px rgba(11, 61, 46, 0.1),
+      0 0 12px rgba(201, 162, 39, 0.13);
+  }
+}
+
+@keyframes absLogoRingGlow {
+  0%,
+  100% {
+    opacity: 0.65;
+    stroke-width: 1.3;
+  }
+
+  50% {
+    opacity: 1;
+    stroke-width: 2;
+  }
+}
+
+@keyframes absLogoFlourish {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes absLogoSpark {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+/* Respect accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  .abs-navbar-logo,
+  .abs-navbar-logo .abs-logo-svg,
+  .abs-logo-orbit,
+  .abs-logo-ring,
+  .abs-logo-flourish,
+  .abs-logo-spark {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media (max-width: 980px) {
+  .abs-navbar-logo .abs-logo-svg {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .abs-navbar-logo .abs-logo-svg {
+    width: 41px;
+    height: 41px;
+  }
+}

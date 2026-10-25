@@ -83,31 +83,36 @@ export async function apiRequest(
      * =================================================
      */
 
-    if (!response.ok) {
-      throw new Error(
-        data?.message ||
-          "Something went wrong.",
-      );
-    }
+ 
+  if (!response.ok) {
+  const error = new Error(
+    data?.message || "Something went wrong."
+  );
+
+  error.status = response.status;
+  error.requiresEmailVerification =
+    data?.requiresEmailVerification === true;
+  error.email = data?.email;
+
+  throw error;
+}
 
     return data;
-  } catch (error) {
-    console.error(
-      "API REQUEST ERROR:",
-      {
-        endpoint,
-        error,
-      },
-    );
 
-    /*
-     * Preserve the backend/API error message.
-     */
+    } catch (error) {
+    console.error("API REQUEST ERROR:", {
+      endpoint,
+      status: error?.status,
+      message: error?.message,
+      error,
+    });
 
-    throw new Error(
-      error?.message ||
-        "Unable to connect to the ABS CUT server.",
-    );
+    // Preserve the original error and its custom properties.
+    throw error instanceof Error
+      ? error
+      : new Error(
+          "Unable to connect to the ABS CUT server."
+        );
   }
 }
 

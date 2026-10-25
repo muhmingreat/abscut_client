@@ -373,7 +373,7 @@ if (
   return (
     <main className="admin-dashboard-page">
       <div className="admin-dashboard-shell">
-        <AdminSidebar />
+        {/* <AdminSidebar /> */}
 
         <section className="admin-main admin-product-create-page">
           {/* HEADER */}

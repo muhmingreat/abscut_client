@@ -1075,12 +1075,38 @@ function Checkout() {
           <div className="checkout-products">
             {cartItems.map((item) => (
               <div className="checkout-product" key={item.id}>
-                <div className="checkout-product-image">
+                {/* <div className="checkout-product-image">
                   <img src={item.image} alt={item.name} />
 
                   <span>{item.quantity}</span>
-                </div>
+                </div> */}
+                <div className="checkout-product-image">
+                  {item.video ? (
+                    <video
+                      src={item.video}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      aria-label={`${item.name} product video`}
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                      }}
+                    >
+                      Your browser does not support video playback.
+                    </video>
+                  ) : item.image ? (
+                    <img src={item.image} alt={item.name} loading="lazy" />
+                  ) : (
+                    <div className="checkout-product-media-placeholder">
+                      <span>ABS CUT</span>
+                      <small>Preview unavailable</small>
+                    </div>
+                  )}
 
+                  <span className="checkout-product-quantity">
+                    {item.quantity}
+                  </span>
+                </div>
                 <div className="checkout-product-info">
                   <h3>{item.name}</h3>
                   <p>{item.category}</p>

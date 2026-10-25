@@ -391,14 +391,7 @@ const handleNewMessage = (payload) => {
           </span>
         </header>
 
-        <div className="abs-chat-notice">
-          <span className="abs-chat-notice-icon">✦</span>
-          <p>
-            Welcome to ABS CUT. Send us a message and our team will
-            respond as soon as possible.
-          </p>
-        </div>
-
+       
         <div
           className="abs-chat-messages"
           aria-live="polite"
@@ -479,6 +472,9 @@ const handleNewMessage = (payload) => {
             {error}
           </div>
         )}
+  
+
+
 
         {conversation.status === "open" ? (
           <form className="abs-chat-composer" onSubmit={handleSend}>

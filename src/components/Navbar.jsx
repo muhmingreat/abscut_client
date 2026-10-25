@@ -34,12 +34,96 @@ function Navbar() {
         aria-label="ABS CUT home"
         onClick={closeMenu}
       >
-        <img
+        <svg
+  className="abs-logo-svg"
+  viewBox="0 0 64 64"
+  role="img"
+  aria-label="ABS CUT logo"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient id="absLogoGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#f4df91" />
+      <stop offset="50%" stopColor="#c9a227" />
+      <stop offset="100%" stopColor="#8c6b13" />
+    </linearGradient>
+
+    <linearGradient id="absLogoGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#145640" />
+      <stop offset="100%" stopColor="#0b2d23" />
+    </linearGradient>
+  </defs>
+
+  <circle
+    className="abs-logo-ring"
+    cx="32"
+    cy="32"
+    r="28"
+    fill="none"
+    stroke="url(#absLogoGold)"
+    strokeWidth="1.5"
+  />
+
+
+  <g className="abs-logo-orbit">
+    <circle
+      cx="32"
+      cy="32"
+      r="24"
+      fill="none"
+      stroke="#c9a227"
+      strokeWidth="1.6"
+      strokeDasharray="5 7 18 6"
+      strokeLinecap="round"
+    />
+
+    <circle cx="32" cy="8" r="2.8" fill="#f4df91" />
+  </g>
+
+  
+  <path
+    d="M14 48 L31 14 L48 48"
+    fill="none"
+    stroke="url(#absLogoGreen)"
+    strokeWidth="5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+
+  
+  <path
+    d="M22 36 H40"
+    fill="none"
+    stroke="#0b3d2e"
+    strokeWidth="3.5"
+    strokeLinecap="round"
+  />
+
+
+  <path
+    className="abs-logo-flourish"
+    d="M17 45 Q30 30 47 40"
+    fill="none"
+    stroke="url(#absLogoGold)"
+    strokeWidth="2.4"
+    strokeLinecap="round"
+  />
+
+
+  <circle
+    className="abs-logo-spark"
+    cx="48"
+    cy="40"
+    r="2.2"
+    fill="#c9a227"
+  />
+</svg>
+        {/* <img
           src="/images/abs-logo.png"
           alt="ABS CUT Logo"
           height="50"
           width="50"
-        />
+        /> */}
       </NavLink>
 
       <button

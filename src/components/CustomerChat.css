@@ -1131,3 +1131,145 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =========================================================
+   ABS CUT — REFINED CUSTOMER CHAT
+   Luxury green & gold
+   ========================================================= */
+
+/* Cleaner message area */
+.abs-chat-page .abs-chat-messages {
+  gap: 8px;
+  padding: 16px;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(201, 162, 39, 0.045),
+      transparent 35%
+    ),
+    #fffefa;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(11, 61, 46, 0.25) transparent;
+}
+
+/* Refined message spacing */
+.abs-chat-page .abs-chat-message-row {
+  margin-bottom: 5px;
+}
+
+.abs-chat-page .abs-chat-message {
+  max-width: 86%;
+  padding: 11px 14px 9px;
+  border-radius: 15px;
+}
+
+.abs-chat-page .abs-chat-message-row.is-customer .abs-chat-message {
+  border-bottom-right-radius: 5px;
+}
+
+.abs-chat-page .abs-chat-message-row.is-admin .abs-chat-message {
+  border-bottom-left-radius: 5px;
+}
+
+/* A more compact welcome notice */
+.abs-chat-page .abs-chat-notice {
+  gap: 10px;
+  margin: 12px 14px 0;
+  padding: 11px 13px;
+  border-radius: 11px;
+}
+
+.abs-chat-page .abs-chat-notice p {
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Refined message composer */
+.abs-chat-page .abs-chat-composer {
+  gap: 9px;
+  padding: 12px 14px 8px;
+  background: #fff;
+  border-top: 1px solid #e9e3d6;
+  box-shadow: 0 -4px 14px rgba(16, 37, 29, 0.025);
+}
+
+.abs-chat-page .abs-chat-composer textarea {
+  min-height: 46px;
+  max-height: 110px;
+  padding: 12px 14px;
+  background: #fbfaf6;
+  border: 1px solid #dedbd2;
+  border-radius: 12px;
+  font-size: 12px;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+.abs-chat-page .abs-chat-composer textarea:focus {
+  background: #fff;
+  border-color: #c9a227;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+}
+
+/* Elegant Send button */
+.abs-chat-page .abs-chat-composer button {
+  min-height: 46px;
+  gap: 8px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #14513b, #0b3d2e);
+  box-shadow: 0 4px 11px rgba(11, 61, 46, 0.14);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.abs-chat-page .abs-chat-composer button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #e3c65e;
+  box-shadow: 0 7px 16px rgba(11, 61, 46, 0.2);
+}
+
+/* Smaller, quieter keyboard hint */
+.abs-chat-page .abs-chat-composer small {
+  margin-top: 0;
+  color: #858d85;
+  font-size: 9px;
+}
+
+/* Subtle footer */
+.abs-chat-page .abs-chat-footer {
+  padding: 9px 12px;
+  background: #faf8f2;
+  font-size: 9px;
+  letter-spacing: 0.3px;
+}
+
+/* Compact mobile layout */
+@media (max-width: 480px) {
+  .abs-chat-page .abs-chat-messages {
+    padding: 12px 10px;
+  }
+
+  .abs-chat-page .abs-chat-message {
+    max-width: 91%;
+  }
+
+  .abs-chat-page .abs-chat-composer {
+    gap: 7px;
+    padding: 10px 9px 7px;
+  }
+
+  .abs-chat-page .abs-chat-composer textarea {
+    min-height: 44px;
+    padding: 10px;
+  }
+
+  .abs-chat-page .abs-chat-composer button {
+    min-height: 44px;
+    padding: 0 12px;
+  }
+}

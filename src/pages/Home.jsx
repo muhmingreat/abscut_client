@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { apiRequest } from "../services/api";
+import Footer from "../components/Footer";
 import "./Home.css";
 
 function Home() {
@@ -315,6 +316,7 @@ function Home() {
         <span className="abs-brand-strip-star">✳</span>
         <span>TIMELESS BY DESIGN</span>
       </div>
+       <Footer />
     </main>
   );
 }

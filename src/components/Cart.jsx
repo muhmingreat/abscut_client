@@ -5,7 +5,7 @@ import "./Cart.css";
 function Cart() {
   const {
     cartItems,
-     cartLoading,
+    cartLoading,
     increaseQuantity,
     decreaseQuantity,
     removeFromCart,
@@ -22,12 +22,8 @@ function Cart() {
   };
 
   if (cartLoading) {
-  return (
-    <LoadingScreen
-      message="Loading your  cart..."
-    />
-  );
-}
+    return <LoadingScreen message="Loading your  cart..." />;
+  }
   /* =========================
      EMPTY CART
      ========================= */
@@ -36,25 +32,18 @@ function Cart() {
     return (
       <main className="cart-page">
         <section className="cart-empty">
-          <div className="cart-empty-icon">
-            🛒
-          </div>
+          <div className="cart-empty-icon">🛒</div>
 
-          <p className="cart-label">
-            ABS CUT SHOPPING BAG
-          </p>
+          <p className="cart-label">ABS CUT SHOPPING BAG</p>
 
           <h1>Your Cart Is Empty</h1>
 
           <p className="cart-empty-text">
-            You haven't added any products to your cart yet.
-            Explore our collection and find something made for you.
+            You haven't added any products to your cart yet. Explore our
+            collection and find something made for you.
           </p>
 
-          <Link
-            to="/shop"
-            className="cart-shop-button"
-          >
+          <Link to="/shop" className="cart-shop-button">
             EXPLORE COLLECTION
           </Link>
         </section>
@@ -64,248 +53,182 @@ function Cart() {
 
   return (
     <main className="cart-page">
-
       {/* =========================
           CART HEADER
           ========================= */}
 
       <section className="cart-header">
-
         <div>
-          <p className="cart-label">
-            ABS CUT SHOPPING BAG
-          </p>
+          <p className="cart-label">ABS CUT SHOPPING BAG</p>
 
           <h1>Your Cart</h1>
 
-          <span>
-            Review your selected items before checkout.
-          </span>
+          <span>Review your selected items before checkout.</span>
         </div>
 
         <div className="cart-item-count">
           <strong>{totalItems}</strong>
-          <span>
-            {totalItems === 1 ? "Item" : "Items"}
-          </span>
+          <span>{totalItems === 1 ? "Item" : "Items"}</span>
         </div>
-
       </section>
-
 
       {/* =========================
           CART CONTENT
           ========================= */}
 
       <section className="cart-content">
-
         {/* =========================
             CART ITEMS
             ========================= */}
 
         <div className="cart-items">
-
           {cartItems.map((item) => {
-
-            const itemTotal =
-              item.price * item.quantity;
+            const itemTotal = item.price * item.quantity;
 
             return (
-              <article
-                className="cart-item"
-                key={item.id}
-              >
-
+              <article className="cart-item" key={item.id}>
                 {/* PRODUCT IMAGE */}
 
-                <div className="cart-item-image">
+                {/* <div className="cart-item-image">
                   <img
                     src={item.image}
                     alt={item.name}
                   />
-                </div>
+                </div> */}
 
+                <div className="cart-item-image">
+                  {item.video ? (
+                    <video
+                      src={item.video}
+                      controls
+                      muted
+                      playsInline
+                      preload="metadata"
+                      aria-label={`${item.name} product video`}
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                      }}
+                    >
+                      Your browser does not support video playback.
+                    </video>
+                  ) : item.image ? (
+                    <img src={item.image} alt={item.name} loading="lazy" />
+                  ) : (
+                    <div className="cart-item-media-placeholder">
+                      <span>ABS CUT</span>
+                      <small>Product preview unavailable</small>
+                    </div>
+                  )}
+                </div>
 
                 {/* PRODUCT INFORMATION */}
 
                 <div className="cart-item-info">
+                  <p className="cart-item-category">{item.category}</p>
 
-                  <p className="cart-item-category">
-                    {item.category}
-                  </p>
+                  <h2>{item.name}</h2>
 
-                  <h2>
-                    {item.name}
-                  </h2>
-
-                  <p className="cart-item-price">
-                    {formatPrice(item.price)}
-                  </p>
-
+                  <p className="cart-item-price">{formatPrice(item.price)}</p>
                 </div>
-
 
                 {/* QUANTITY */}
 
                 <div className="cart-item-quantity">
-
                   <span>Quantity</span>
 
                   <div className="quantity-control">
-
                     <button
                       type="button"
-                      onClick={() =>
-                        decreaseQuantity(item.id)
-                      }
+                      onClick={() => decreaseQuantity(item.id)}
                       aria-label={`Decrease ${item.name} quantity`}
                     >
                       −
                     </button>
 
-                    <strong>
-                      {item.quantity}
-                    </strong>
+                    <strong>{item.quantity}</strong>
 
                     <button
                       type="button"
-                      onClick={() =>
-                        increaseQuantity(item.id)
-                      }
+                      onClick={() => increaseQuantity(item.id)}
                       aria-label={`Increase ${item.name} quantity`}
                     >
                       +
                     </button>
-
                   </div>
-
                 </div>
-
 
                 {/* ITEM TOTAL */}
 
                 <div className="cart-item-total">
-
                   <span>Total</span>
 
-                  <strong>
-                    {formatPrice(itemTotal)}
-                  </strong>
-
+                  <strong>{formatPrice(itemTotal)}</strong>
                 </div>
-
 
                 {/* REMOVE */}
 
                 <button
                   type="button"
                   className="cart-remove-button"
-                  onClick={() =>
-                    removeFromCart(item.id)
-                  }
+                  onClick={() => removeFromCart(item.id)}
                   aria-label={`Remove ${item.name} from cart`}
                 >
                   ×
                 </button>
-
               </article>
             );
           })}
-
         </div>
-
 
         {/* =========================
             CART SUMMARY
             ========================= */}
 
         <aside className="cart-summary">
-
           <div className="cart-summary-header">
             <p>ORDER SUMMARY</p>
 
-            <h2>
-              Cart Summary
-            </h2>
+            <h2>Cart Summary</h2>
           </div>
-
 
           <div className="cart-summary-row">
+            <span>Items</span>
 
-            <span>
-              Items
-            </span>
-
-            <strong>
-              {totalItems}
-            </strong>
-
+            <strong>{totalItems}</strong>
           </div>
-
 
           <div className="cart-summary-row">
+            <span>Subtotal</span>
 
-            <span>
-              Subtotal
-            </span>
-
-            <strong>
-              {formatPrice(totalPrice)}
-            </strong>
-
+            <strong>{formatPrice(totalPrice)}</strong>
           </div>
-
 
           <div className="cart-summary-divider"></div>
 
-
           <div className="cart-summary-total">
+            <span>Total</span>
 
-            <span>
-              Total
-            </span>
-
-            <strong>
-              {formatPrice(totalPrice)}
-            </strong>
-
+            <strong>{formatPrice(totalPrice)}</strong>
           </div>
 
-
-          <Link
-            to="/checkout"
-            className="cart-checkout-button"
-          >
+          <Link to="/checkout" className="cart-checkout-button">
             PROCEED TO CHECKOUT
             <span>→</span>
           </Link>
 
-
-          <Link
-            to="/shop"
-            className="cart-continue-button"
-          >
+          <Link to="/shop" className="cart-continue-button">
             ← CONTINUE SHOPPING
           </Link>
 
-
           <div className="cart-security">
-
             <span>✓</span>
 
-            <p>
-              Your cart items are saved automatically.
-            </p>
-
+            <p>Your cart items are saved automatically.</p>
           </div>
-
         </aside>
-
       </section>
-
     </main>
   );
 }
 
 export default Cart;
-

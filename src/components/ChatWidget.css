@@ -482,3 +482,72 @@
     transition: none !important;
   }
 }
+
+/* =========================================================
+   CHAT WIDGET LAYOUT FIX
+   ========================================================= */
+
+.abs-chat-page {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  animation: none;
+}
+
+.abs-chat-page > .abs-chat-card {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.abs-chat-page .abs-chat-header,
+.abs-chat-page .abs-chat-notice,
+.abs-chat-page .abs-chat-typing,
+.abs-chat-page .abs-chat-inline-error,
+.abs-chat-page .abs-chat-composer,
+.abs-chat-page .abs-chat-closed,
+.abs-chat-page .abs-chat-footer {
+  flex-shrink: 0;
+}
+
+.abs-chat-page .abs-chat-messages {
+  flex: 1 1 0;
+  min-height: 0;
+  height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Keep the message input and Send button visible. */
+.abs-chat-page .abs-chat-composer {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
+  min-width: 0;
+  background: #fff;
+}
+
+.abs-chat-page .abs-chat-composer textarea {
+  width: 100%;
+  min-width: 0;
+}
+
+.abs-chat-page .abs-chat-composer button {
+  flex-shrink: 0;
+}

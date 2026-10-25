@@ -181,11 +181,7 @@ function CustomOrder() {
 
   /* Pickup location handler */
   const handlePickupLocationChange = (latitude, longitude, details = null) => {
-    console.log("🟢 PICKUP HANDLER FIRED:", {
-      latitude,
-      longitude,
-      details,
-    });
+  
 
     setFormData((currentData) => ({
       ...currentData,
@@ -219,11 +215,7 @@ function CustomOrder() {
     longitude,
     details = null,
   ) => {
-    console.log("🔵 DELIVERY HANDLER FIRED:", {
-      latitude,
-      longitude,
-      details,
-    });
+
 
     setFormData((currentData) => ({
       ...currentData,
@@ -816,7 +808,7 @@ function CustomOrder() {
                 <option value="Customer">I will provide the material</option>
 
                 <option value="Already Made Garment">
-                  I already have a garment for embroidery / monogramming
+                  I already have a garment I only want to need embroidery or monogramming
                 </option>
 
                 <option value="Not Required">Material not required</option>

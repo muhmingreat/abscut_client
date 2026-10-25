@@ -5,6 +5,7 @@ import LoadingScreen from "./LoadingScreen";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import FacebookLoginButton from "../components/FacebookLoginButton";
 
+
 import { useApp } from "../context/AppContext";
 import "./Login.css";
 
@@ -118,11 +119,28 @@ const [facebookAccessToken, setFacebookAccessToken] =
       setTimeout(() => {
         navigate("/account");
       }, 1000);
+    
+   
     } catch (error) {
-      console.error("ABS CUT login error:", error);
-      setLoading(false);
-      setError(error.message || "Unable to log in. Please try again.");
-    }
+  console.error("ABS CUT login error:", error);
+
+  if (error.requiresEmailVerification) {
+    navigate("/verify-email", {
+      state: {
+        email: error.email || email,
+      },
+    });
+
+    return;
+  }
+
+  setError(
+    error.message ||
+      "Unable to log in. Please try again."
+  );
+} finally {
+  setLoading(false);
+}
   };
 
  
@@ -130,37 +148,120 @@ const [facebookAccessToken, setFacebookAccessToken] =
 // GOOGLE LOGIN SUCCESS
 // =========================================================
 
-const handleGoogleSuccess = (data) => {
+// const handleGoogleSuccess = (data) => {
+//   try {
+//     if (!data?.user || !data?.token) {
+//       throw new Error(
+//         "Google login did not return a valid ABS CUT session."
+//       );
+//     }
+
+//     // Save the customer and JWT.
+//     login(data.user, data.token);
+
+//     setError("");
+//     setSuccess(true);
+//     setGoogleLoading(false);
+
+//     // Navigate after saving the authenticated session.
+//     navigate("/account", {
+//       replace: true,
+//     });
+//   } catch (error) {
+//     console.error(
+//       "ABS CUT Google session error:",
+//       error
+//     );
+
+//     setGoogleLoading(false);
+
+//     setError(
+//       error.message ||
+//         "Unable to complete Google login."
+//     );
+//   }
+// };
+
+// const handleGoogleSuccess = (data) => {
+//   try {
+//     setGoogleLoading(false);
+
+//     if (data?.requiresEmailVerification) {
+//       navigate("/verify-email", {
+//         state: {
+//           email: data.email || "",
+//         },
+//       });
+
+//       return;
+//     }
+
+//     if (!data?.user || !data?.token) {
+//       throw new Error(
+//         "Google login did not return a valid ABS CUT session."
+//       );
+//     }
+
+//     login(data.user, data.token);
+
+//     setError("");
+//     setSuccess(true);
+
+//     navigate("/account", {
+//       replace: true,
+//     });
+//   } catch (error) {
+//     console.error(
+//       "ABS CUT Google session error:",
+//       error
+//     );
+
+//     setGoogleLoading(false);
+
+//     setError(
+//       error.message ||
+//         "Unable to complete Google login."
+//     );
+//   }
+// };
+
+const handleGoogleSuccess = async (data) => {
   try {
+    setGoogleLoading(false);
+    setError("");
+
+    if (data?.requiresEmailVerification) {
+      navigate("/verify-email", {
+        state: {
+          email: data.email || "",
+        },
+      });
+      return;
+    }
+
     if (!data?.user || !data?.token) {
       throw new Error(
         "Google login did not return a valid ABS CUT session."
       );
     }
 
-    // Save the customer and JWT.
-    login(data.user, data.token);
+    // Wait for the context to finish processing the login.
+    await login(data.user, data.token);
 
-    setError("");
     setSuccess(true);
-    setGoogleLoading(false);
 
-    // Navigate after saving the authenticated session.
     navigate("/account", {
       replace: true,
     });
   } catch (error) {
-    console.error(
-      "ABS CUT Google session error:",
-      error
-    );
-
-    setGoogleLoading(false);
+    console.error("ABS CUT Google session error:", error);
 
     setError(
-      error.message ||
-        "Unable to complete Google login."
+      error?.message ||
+        "Unable to complete Google login. Please try again."
     );
+  } finally {
+    setGoogleLoading(false);
   }
 };
 

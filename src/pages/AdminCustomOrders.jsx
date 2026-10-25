@@ -95,7 +95,7 @@ function AdminCustomOrders() {
 
         {/* SIDEBAR */}
 
-        <AdminSidebar />
+       {/* <AdminSidebar /> */}
 
         {/* MAIN ADMIN AREA */}
 

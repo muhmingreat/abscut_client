@@ -228,7 +228,7 @@ function AdminCustomOrderDetails() {
     return (
       <main className="admin-dashboard-page">
         <div className="admin-dashboard-shell">
-          <AdminSidebar />
+          {/* <AdminSidebar /> */}
 
           <section className="admin-main">
             <div className="admin-custom-details-error">

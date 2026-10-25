@@ -125,7 +125,7 @@ function AdminInstallmentSettings() {
 
   return (
     <div className="admin-installments-page">
-      <AdminSidebar />
+      {/* <AdminSidebar /> */}
 
       <main className="admin-installments-main">
         <header className="installments-header">

@@ -38,6 +38,9 @@ import {
   AdminCustomer,
   AdminInventory,
   AdminReports,
+    EmailVerification,
+  ForgotPassword,
+  ResetPassword,
 } from "./index";
 
 function App() {
@@ -57,11 +60,15 @@ function App() {
         <Route path="/about" element={<About />} />
 
         <Route path="/contact" element={<Contact />} />
-        <Route path="/payment/callback" element={<PaymentCallback />} />
-        {/* "09071697982" */}
+        <Route path="/payments/callback" element={<PaymentCallback />} />
+        
         <Route path="/register" element={<Register />} />
 
         <Route path="/login" element={<Login />} />
+
+        <Route path="/verify-email" element={<EmailVerification />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/product/:id" element={<ProductDetails />} />
 
@@ -127,6 +134,7 @@ function App() {
           />
         </Route>
       </Routes>
+     
     </>
   );
 }

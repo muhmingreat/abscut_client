@@ -19,7 +19,9 @@ export { default as About } from "./pages/About";
 export { default as Register } from "./pages/Register";
 export { default as Login } from "./pages/Login";
 export { default as PaymentCallback } from "./pages/PaymentCallback";
-
+export { default as EmailVerification } from "./pages/EmailVerification";
+export { default as ForgotPassword } from "./pages/ForgotPassword";
+export { default as ResetPassword } from "./pages/ResetPassword";
 // Shared components
 export { default as Navbar } from "./components/Navbar";
 export { default as ChatWidget } from "./components/ChatWidget";

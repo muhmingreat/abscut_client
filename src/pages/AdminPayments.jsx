@@ -344,7 +344,7 @@ function AdminPayments() {
 
   return (
     <div className="admin-payments-page">
-      <AdminSidebar />
+      {/* <AdminSidebar /> */}
 
       <main className="admin-payments-main">
         {/* HEADER */}

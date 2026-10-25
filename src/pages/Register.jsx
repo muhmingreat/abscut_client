@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../services/api";
+import GoogleLoginButton from "../components/GoogleLoginButton";
+import { useApp } from "../context/AppContext";
 
 import LoadingScreen from "./LoadingScreen";
 import './Register.css';
 
 function Register() {
   const navigate = useNavigate();
+  const { login } = useApp();
+
+const [googleLoading, setGoogleLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -45,141 +50,275 @@ function Register() {
   // =========================================================
   // HANDLE REGISTER
   // =========================================================
+  
+const handleSubmit = async (event) => {
+  event.preventDefault();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const firstName = formData.firstName.trim();
+  const lastName = formData.lastName.trim();
+  const phone = formData.phone.trim();
+  const email = formData.email.trim().toLowerCase();
+  const password = formData.password;
 
-    // =======================================================
-    // CLEAN FORM VALUES
-    // =======================================================
+  if (!firstName) {
+    setError("Please enter your first name.");
+    return;
+  }
 
-    const firstName = formData.firstName.trim();
-    const lastName = formData.lastName.trim();
-    const phone = formData.phone.trim();
-    const email = formData.email.trim().toLowerCase();
-    const password = formData.password;
+  if (!lastName) {
+    setError("Please enter your last name.");
+    return;
+  }
 
-    // =======================================================
-    // VALIDATION
-    // =======================================================
+  if (!phone) {
+    setError("Please enter your phone number.");
+    return;
+  }
 
-    if (!firstName) {
-      setError("Please enter your first name.");
-      return;
-    }
+  const phoneDigits = phone.replace(/\D/g, "");
 
-    if (!lastName) {
-      setError("Please enter your last name.");
-      return;
-    }
+  if (phoneDigits.length < 10) {
+    setError("Please enter a valid phone number.");
+    return;
+  }
 
-    if (!phone) {
-      setError("Please enter your phone number.");
-      return;
-    }
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // =======================================================
-    // PHONE VALIDATION
-    // =======================================================
+  if (!emailPattern.test(email)) {
+    setError("Please enter a valid email address.");
+    return;
+  }
 
-    const phoneDigits = phone.replace(/\D/g, "");
+  if (password.length < 8) {
+    setError("Your password must contain at least 8 characters.");
+    return;
+  }
 
-    if (phoneDigits.length < 10) {
-      setError("Please enter a valid phone number.");
-      return;
-    }
+  if (password !== formData.confirmPassword) {
+    setError("Your passwords do not match.");
+    return;
+  }
 
-    // =======================================================
-    // EMAIL VALIDATION
-    // =======================================================
+  if (!agreeToTerms) {
+    setError("Please agree to the ABS CUT terms before continuing.");
+    return;
+  }
 
-    if (!email) {
-      setError("Please enter your email address.");
-      return;
-    }
+  try {
+    setLoading(true);
+    setError("");
+    setSuccess(false);
 
-    if (!email.includes("@") || !email.includes(".")) {
-      setError("Please enter a valid email address.");
-      return;
-    }
+    const data = await apiRequest("/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        phone,
+        email,
+        password,
+      }),
+    });
 
-    // =======================================================
-    // PASSWORD VALIDATION
-    // =======================================================
-
-    if (password.length < 6) {
-      setError(
-        "Your password must contain at least 6 characters."
-      );
-      return;
-    }
-
-    if (password !== formData.confirmPassword) {
-      setError("Your passwords do not match.");
-      return;
-    }
-
-    // =======================================================
-    // TERMS VALIDATION
-    // =======================================================
-
-    if (!agreeToTerms) {
-      setError(
-        "Please agree to the ABS CUT terms before continuing."
-      );
-      return;
-    }
-
-    // =======================================================
-    // REGISTER THROUGH BACKEND
-    // =======================================================
-
-    try {
-      // Start full-page loading
-      setLoading(true);
-      setError("");
-
-      const data = await apiRequest("/auth/register", {
-        method: "POST",
-
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          phone,
-          email,
-          password,
-        }),
+    // The backend must request email verification.
+    if (data.requiresEmailVerification) {
+      navigate("/verify-email", {
+        state: {
+          email: data.email || email,
+        },
       });
 
-      // =====================================================
-      // SUCCESS
-      // =====================================================
-
-      setSuccess(true);
-      setLoading(false);
-
-      // =====================================================
-      // REDIRECT TO LOGIN
-      // =====================================================
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
-
-    } catch (error) {
-      console.error(
-        "ABS CUT registration error:",
-        error
-      );
-
-      setLoading(false);
-
-      setError(
-        error.message ||
-          "Unable to create your account. Please try again."
-      );
+      return;
     }
-  };
+
+    // Handle an unexpected successful response safely.
+    setSuccess(true);
+
+    navigate("/login", {
+      replace: true,
+      state: {
+        message:
+          data.message ||
+          "Registration successful. Please log in.",
+      },
+    });
+  } catch (error) {
+    console.error("ABS CUT registration error:", error);
+
+    setError(
+      error.message ||
+        "Unable to create your account. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleGoogleSuccess = (data) => {
+  setGoogleLoading(false);
+  setError("");
+
+  // New Google accounts may need email verification first.
+  if (data?.requiresEmailVerification) {
+    navigate("/verify-email", {
+      state: {
+        email: data.email || "",
+      },
+    });
+    return;
+  }
+
+  if (!data?.user || !data?.token) {
+    setError("Google signup could not complete your account setup.");
+    return;
+  }
+
+  login(data.user, data.token);
+  navigate("/account", { replace: true });
+};
+
+const handleGoogleError = (message) => {
+  setGoogleLoading(false);
+  setError(message || "Unable to sign up with Google. Please try again.");
+};
+
+const handleGoogleLoading = (isLoading) => {
+  setGoogleLoading(isLoading);
+};
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+
+  //   // =======================================================
+  //   // CLEAN FORM VALUES
+  //   // =======================================================
+
+  //   const firstName = formData.firstName.trim();
+  //   const lastName = formData.lastName.trim();
+  //   const phone = formData.phone.trim();
+  //   const email = formData.email.trim().toLowerCase();
+  //   const password = formData.password;
+
+  //   // =======================================================
+  //   // VALIDATION
+  //   // =======================================================
+
+  //   if (!firstName) {
+  //     setError("Please enter your first name.");
+  //     return;
+  //   }
+
+  //   if (!lastName) {
+  //     setError("Please enter your last name.");
+  //     return;
+  //   }
+
+  //   if (!phone) {
+  //     setError("Please enter your phone number.");
+  //     return;
+  //   }
+
+  //   // =======================================================
+  //   // PHONE VALIDATION
+  //   // =======================================================
+
+  //   const phoneDigits = phone.replace(/\D/g, "");
+
+  //   if (phoneDigits.length < 10) {
+  //     setError("Please enter a valid phone number.");
+  //     return;
+  //   }
+
+  //   // =======================================================
+  //   // EMAIL VALIDATION
+  //   // =======================================================
+
+  //   if (!email) {
+  //     setError("Please enter your email address.");
+  //     return;
+  //   }
+
+  //   if (!email.includes("@") || !email.includes(".")) {
+  //     setError("Please enter a valid email address.");
+  //     return;
+  //   }
+
+  //   // =======================================================
+  //   // PASSWORD VALIDATION
+  //   // =======================================================
+
+  //   if (password.length < 6) {
+  //     setError(
+  //       "Your password must contain at least 6 characters."
+  //     );
+  //     return;
+  //   }
+
+  //   if (password !== formData.confirmPassword) {
+  //     setError("Your passwords do not match.");
+  //     return;
+  //   }
+
+  //   // =======================================================
+  //   // TERMS VALIDATION
+  //   // =======================================================
+
+  //   if (!agreeToTerms) {
+  //     setError(
+  //       "Please agree to the ABS CUT terms before continuing."
+  //     );
+  //     return;
+  //   }
+
+  //   // =======================================================
+  //   // REGISTER THROUGH BACKEND
+  //   // =======================================================
+
+  //   try {
+  //     // Start full-page loading
+  //     setLoading(true);
+  //     setError("");
+
+  //     const data = await apiRequest("/auth/register", {
+  //       method: "POST",
+
+  //       body: JSON.stringify({
+  //         firstName,
+  //         lastName,
+  //         phone,
+  //         email,
+  //         password,
+  //       }),
+  //     });
+
+  //     // =====================================================
+  //     // SUCCESS
+  //     // =====================================================
+
+  //     setSuccess(true);
+  //     setLoading(false);
+
+  //     // =====================================================
+  //     // REDIRECT TO LOGIN
+  //     // =====================================================
+
+  //     setTimeout(() => {
+  //       navigate("/login");
+  //     }, 1000);
+
+  //   } catch (error) {
+  //     console.error(
+  //       "ABS CUT registration error:",
+  //       error
+  //     );
+
+  //     setLoading(false);
+
+  //     setError(
+  //       error.message ||
+  //         "Unable to create your account. Please try again."
+  //     );
+  //   }
+  // };
 
   // =========================================================
   // LOADING SCREEN
@@ -538,10 +677,13 @@ function Register() {
 
               <strong>✓</strong>
 
-              <p>
+              {/* <p>
                 Account created successfully.
                 Redirecting you to your account...
-              </p>
+              </p> */}
+              <p>
+  Registration successful. Preparing your email verification...
+</p>
 
             </div>
           )}
@@ -569,6 +711,79 @@ function Register() {
           </button>
 
         </form>
+
+{/* SOCIAL SIGNUP */}
+<div className="register-social-divider">
+  <span />
+  {/* <p>OR SIGN UP WITH</p> */}
+  <span />
+</div>
+
+{/* <div className="register-google-button">
+  <GoogleLoginButton
+    onSuccess={handleGoogleSuccess}
+    onError={handleGoogleError}
+    onLoading={handleGoogleLoading}
+  />
+</div> */}
+{/* <GoogleLoginButton
+  onSuccess={handleGoogleSuccess}
+  onError={setError}
+  onLoading={setLoading}
+  onVerificationRequired={(data) => {
+    const email =
+      data.email ||
+      data.user?.email ||
+      "";
+
+    if (!email) {
+      setError(
+        "We sent a verification code, but could not identify the email address. Please check your inbox."
+      );
+      return;
+    }
+
+    navigate("/verify-email", {
+      state: {
+        email,
+        message:
+          data.message ||
+          "We sent a verification code to your email.",
+        source: "google",
+      },
+    });
+  }}
+/> */}
+
+<GoogleLoginButton
+  onSuccess={handleGoogleSuccess}
+  onError={handleGoogleError}
+  onLoading={handleGoogleLoading}
+  onVerificationRequired={(data) => {
+    const email =
+      data.email ||
+      data.user?.email ||
+      "";
+
+    if (!email) {
+      setError(
+        "We sent a verification code, but could not identify the email address. Please check your inbox."
+      );
+      return;
+    }
+
+    navigate("/verify-email", {
+      state: {
+        email,
+        message:
+          data.message ||
+          "We sent a verification code to your email.",
+        source: "google",
+      },
+    });
+  }}
+/>
+
 
         {/* ===================================================
             LOGIN LINK
