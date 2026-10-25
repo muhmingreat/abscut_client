@@ -2,7 +2,8 @@
 // const API_URL = "http://localhost:5000/api" || "https://abscut-server-seven.vercel.app/" ;
 const API_URL = import.meta.env.DEV
   ? "http://localhost:5000/api"
-  : "https://abscut-server-seven.vercel.app/api";
+  
+  :"https://abscut-server.vercel.app/api";
 /*
   =====================================================
   STANDARD API REQUEST
