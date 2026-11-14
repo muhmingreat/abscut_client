@@ -1,9 +1,9 @@
 
 
-const API_URL = import.meta.env.DEV
+ export const API_URL = (import.meta.env.DEV
   ? "http://localhost:5000/api"
   
-  :"https://abscut-server.vercel.app/api"
+  :"https://abscut-server.vercel.app/api").replace(/\/+$/, "");
 /*
   =====================================================
   STANDARD API REQUEST

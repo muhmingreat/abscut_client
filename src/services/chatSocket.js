@@ -1,16 +1,14 @@
 
 import { io } from "socket.io-client";
-
+import {API_URL} from "./api.js";
 // ============================================================
 // ABS CUT — CHAT SOCKET SERVICE
 // ============================================================
 
-// Set VITE_API_URL in your frontend .env file.
-// Example: VITE_API_URL=http://localhost:5000/api
 
-const API_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
-).replace(/\/+$/, "");
+// const API_URL = (
+//   import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+// ).replace(/\/+$/, "");
 
 // Socket.IO connects to the server origin, not the REST API path.
 const SOCKET_URL = API_URL.replace(/\/api\/?$/i, "");
