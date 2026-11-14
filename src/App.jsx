@@ -1,10 +1,11 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,useLocation } from "react-router-dom";
 import Certificates from "./pages/academy/Certificates";
 import CertificateDetails from "./pages/academy/CertificateDetails";
 import VerifyCertificate from "./pages/academy/VerifyCertificate";
 import AdminAcademyAssignments from "./pages/admin/AdminAcademyAssignments";
 import AdminAcademyAssignmentSubmissions from "./pages/admin/AdminAcademyAssignmentSubmissions";
 import AIGuide from "./components/ai-guide/AIGuide";
+import { useEffect , } from "react";
 import {
   ProductDetails,
   Navbar,
@@ -70,7 +71,16 @@ import Notifications from "./pages/customers/Notifications";
 import AdminNotifications from "./pages/admin/AdminNotifications";
 import ActivityDetails from "./pages/customers/ActivityDetails";
 import AdminAcademyLiveClasses from "./pages/admin/AdminAcademyLiveClasses";
+import{PAGE_TITLES,getPageTitle} from "./index.js";
+
+
+PAGE_TITLES
 function App() {
+  const location = useLocation();
+
+useEffect(() => {
+  document.title = getPageTitle(location.pathname);
+}, [location.pathname]);
   return (
     <>
       <Navbar />

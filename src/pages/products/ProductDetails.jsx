@@ -75,7 +75,12 @@ export default function ProductDetails() {
       behavior: "smooth",
     });
   }, [id]);
-
+  
+useEffect(() => {
+  document.title = product?.name
+    ? `${product.name} | ABS CUT`
+    : "Product | ABS CUT";
+}, [product?.name]);
   // =========================
   // PRODUCT HELPERS
   // =========================

@@ -230,6 +230,12 @@ function CourseDetails() {
     );
   }
 
+
+  useEffect(() => {
+  document.title = course?.title
+    ? `${course.title} | ABS CUT`
+    : "Course | ABS CUT";
+}, [course?.title]);
   return (
     <main className="academy-details-page">
       {/* BREADCRUMB */}
