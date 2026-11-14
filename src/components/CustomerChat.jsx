@@ -372,14 +372,7 @@ const handleNewMessage = (payload) => {
         <header className="abs-chat-header">
           <div className="abs-chat-brand-icon">AC</div>
 
-          <div className="abs-chat-heading">
-            <span className="abs-chat-eyebrow">ABS CUT SUPPORT</span>
-            <h2>Let's talk</h2>
-            <p>
-              Questions about orders, tailoring, or payments? We're here
-              to help.
-            </p>
-          </div>
+       
 
           <span
             className={`abs-chat-status ${

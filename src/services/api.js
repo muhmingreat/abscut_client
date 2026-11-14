@@ -3,7 +3,7 @@
 const API_URL = import.meta.env.DEV
   ? "http://localhost:5000/api"
   
-  :"https://abscut-server-nine.vercel.app/api"
+  :"https://abscut-server-xmn4.vercel.app/"
 /*
   =====================================================
   STANDARD API REQUEST
