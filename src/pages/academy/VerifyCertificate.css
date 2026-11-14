@@ -1,0 +1,359 @@
+
+.verify-certificate-page {
+  min-height: 100vh;
+  padding-bottom: 65px;
+  background: #f8f5ed;
+  color: #1e2924;
+}
+
+.verify-certificate-hero {
+  min-height: 280px;
+  padding: 50px 6%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(201, 162, 39, .16), transparent 40%),
+    linear-gradient(120deg, #0b3d2e, #10251d);
+  color: #fffefa;
+  text-align: center;
+}
+
+.verify-hero-symbol {
+  margin-bottom: 12px;
+  color: #d4b34c;
+  font-size: 2.3rem;
+}
+
+.verify-eyebrow {
+  color: #d4b34c;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+}
+
+.verify-certificate-hero h1 {
+  margin: 15px 0;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 500;
+}
+
+.verify-certificate-hero p {
+  max-width: 570px;
+  margin: 0;
+  color: rgba(255, 254, 250, .78);
+  line-height: 1.8;
+}
+
+.verify-certificate-content {
+  width: min(760px, 92%);
+  margin: -25px auto 0;
+  position: relative;
+}
+
+.verify-certificate-form {
+  padding: 30px;
+  border: 1px solid #e2ded2;
+  border-radius: 16px;
+  background: #fffefa;
+  box-shadow: 0 15px 40px rgba(16, 37, 29, .08);
+}
+
+.verify-certificate-form label {
+  display: block;
+  margin-bottom: 10px;
+  color: #10251d;
+  font-size: .9rem;
+  font-weight: 800;
+}
+
+.verify-input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.verify-input-row input {
+  min-width: 0;
+  min-height: 50px;
+  padding: 0 15px;
+  flex: 1;
+  border: 1px solid #dedbd2;
+  border-radius: 8px;
+  outline: none;
+  background: #fffefa;
+  color: #1e2924;
+  font: inherit;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.verify-input-row input:focus {
+  border-color: #c9a227;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, .12);
+}
+
+.verify-input-row button {
+  min-width: 110px;
+  min-height: 50px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #0b3d2e;
+  color: #fffefa;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+
+.verify-input-row button:hover:not(:disabled) {
+  background: #16533e;
+}
+
+.verify-input-row button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.verify-certificate-form small {
+  display: block;
+  margin-top: 10px;
+  color: #66736d;
+  line-height: 1.5;
+}
+
+.verify-loading {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #66736d;
+}
+
+.verify-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #dedbd2;
+  border-top-color: #c9a227;
+  border-radius: 50%;
+  animation: verifySpin .8s linear infinite;
+}
+
+.verify-result {
+  margin-top: 25px;
+  padding: 30px;
+  border: 1px solid #dedbd2;
+  border-radius: 15px;
+  background: #fffefa;
+  animation: verifyAppear .35s ease both;
+}
+
+.verify-result-valid {
+  border-top: 4px solid #24794d;
+}
+
+.verify-result-revoked,
+.verify-result-invalid {
+  border-top: 4px solid #b13c30;
+}
+
+.verify-result-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 15px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #e7f2eb;
+  color: #17613e;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.verify-result-revoked .verify-result-icon,
+.verify-result-invalid .verify-result-icon {
+  background: #fce9e6;
+  color: #a83227;
+}
+
+.verify-result-label {
+  color: #17613e;
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: 1.7px;
+}
+
+.verify-result-revoked .verify-result-label,
+.verify-result-invalid .verify-result-label {
+  color: #a83227;
+}
+
+.verify-result h2 {
+  margin: 10px 0;
+  color: #10251d;
+  font-family: Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+.verify-result-description,
+.verify-result > p {
+  color: #66736d;
+  font-size: .9rem;
+  line-height: 1.7;
+}
+
+.verify-record {
+  margin-top: 25px;
+  border-top: 1px solid #e8e4d9;
+}
+
+.verify-record-item {
+  padding: 14px 0;
+  border-bottom: 1px solid #e8e4d9;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.verify-record-item span {
+  color: #66736d;
+  font-size: .83rem;
+}
+
+.verify-record-item strong {
+  max-width: 60%;
+  color: #10251d;
+  font-size: .85rem;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.verify-record-item .status-valid {
+  color: #17613e;
+}
+
+.verify-record-item .status-revoked {
+  color: #a83227;
+}
+
+.verify-instructions {
+  margin-top: 25px;
+  padding: 30px;
+  border: 1px dashed #d5cfbd;
+  border-radius: 14px;
+  text-align: center;
+  background: rgba(255, 254, 250, .7);
+}
+
+.verify-instructions > span {
+  color: #a1842c;
+  font-size: 2rem;
+}
+
+.verify-instructions h3 {
+  margin: 10px 0;
+  color: #10251d;
+  font-family: Georgia, serif;
+  font-size: 1.4rem;
+}
+
+.verify-instructions p {
+  max-width: 500px;
+  margin: 0 auto;
+  color: #66736d;
+  font-size: .9rem;
+  line-height: 1.8;
+}
+
+.verify-footer {
+  margin-top: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.verify-footer p {
+  margin: 0;
+  color: #a1842c;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.verify-footer a {
+  color: #0b3d2e;
+  font-size: .85rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.verify-footer a:hover {
+  color: #a1842c;
+}
+
+@keyframes verifySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes verifyAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .verify-certificate-hero {
+    min-height: 250px;
+  }
+
+  .verify-certificate-form,
+  .verify-result,
+  .verify-instructions {
+    padding: 22px 18px;
+  }
+
+  .verify-input-row {
+    flex-direction: column;
+  }
+
+  .verify-input-row button {
+    width: 100%;
+  }
+
+  .verify-record-item {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .verify-record-item strong {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .verify-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verify-certificate-page *,
+  .verify-certificate-page *::before,
+  .verify-certificate-page *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

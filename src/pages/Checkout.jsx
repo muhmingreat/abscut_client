@@ -1,51 +1,398 @@
-import { useEffect, useState } from "react";
+
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useCart } from "../context/AppContext";
 import { apiRequest, uploadRequest } from "../services/api";
+
 import "./Checkout.css";
 
-function Checkout() {
-  const { cartItems, totalItems, totalPrice } = useCart();
+// =====================================================
+// CONSTANTS
+// =====================================================
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    address: "",
-    city: "",
-    state: "",
-    deliveryMethod: "delivery",
-    notes: "",
-  });
+const RECEIPT_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+];
+
+const MAX_RECEIPT_SIZE = 5 * 1024 * 1024;
+
+const EMPTY_FORM = {
+  firstName: "",
+  lastName: "",
+  phone: "",
+  email: "",
+  address: "",
+  area: "",
+  landmark: "",
+  city: "",
+  state: "",
+  deliveryMethod: "delivery",
+  notes: "",
+};
+
+const PAYMENT_METHODS = [
+  {
+    value: "paystack",
+    title: "Paystack",
+    description: "Online payment is temporarily unavailable.",
+    unavailable: true,
+  },
+  {
+    value: "flutterwave",
+    title: "Flutterwave",
+    description: "Online payment is temporarily unavailable.",
+    unavailable: true,
+  },
+  {
+    value: "bank_transfer",
+    title: "Bank Transfer",
+    description: "Transfer directly and submit your receipt.",
+    unavailable: false,
+  },
+];
+
+// =====================================================
+// HELPERS
+// =====================================================
+
+function getErrorMessage(error, fallback) {
+  const message = error?.message;
+
+  if (
+    !message ||
+    message.includes("Unexpected token '<'") ||
+    message.includes("<!DOCTYPE") ||
+    message.includes("is not valid JSON")
+  ) {
+    return fallback;
+  }
+
+  return message;
+}
+
+function getProductId(item) {
+  return String(
+    item.productId ||
+    item._id ||
+    item.id ||
+    item.product?._id ||
+    "",
+  );
+}
+
+function getPurchaseMode(item) {
+  return item.purchaseMode === "digital"
+    ? "digital"
+    : "physical";
+}
+
+function getPriceUnit(item) {
+  if (item.priceUnit) {
+    return item.priceUnit;
+  }
+
+  if (item.productType === "raw_material") {
+    return "yard";
+  }
+
+  if (
+    item.productType === "monogram" ||
+    item.productType === "phoenix_embroidery"
+  ) {
+    return "design";
+  }
+
+  return "piece";
+}
+
+function getUnitLabel(unit) {
+  switch (unit) {
+    case "yard":
+      return "Yards";
+
+    case "design":
+      return "Designs";
+
+    default:
+      return "Pieces";
+  }
+}
+
+// =====================================================
+// CHECKOUT COMPONENT
+// =====================================================
+
+function Checkout() {
+  const { cartItems, totalPrice } = useCart();
+
+  // ===================================================
+  // CART CLASSIFICATION
+  // ===================================================
+
+  const physicalCartItems = cartItems.filter(
+    (item) => getPurchaseMode(item) === "physical",
+  );
+
+  const digitalCartItems = cartItems.filter(
+    (item) => getPurchaseMode(item) === "digital",
+  );
+
+  const hasPhysicalItems = physicalCartItems.length > 0;
+  const hasDigitalItems = digitalCartItems.length > 0;
+
+  const isDigitalOnly =
+    !hasPhysicalItems && hasDigitalItems;
+
+  const isMixedCart =
+    hasPhysicalItems && hasDigitalItems;
+
+  // ===================================================
+  // FORM STATE
+  // ===================================================
+
+  const [formData, setFormData] = useState(EMPTY_FORM);
 
   const [errors, setErrors] = useState({});
+
   const [orderLoading, setOrderLoading] = useState(false);
 
-  const [paymentMethod, setPaymentMethod] = useState("paystack");
+  // ===================================================
+  // DELIVERY ZONES
+  // ===================================================
 
-  // Reuse an unpaid order if payment initialization needs to be retried.
+  const [deliveryZones, setDeliveryZones] = useState([]);
+
+  const [deliveryZonesLoading, setDeliveryZonesLoading] =
+    useState(true);
+
+  const [deliveryZonesError, setDeliveryZonesError] =
+    useState("");
+
+  // ===================================================
+  // DELIVERY QUOTATION
+  // ===================================================
+
+  const [deliveryQuote, setDeliveryQuote] = useState(null);
+
+  const [deliveryQuoteLoading, setDeliveryQuoteLoading] =
+    useState(false);
+
+  const [deliveryQuoteError, setDeliveryQuoteError] =
+    useState("");
+
+  const quoteRequestRef = useRef(0);
+
+  // ===================================================
+  // PAYMENT STATE
+  // ===================================================
+
+  const [paymentMethod, setPaymentMethod] =
+    useState("bank_transfer");
+
   const [pendingOrder, setPendingOrder] = useState(null);
 
   const [transferInfo, setTransferInfo] = useState(null);
-  const [transferSenderName, setTransferSenderName] = useState("");
-  const [transferSubmitting, setTransferSubmitting] = useState(false);
-  const [transferSubmitted, setTransferSubmitted] = useState(false);
-  const [transferMessage, setTransferMessage] = useState("");
-  const [receiptFile, setReceiptFile] = useState(null);
-  const [receiptUploading, setReceiptUploading] = useState(false);
 
-  // --------------------------------------------------
-  // LOAD SAVED CUSTOMER
-  // --------------------------------------------------
+  const [transferSenderName, setTransferSenderName] =
+    useState("");
+
+  const [receiptFile, setReceiptFile] = useState(null);
+
+  const [transferSubmitting, setTransferSubmitting] =
+    useState(false);
+
+  const [receiptUploading, setReceiptUploading] =
+    useState(false);
+
+  const [transferSubmitted, setTransferSubmitted] =
+    useState(false);
+
+  const [transferMessage, setTransferMessage] =
+    useState("");
+
+  // ===================================================
+  // PRICE FORMATTER
+  // ===================================================
+
+  const formatPrice = useCallback((price) => {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      maximumFractionDigits: 0,
+    }).format(Number(price) || 0);
+  }, []);
+
+  // ===================================================
+  // DELIVERY FEE AND TOTAL
+  // ===================================================
+
+  const estimatedDeliveryFee =
+    hasPhysicalItems &&
+    formData.deliveryMethod === "delivery"
+      ? Number(deliveryQuote?.fee || 0)
+      : 0;
+
+  const estimatedTotal =
+    Number(totalPrice || 0) + estimatedDeliveryFee;
+
+  // ===================================================
+  // AUTOMATIC DELIVERY METHOD
+  // ===================================================
 
   useEffect(() => {
-    const savedCustomer = localStorage.getItem("absCutCustomer");
+    if (!hasPhysicalItems) {
+      quoteRequestRef.current += 1;
 
-    if (!savedCustomer) return;
+      setDeliveryQuote(null);
+      setDeliveryQuoteError("");
+      setDeliveryQuoteLoading(false);
 
+      setFormData((current) => ({
+        ...current,
+        deliveryMethod: "digital",
+      }));
+
+      return;
+    }
+
+    setFormData((current) => {
+      if (current.deliveryMethod === "digital") {
+        return {
+          ...current,
+          deliveryMethod: "delivery",
+        };
+      }
+
+      return current;
+    });
+  }, [hasPhysicalItems]);
+
+  // ===================================================
+  // LOAD ACTIVE DELIVERY ZONES
+  // ===================================================
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadDeliveryZones = async () => {
+      try {
+        setDeliveryZonesLoading(true);
+        setDeliveryZonesError("");
+
+        const response = await apiRequest("/delivery/zones");
+
+        if (!response?.success) {
+          throw new Error(
+            response?.message ||
+              "Unable to load delivery locations.",
+          );
+        }
+
+        const zones =
+          response.zones ||
+          response.data?.zones ||
+          [];
+
+        if (isMounted) {
+          setDeliveryZones(
+            Array.isArray(zones)
+              ? zones.filter(
+                  (zone) => zone.active !== false,
+                )
+              : [],
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Delivery zones loading error:",
+          error,
+        );
+
+        if (isMounted) {
+          setDeliveryZonesError(
+            getErrorMessage(
+              error,
+              "Unable to load delivery locations. Please refresh the page.",
+            ),
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setDeliveryZonesLoading(false);
+        }
+      }
+    };
+
+    loadDeliveryZones();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // ===================================================
+  // DELIVERY LOCATION OPTIONS
+  // ===================================================
+
+  const availableStates = [
+    ...new Set(
+      deliveryZones
+        .map((zone) => zone.state)
+        .filter(Boolean),
+    ),
+  ].sort((a, b) => a.localeCompare(b));
+
+  const zonesForSelectedState = deliveryZones.filter(
+    (zone) => zone.state === formData.state,
+  );
+
+  const availableCities = [
+    ...new Set(
+      zonesForSelectedState
+        .map((zone) => zone.city)
+        .filter(Boolean),
+    ),
+  ].sort((a, b) => a.localeCompare(b));
+
+  const zonesForSelectedCity = zonesForSelectedState.filter(
+    (zone) => zone.city === formData.city,
+  );
+
+  const availableAreas = [
+    ...new Set(
+      zonesForSelectedCity.flatMap((zone) =>
+        Array.isArray(zone.areas)
+          ? zone.areas
+          : [],
+      ),
+    ),
+  ].sort((a, b) => a.localeCompare(b));
+
+  const hasCityWideZone = zonesForSelectedCity.some(
+    (zone) =>
+      !Array.isArray(zone.areas) ||
+      zone.areas.length === 0,
+  );
+
+  const areaRequired =
+    zonesForSelectedCity.length > 0 &&
+    !hasCityWideZone &&
+    availableAreas.length > 0;
+
+  // ===================================================
+  // LOAD SAVED CUSTOMER INFORMATION
+  // ===================================================
+
+  useEffect(() => {
     try {
+      const savedCustomer =
+        localStorage.getItem("absCutCustomer");
+
+      if (!savedCustomer) return;
+
       const customer = JSON.parse(savedCustomer);
 
       setFormData((current) => ({
@@ -56,37 +403,342 @@ function Checkout() {
         email: customer.email || "",
       }));
     } catch (error) {
-      console.error("Unable to load customer information:", error);
+      console.error(
+        "Unable to load saved customer:",
+        error,
+      );
     }
   }, []);
 
-  // --------------------------------------------------
-  // HELPERS
-  // --------------------------------------------------
+  // ===================================================
+  // SAVE CUSTOMER INFORMATION
+  // ===================================================
 
-  const formatPrice = (price) =>
-    new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-      maximumFractionDigits: 0,
-    }).format(Number(price) || 0);
+  const saveCustomer = () => {
+    try {
+      localStorage.setItem(
+        "absCutCustomer",
+        JSON.stringify({
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          phone: formData.phone.trim(),
+          email: formData.email.trim().toLowerCase(),
+        }),
+      );
+    } catch (error) {
+      console.warn(
+        "Unable to save customer details:",
+        error,
+      );
+    }
+  };
+
+  // ===================================================
+  // INVALIDATE DELIVERY QUOTATION
+  // ===================================================
+
+  const invalidateDeliveryQuote = () => {
+    quoteRequestRef.current += 1;
+
+    setDeliveryQuote(null);
+    setDeliveryQuoteError("");
+    setDeliveryQuoteLoading(false);
+  };
+
+  // ===================================================
+  // FORM CHANGE HANDLER
+  // ===================================================
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setFormData((current) => ({
-      ...current,
-      [name]: value,
-    }));
+    if (
+      [
+        "address",
+        "area",
+        "landmark",
+        "city",
+        "state",
+        "deliveryMethod",
+      ].includes(name)
+    ) {
+      invalidateDeliveryQuote();
+    }
+
+    setFormData((current) => {
+      const updated = {
+        ...current,
+        [name]: value,
+      };
+
+      if (name === "state") {
+        updated.city = "";
+        updated.area = "";
+      }
+
+      if (name === "city") {
+        updated.area = "";
+      }
+
+      if (
+        name === "deliveryMethod" &&
+        value === "pickup"
+      ) {
+        updated.area = "";
+      }
+
+      return updated;
+    });
 
     setErrors((current) => ({
       ...current,
       [name]: "",
-    }));
 
-    // Customer or delivery changes mean the previous order may be stale.
-    setPendingOrder(null);
+      ...(name === "state"
+        ? { city: "", area: "" }
+        : {}),
+
+      ...(name === "city"
+        ? { area: "" }
+        : {}),
+
+      deliveryQuote: "",
+      submit: "",
+    }));
   };
+
+  // ===================================================
+  // PAYMENT METHOD HANDLER
+  // ===================================================
+
+  const handlePaymentMethodChange = (method) => {
+    const selectedMethod = PAYMENT_METHODS.find(
+      (item) => item.value === method,
+    );
+
+    if (
+      !selectedMethod ||
+      selectedMethod.unavailable ||
+      orderLoading ||
+      transferSubmitting ||
+      transferInfo
+    ) {
+      return;
+    }
+
+    setPaymentMethod(method);
+
+    setErrors((current) => ({
+      ...current,
+      submit: "",
+    }));
+  };
+
+  // ===================================================
+  // FORM VALIDATION
+  // ===================================================
+
+  const validateForm = () => {
+    const nextErrors = {};
+
+    if (!formData.firstName.trim()) {
+      nextErrors.firstName =
+        "First name is required.";
+    }
+
+    if (!formData.lastName.trim()) {
+      nextErrors.lastName =
+        "Last name is required.";
+    }
+
+    if (!formData.phone.trim()) {
+      nextErrors.phone =
+        "Phone number is required.";
+    } else if (
+      formData.phone.replace(/\D/g, "").length < 10
+    ) {
+      nextErrors.phone =
+        "Please enter a valid phone number.";
+    }
+
+    if (!formData.email.trim()) {
+      nextErrors.email =
+        "Email address is required.";
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        formData.email.trim(),
+      )
+    ) {
+      nextErrors.email =
+        "Please enter a valid email address.";
+    }
+
+    // Delivery validation only applies to physical orders.
+    if (
+      hasPhysicalItems &&
+      formData.deliveryMethod === "delivery"
+    ) {
+      if (!formData.address.trim()) {
+        nextErrors.address =
+          "Delivery address is required.";
+      }
+
+      if (!formData.city.trim()) {
+        nextErrors.city =
+          "Please select your city.";
+      }
+
+      if (!formData.state.trim()) {
+        nextErrors.state =
+          "Please select your state.";
+      }
+
+      if (
+        areaRequired &&
+        !formData.area.trim()
+      ) {
+        nextErrors.area =
+          "Please select your delivery area.";
+      }
+
+      if (
+        !deliveryQuote ||
+        deliveryQuoteError ||
+        deliveryQuoteLoading
+      ) {
+        nextErrors.deliveryQuote =
+          "Calculate your delivery fee before continuing.";
+      }
+    }
+
+    setErrors(nextErrors);
+
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  // ===================================================
+  // CALCULATE DELIVERY QUOTATION
+  // ===================================================
+
+  const calculateDeliveryQuote = async () => {
+    if (
+      !hasPhysicalItems ||
+      formData.deliveryMethod !== "delivery"
+    ) {
+      return;
+    }
+
+    if (
+      deliveryQuoteLoading ||
+      orderLoading ||
+      transferInfo ||
+      deliveryZonesLoading
+    ) {
+      return;
+    }
+
+    if (
+      !formData.address.trim() ||
+      !formData.city.trim() ||
+      !formData.state.trim() ||
+      (areaRequired && !formData.area.trim())
+    ) {
+      setDeliveryQuote(null);
+
+      setDeliveryQuoteError(
+        "Enter your address and select your state and city. Select an area where required.",
+      );
+
+      return;
+    }
+
+    const requestId = ++quoteRequestRef.current;
+
+    try {
+      setDeliveryQuoteLoading(true);
+      setDeliveryQuoteError("");
+      setDeliveryQuote(null);
+
+      const response = await apiRequest(
+        "/delivery/quote",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            state: formData.state.trim(),
+            city: formData.city.trim(),
+            area: formData.area.trim(),
+          }),
+        },
+      );
+
+      // Ignore outdated requests.
+      if (requestId !== quoteRequestRef.current) {
+        return;
+      }
+
+      if (!response?.success) {
+        throw new Error(
+          response?.message ||
+            "Unable to calculate delivery fee.",
+        );
+      }
+
+      if (
+        !response.deliveryAvailable ||
+        !response.quote
+      ) {
+        setDeliveryQuoteError(
+          response.message ||
+            "Delivery is not automatically available in this location. Please contact ABS CUT for a quotation.",
+        );
+
+        return;
+      }
+
+      const fee = Number(response.quote.fee);
+
+      if (!Number.isFinite(fee) || fee < 0) {
+        throw new Error(
+          "The server returned an invalid delivery fee.",
+        );
+      }
+
+      setDeliveryQuote({
+        ...response.quote,
+        fee,
+      });
+
+      setErrors((current) => ({
+        ...current,
+        deliveryQuote: "",
+        submit: "",
+      }));
+    } catch (error) {
+      if (requestId !== quoteRequestRef.current) {
+        return;
+      }
+
+      console.error(
+        "Delivery quotation error:",
+        error,
+      );
+
+      setDeliveryQuoteError(
+        getErrorMessage(
+          error,
+          "Unable to calculate delivery fee. Please try again.",
+        ),
+      );
+    } finally {
+      if (requestId === quoteRequestRef.current) {
+        setDeliveryQuoteLoading(false);
+      }
+    }
+  };
+
+  // ===================================================
+  // RECEIPT VALIDATION
+  // ===================================================
 
   const handleReceiptChange = (event) => {
     const file = event.target.files?.[0];
@@ -96,19 +748,25 @@ function Checkout() {
       return;
     }
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-
-    if (!allowedTypes.includes(file.type)) {
+    if (!RECEIPT_TYPES.includes(file.type)) {
       setReceiptFile(null);
       event.target.value = "";
-      setTransferMessage("Please select a JPG, PNG, or WebP receipt image.");
+
+      setTransferMessage(
+        "Choose a JPG, PNG, or WebP image for your receipt.",
+      );
+
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    if (file.size > MAX_RECEIPT_SIZE) {
       setReceiptFile(null);
       event.target.value = "";
-      setTransferMessage("Your receipt must be 5MB or smaller.");
+
+      setTransferMessage(
+        "Your receipt must be 5MB or smaller.",
+      );
+
       return;
     }
 
@@ -116,116 +774,226 @@ function Checkout() {
     setTransferMessage("");
   };
 
-  const validateForm = () => {
-    const newErrors = {};
+  // ===================================================
+  // CHECKOUT SIGNATURE
+  // ===================================================
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required.";
-    }
+  const getCheckoutSignature = () => {
+    const cart = cartItems.map((item) => ({
+      id: getProductId(item),
+      quantity: Number(item.quantity || 0),
+      price: Number(item.price || 0),
+      purchaseMode: getPurchaseMode(item),
+      priceUnit: getPriceUnit(item),
+    }));
 
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required.";
-    }
+    return JSON.stringify({
+      cart,
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required.";
-    } else if (formData.phone.replace(/\D/g, "").length < 10) {
-      newErrors.phone = "Please enter a valid phone number.";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email address is required.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = "Please enter a valid email address.";
-    }
-
-    if (formData.deliveryMethod === "delivery") {
-      if (!formData.address.trim()) {
-        newErrors.address = "Delivery address is required.";
-      }
-
-      if (!formData.city.trim()) {
-        newErrors.city = "City is required.";
-      }
-
-      if (!formData.state.trim()) {
-        newErrors.state = "State is required.";
-      }
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const saveCustomer = () => {
-    localStorage.setItem(
-      "absCutCustomer",
-      JSON.stringify({
+      customer: {
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
         phone: formData.phone.trim(),
-        email: formData.email.trim(),
-      }),
-    );
+        email: formData.email.trim().toLowerCase(),
+      },
+
+      shippingAddress:
+        hasPhysicalItems &&
+        formData.deliveryMethod === "delivery"
+          ? {
+              address: formData.address.trim(),
+              area: formData.area.trim(),
+              landmark: formData.landmark.trim(),
+              city: formData.city.trim(),
+              state: formData.state.trim(),
+            }
+          : null,
+
+      deliveryMethod: hasPhysicalItems
+        ? formData.deliveryMethod
+        : "digital",
+
+      notes: formData.notes.trim(),
+    });
   };
 
-  // --------------------------------------------------
+  // ===================================================
   // CREATE OR REUSE ORDER
-  // --------------------------------------------------
+  // ===================================================
 
   const createOrReuseOrder = async () => {
-    if (pendingOrder?._id) {
+    const signature = getCheckoutSignature();
+
+    // Reuse the current pending order if unchanged.
+    if (
+      pendingOrder?._id &&
+      pendingOrder.__checkoutSignature === signature
+    ) {
       return pendingOrder;
     }
 
-    const response = await apiRequest("/orders", {
-      method: "POST",
-      body: JSON.stringify({
-        customer: {
-          firstName: formData.firstName.trim(),
-          lastName: formData.lastName.trim(),
-          phone: formData.phone.trim(),
-          email: formData.email.trim().toLowerCase(),
-        },
+    // Recover a pending checkout from local storage.
+    try {
+      const savedCheckout = localStorage.getItem(
+        "absCutPendingCheckout",
+      );
 
-        shippingAddress: {
-          address: formData.address.trim(),
-          city: formData.city.trim(),
-          state: formData.state.trim(),
-        },
+      if (savedCheckout) {
+        const parsed = JSON.parse(savedCheckout);
 
-        deliveryMethod: formData.deliveryMethod,
-        notes: formData.notes.trim(),
-      }),
-    });
+        if (
+          parsed?.order?._id &&
+          parsed.signature === signature
+        ) {
+          const recoveredOrder = {
+            ...parsed.order,
+            __checkoutSignature: signature,
+          };
 
-    if (!response.success || !response.order?._id) {
-      throw new Error(response.message || "Unable to create your order.");
+          setPendingOrder(recoveredOrder);
+
+          return recoveredOrder;
+        }
+      }
+    } catch (error) {
+      console.warn(
+        "Unable to recover saved checkout:",
+        error,
+      );
     }
 
-    setPendingOrder(response.order);
+    // Create a new order.
+    const response = await apiRequest(
+      "/orders",
+      {
+        method: "POST",
 
-    localStorage.setItem("absCutLatestOrder", JSON.stringify(response.order));
+        body: JSON.stringify({
+          customer: {
+            firstName: formData.firstName.trim(),
+            lastName: formData.lastName.trim(),
+            phone: formData.phone.trim(),
+            email: formData.email.trim().toLowerCase(),
+          },
 
-    return response.order;
+          shippingAddress: {
+            address:
+              hasPhysicalItems &&
+              formData.deliveryMethod === "delivery"
+                ? formData.address.trim()
+                : "",
+
+            area:
+              hasPhysicalItems &&
+              formData.deliveryMethod === "delivery"
+                ? formData.area.trim()
+                : "",
+
+            landmark:
+              hasPhysicalItems &&
+              formData.deliveryMethod === "delivery"
+                ? formData.landmark.trim()
+                : "",
+
+            city:
+              hasPhysicalItems &&
+              formData.deliveryMethod === "delivery"
+                ? formData.city.trim()
+                : "",
+
+            state:
+              hasPhysicalItems &&
+              formData.deliveryMethod === "delivery"
+                ? formData.state.trim()
+                : "",
+          },
+
+          deliveryMethod: hasPhysicalItems
+            ? formData.deliveryMethod
+            : "digital",
+
+          notes: formData.notes.trim(),
+        }),
+      },
+    );
+
+    const createdOrder =
+      response?.order ||
+      response?.data?.order ||
+      null;
+
+    if (!response?.success || !createdOrder?._id) {
+      throw new Error(
+        response?.message ||
+          "Unable to create your order.",
+      );
+    }
+
+    const orderWithSignature = {
+      ...createdOrder,
+      __checkoutSignature: signature,
+    };
+
+    setPendingOrder(orderWithSignature);
+
+    try {
+      localStorage.setItem(
+        "absCutPendingCheckout",
+        JSON.stringify({
+          order: createdOrder,
+          signature,
+        }),
+      );
+
+      localStorage.setItem(
+        "absCutLatestOrder",
+        JSON.stringify(createdOrder),
+      );
+    } catch (error) {
+      console.warn(
+        "Unable to save pending checkout:",
+        error,
+      );
+    }
+
+    return orderWithSignature;
   };
 
-  // --------------------------------------------------
-  // CHECKOUT AND PAYMENT
-  // --------------------------------------------------
+  // ===================================================
+  // INITIALIZE BANK TRANSFER
+  // ===================================================
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (orderLoading || transferInfo) return;
-
-    if (!cartItems.length) {
-      setErrors({ submit: "Your cart is empty." });
+    if (
+      orderLoading ||
+      transferInfo ||
+      transferSubmitting
+    ) {
       return;
     }
 
-    if (!validateForm()) return;
+    if (!cartItems.length) {
+      setErrors({
+        submit: "Your cart is empty.",
+      });
+
+      return;
+    }
+
+    if (!validateForm()) {
+      return;
+    }
+
+    if (paymentMethod !== "bank_transfer") {
+      setErrors({
+        submit:
+          "This payment method is temporarily unavailable. Please use bank transfer.",
+      });
+
+      return;
+    }
 
     try {
       setOrderLoading(true);
@@ -235,257 +1003,281 @@ function Checkout() {
 
       const order = await createOrReuseOrder();
 
-      // PAYSTACK — EXISTING ROUTE PRESERVED
-      if (paymentMethod === "paystack") {
-        const payment = await apiRequest("/payments/initialize", {
+      const payment = await apiRequest(
+        "/payments/bank-transfer/initialize",
+        {
           method: "POST",
-          body: JSON.stringify({ orderId: order._id }),
-        });
 
-        if (!payment.success || !payment.authorizationUrl) {
-          throw new Error(
-            payment.message || "Unable to initialize Paystack payment.",
-          );
-        }
+          body: JSON.stringify({
+            orderId: order._id,
+          }),
+        },
+      );
 
-        window.location.href = payment.authorizationUrl;
-        return;
+      if (!payment?.success) {
+        throw new Error(
+          payment?.message ||
+            "Unable to initialize bank transfer.",
+        );
       }
 
-      // FLUTTERWAVE
-      if (paymentMethod === "flutterwave") {
-        const payment = await apiRequest("/payments/flutterwave/initialize", {
-          method: "POST",
-          body: JSON.stringify({ orderId: order._id }),
-        });
+      const details =
+        payment?.bankDetails ||
+        payment?.data?.bankDetails ||
+        payment?.data ||
+        payment;
 
-        if (!payment.success || !payment.authorizationUrl) {
-          throw new Error(
-            payment.message || "Unable to initialize Flutterwave payment.",
-          );
-        }
+      const record =
+        payment?.payment ||
+        payment?.data?.payment ||
+        {};
 
-        window.location.href = payment.authorizationUrl;
-        return;
+      const paymentId =
+        record._id ||
+        record.id ||
+        payment?.paymentId ||
+        payment?.data?.paymentId;
+
+      const reference =
+        record.reference ||
+        payment?.reference ||
+        payment?.data?.reference;
+
+      const amount = Number(
+        record.amount ??
+          payment?.amount ??
+          payment?.data?.amount ??
+          order.total ??
+          totalPrice,
+      );
+
+      if (!paymentId || !reference) {
+        console.error(
+          "Bank-transfer initialization response:",
+          payment,
+        );
+
+        throw new Error(
+          "The server did not return the payment ID and reference.",
+        );
       }
 
-      // OPAY / BANK TRANSFER
-      if (paymentMethod === "bank_transfer") {
-        const payment = await apiRequest("/payments/bank-transfer/initialize", {
-          method: "POST",
-          body: JSON.stringify({ orderId: order._id }),
-        });
-
-        if (!payment.success) {
-          throw new Error(
-            payment.message || "Unable to initialize bank transfer.",
-          );
-        }
-
-        // const details = payment.bankDetails || payment;
-        // const paymentRecord = payment.payment || payment.data?.payment || {};
-
-        // const paymentId =
-        //   payment.paymentId ||
-        //   paymentRecord._id ||
-        //   payment._id;
-
-        // const reference =
-        //   payment.reference ||
-        //   paymentRecord.reference;
-
-        // if (!paymentId || !reference) {
-        //   throw new Error(
-        //     "The server did not return the payment ID and reference. Please check the bank-transfer controller response."
-        //   );
-        // }
-
-        // setTransferInfo({
-        //   paymentId,
-        //   reference,
-        //   amount: payment.amount ?? paymentRecord.amount ?? order.total ?? totalPrice,
-        //   bankName:
-        //     details.bankName ||
-        //     details.BANK_NAME ||
-        //     "",
-        //   accountName:
-        //     details.accountName ||
-        //     details.accountHolder ||
-        //     details.BANK_ACCOUNT_NAME ||
-        //     "",
-        //   accountNumber:
-        //     details.accountNumber ||
-        //     details.BANK_ACCOUNT_NUMBER ||
-        //     "",
-        // });
-
-        // setTransferMessage("");
-        // setTransferSubmitted(false);
-
-        const details = payment.bankDetails || payment;
-        const paymentRecord = payment.payment || payment.data?.payment || {};
-
-        const paymentId =
-          paymentRecord.id ||
-          paymentRecord._id ||
-          payment.paymentId ||
-          payment._id;
-
-        const reference = paymentRecord.reference || payment.reference;
-
-        const amount =
-          paymentRecord.amount ?? payment.amount ?? order.total ?? totalPrice;
-
-        if (!paymentId || !reference) {
-          console.error("Bank transfer response:", payment);
-
-          throw new Error(
-            "The server did not return the payment ID and reference. Please check the bank-transfer controller response.",
-          );
-        }
-
-        setTransferInfo({
-          paymentId,
-          reference,
-          amount,
-          bankName: details.bankName || details.BANK_NAME || "",
-          accountName:
-            details.accountName ||
-            details.accountHolder ||
-            details.BANK_ACCOUNT_NAME ||
-            "",
-          accountNumber:
-            details.accountNumber || details.BANK_ACCOUNT_NUMBER || "",
-        });
-
-        setTransferMessage("");
-        setTransferSubmitted(false);
+      if (!Number.isFinite(amount) || amount <= 0) {
+        throw new Error(
+          "The server returned an invalid transfer amount.",
+        );
       }
+
+      const status = String(
+        record.status || "",
+      ).toLowerCase();
+
+      const info = {
+        paymentId,
+        reference,
+        amount,
+        status,
+
+        receiptUrl: record.receiptUrl || "",
+
+        bankName:
+          details.bankName ||
+          details.BANK_NAME ||
+          details.bank ||
+          "",
+
+        accountName:
+          details.accountName ||
+          details.accountHolder ||
+          details.BANK_ACCOUNT_NAME ||
+          "",
+
+        accountNumber:
+          details.accountNumber ||
+          details.BANK_ACCOUNT_NUMBER ||
+          "",
+
+        transferSenderName:
+          record.transferSenderName || "",
+      };
+
+      setTransferInfo(info);
+
+      setTransferSenderName(
+        info.transferSenderName,
+      );
+
+      setReceiptFile(null);
+
+      const alreadySubmitted =
+        status === "awaiting_confirmation";
+
+      setTransferSubmitted(alreadySubmitted);
+
+      setTransferMessage(
+        alreadySubmitted
+          ? "Your receipt has already been submitted and is awaiting ABS CUT's verification."
+          : "",
+      );
     } catch (error) {
-      console.error("ABS CUT checkout error:", error);
+      console.error(
+        "ABS CUT checkout error:",
+        error,
+      );
 
       setErrors({
-        submit:
-          error.message || "Unable to continue checkout. Please try again.",
+        submit: getErrorMessage(
+          error,
+          "Unable to continue checkout. Please try again.",
+        ),
       });
     } finally {
       setOrderLoading(false);
     }
   };
 
-  // --------------------------------------------------
-  // SUBMIT BANK TRANSFER DETAILS
-  // --------------------------------------------------
-
-  // const handleTransferSubmit = async () => {
-  //   if (!transferInfo || transferSubmitting || transferSubmitted) return;
-
-  //   if (!transferSenderName.trim()) {
-  //     setTransferMessage("Please enter the name used for the transfer.");
-  //     return;
-  //   }
-
-  //   try {
-  //     setTransferSubmitting(true);
-  //     setTransferMessage("");
-
-  //     const response = await apiRequest("/payments/bank-transfer/submit", {
-  //       method: "POST",
-  //       body: JSON.stringify({
-  //         paymentId: transferInfo.paymentId,
-  //         transferSenderName: transferSenderName.trim(),
-  //       }),
-  //     });
-
-  //     if (!response.success) {
-  //       throw new Error(
-  //         response.message || "Unable to submit transfer details.",
-  //       );
-  //     }
-
-  //     setTransferSubmitted(true);
-
-  //     setTransferMessage(
-  //       "Your transfer details have been submitted. Your payment is awaiting verification by ABS CUT.",
-  //     );
-  //   } catch (error) {
-  //     setTransferMessage(
-  //       error.message || "Unable to submit transfer details. Please try again.",
-  //     );
-  //   } finally {
-  //     setTransferSubmitting(false);
-  //   }
-  // };
+  // ===================================================
+  // SUBMIT BANK-TRANSFER RECEIPT
+  // ===================================================
 
   const handleTransferSubmit = async () => {
-    if (!transferInfo || transferSubmitting || transferSubmitted) {
+    if (
+      !transferInfo ||
+      transferSubmitting ||
+      transferSubmitted
+    ) {
       return;
     }
 
     if (!transferSenderName.trim()) {
-      setTransferMessage("Please enter the name used for the transfer.");
+      setTransferMessage(
+        "Enter the name used for the bank transfer.",
+      );
+
       return;
     }
 
-    if (!receiptFile) {
+    if (
+      !receiptFile &&
+      !transferInfo.receiptUrl
+    ) {
       setTransferMessage(
-        "Please upload your payment receipt before submitting.",
+        "Please upload your bank transfer receipt.",
       );
+
+      return;
+    }
+
+    if (
+      !transferInfo.bankName ||
+      !transferInfo.accountName ||
+      !transferInfo.accountNumber
+    ) {
+      setTransferMessage(
+        "The bank details are incomplete. Contact ABS CUT before transferring money.",
+      );
+
       return;
     }
 
     try {
       setTransferSubmitting(true);
-      setReceiptUploading(true);
       setTransferMessage("");
 
-      // STEP 1: Upload the receipt image to Cloudinary
-      const imageData = new FormData();
-      imageData.append("image", receiptFile);
+      let receiptUrl =
+        transferInfo.receiptUrl || "";
 
-      const uploadResponse = await uploadRequest(
-        "/uploads/custom-reference",
-        imageData,
-      );
+      // Upload receipt image.
+      if (receiptFile) {
+        setReceiptUploading(true);
 
-      if (!uploadResponse?.success || !uploadResponse?.image?.url) {
-        throw new Error(
-          uploadResponse?.message || "Receipt upload failed. Please try again.",
+        const imageData = new FormData();
+
+        imageData.append("image", receiptFile);
+
+        const uploadResponse = await uploadRequest(
+          "/uploads/custom-reference",
+          imageData,
+        );
+
+        receiptUrl =
+          uploadResponse?.image?.url ||
+          uploadResponse?.data?.image?.url ||
+          "";
+
+        if (
+          !uploadResponse?.success ||
+          !receiptUrl
+        ) {
+          throw new Error(
+            uploadResponse?.message ||
+              "Receipt upload failed. Please try again.",
+          );
+        }
+
+        setTransferInfo((current) =>
+          current
+            ? {
+                ...current,
+                receiptUrl,
+              }
+            : current,
         );
       }
 
-      const receiptUrl = uploadResponse.image.url;
-
-      // STEP 2: Submit the receipt URL with the payment details
       setReceiptUploading(false);
 
-      const response = await apiRequest("/payments/bank-transfer/submit", {
-        method: "POST",
-        body: JSON.stringify({
-          paymentId: transferInfo.paymentId,
-          transferSenderName: transferSenderName.trim(),
-          receiptUrl,
-        }),
-      });
+      // Submit receipt for admin verification.
+      const response = await apiRequest(
+        "/payments/bank-transfer/submit",
+        {
+          method: "POST",
 
-      if (!response.success) {
+          body: JSON.stringify({
+            paymentId: transferInfo.paymentId,
+            transferSenderName:
+              transferSenderName.trim(),
+            transferAmount: transferInfo.amount,
+            receiptUrl,
+          }),
+        },
+      );
+
+      if (!response?.success) {
         throw new Error(
-          response.message || "Unable to submit transfer details.",
+          response?.message ||
+            "Unable to submit your transfer receipt.",
         );
       }
 
-      // STEP 3: Update the checkout UI
       setTransferSubmitted(true);
+
+      setTransferInfo((current) =>
+        current
+          ? {
+              ...current,
+              status: "awaiting_confirmation",
+              receiptUrl,
+            }
+          : current,
+      );
+
       setReceiptFile(null);
 
       setTransferMessage(
-        "Your payment receipt and transfer details have been submitted. Your payment is awaiting verification by ABS CUT.",
+        "Your receipt has been submitted. ABS CUT will verify the actual bank credit before confirming your payment. Uploading a receipt does not mean the payment has been confirmed.",
       );
     } catch (error) {
-      console.error("Bank transfer receipt submission error:", error);
+      console.error(
+        "Bank-transfer submission error:",
+        error,
+      );
 
       setTransferMessage(
-        error.message || "Unable to submit your receipt. Please try again.",
+        getErrorMessage(
+          error,
+          "Unable to submit your receipt. Please try again.",
+        ),
       );
     } finally {
       setTransferSubmitting(false);
@@ -493,23 +1285,36 @@ function Checkout() {
     }
   };
 
-  // --------------------------------------------------
+  // ===================================================
   // EMPTY CART
-  // --------------------------------------------------
+  // ===================================================
 
   if (!cartItems.length) {
     return (
       <main className="checkout-page">
         <section className="checkout-empty">
-          <div className="checkout-empty-icon">🛒</div>
+          <div
+            className="checkout-empty-icon"
+            aria-hidden="true"
+          >
+            🛒
+          </div>
 
-          <p className="checkout-label">ABS CUT CHECKOUT</p>
+          <p className="checkout-label">
+            ABS CUT CHECKOUT
+          </p>
 
           <h1>Your Cart Is Empty</h1>
 
-          <p>Add products to your cart before continuing to checkout.</p>
+          <p>
+            Add products to your cart before continuing
+            to checkout.
+          </p>
 
-          <Link to="/shop" className="checkout-shop-button">
+          <Link
+            to="/shop"
+            className="checkout-shop-button"
+          >
             SHOP COLLECTION
           </Link>
         </section>
@@ -517,27 +1322,47 @@ function Checkout() {
     );
   }
 
-  // --------------------------------------------------
+  // ===================================================
   // CHECKOUT PAGE
-  // --------------------------------------------------
+  // ===================================================
 
   return (
     <main className="checkout-page">
+
+      {/* ================================================
+          PAGE HEADER
+      ================================================= */}
+
       <section className="checkout-header">
-        <p className="checkout-label">ABS CUT CHECKOUT</p>
+        <p className="checkout-label">
+          ABS CUT CHECKOUT
+        </p>
 
         <h1>Complete Your Order</h1>
 
         <span>
-          Provide your details, choose a payment method, and review your order.
+          Provide your details, choose an available payment
+          method, and review your order.
         </span>
       </section>
 
       <section className="checkout-content">
-        <form className="checkout-form" onSubmit={handleSubmit}>
-          {/* CUSTOMER INFORMATION */}
+
+        {/* ==============================================
+            CHECKOUT FORM
+        ============================================== */}
+
+        <form
+          className="checkout-form"
+          onSubmit={handleSubmit}
+        >
+
+          {/* ============================================
+              01. CUSTOMER INFORMATION
+          ============================================ */}
 
           <div className="checkout-card">
+
             <div className="checkout-card-header">
               <div className="checkout-step">01</div>
 
@@ -548,8 +1373,11 @@ function Checkout() {
             </div>
 
             <div className="checkout-form-row">
+
               <div className="checkout-form-group">
-                <label htmlFor="firstName">First Name</label>
+                <label htmlFor="firstName">
+                  First Name
+                </label>
 
                 <input
                   id="firstName"
@@ -559,15 +1387,20 @@ function Checkout() {
                   onChange={handleChange}
                   placeholder="First name"
                   autoComplete="given-name"
+                  disabled={!!transferInfo}
                 />
 
                 {errors.firstName && (
-                  <small className="checkout-error">{errors.firstName}</small>
+                  <small className="checkout-error">
+                    {errors.firstName}
+                  </small>
                 )}
               </div>
 
               <div className="checkout-form-group">
-                <label htmlFor="lastName">Last Name</label>
+                <label htmlFor="lastName">
+                  Last Name
+                </label>
 
                 <input
                   id="lastName"
@@ -577,17 +1410,24 @@ function Checkout() {
                   onChange={handleChange}
                   placeholder="Last name"
                   autoComplete="family-name"
+                  disabled={!!transferInfo}
                 />
 
                 {errors.lastName && (
-                  <small className="checkout-error">{errors.lastName}</small>
+                  <small className="checkout-error">
+                    {errors.lastName}
+                  </small>
                 )}
               </div>
+
             </div>
 
             <div className="checkout-form-row">
+
               <div className="checkout-form-group">
-                <label htmlFor="phone">Phone Number</label>
+                <label htmlFor="phone">
+                  Phone Number
+                </label>
 
                 <input
                   id="phone"
@@ -597,15 +1437,20 @@ function Checkout() {
                   onChange={handleChange}
                   placeholder="08012345678"
                   autoComplete="tel"
+                  disabled={!!transferInfo}
                 />
 
                 {errors.phone && (
-                  <small className="checkout-error">{errors.phone}</small>
+                  <small className="checkout-error">
+                    {errors.phone}
+                  </small>
                 )}
               </div>
 
               <div className="checkout-form-group">
-                <label htmlFor="email">Email Address</label>
+                <label htmlFor="email">
+                  Email Address
+                </label>
 
                 <input
                   id="email"
@@ -615,135 +1460,480 @@ function Checkout() {
                   onChange={handleChange}
                   placeholder="you@example.com"
                   autoComplete="email"
+                  disabled={!!transferInfo}
                 />
 
                 {errors.email && (
-                  <small className="checkout-error">{errors.email}</small>
+                  <small className="checkout-error">
+                    {errors.email}
+                  </small>
                 )}
               </div>
+
             </div>
           </div>
 
-          {/* DELIVERY INFORMATION */}
+          {/* ============================================
+              02. DELIVERY INFORMATION
+          ============================================ */}
 
           <div className="checkout-card">
+
             <div className="checkout-card-header">
               <div className="checkout-step">02</div>
 
               <div>
                 <p>DELIVERY</p>
-                <h2>Delivery Information</h2>
+
+                <h2>
+                  {isDigitalOnly
+                    ? "Digital Delivery"
+                    : "Delivery Information"}
+                </h2>
               </div>
             </div>
 
-            <div className="delivery-methods">
-              <label
-                className={
-                  formData.deliveryMethod === "delivery"
-                    ? "delivery-option active"
-                    : "delivery-option"
-                }
-              >
-                <input
-                  type="radio"
-                  name="deliveryMethod"
-                  value="delivery"
-                  checked={formData.deliveryMethod === "delivery"}
-                  onChange={handleChange}
-                />
+            {/* DIGITAL-ONLY CART */}
 
-                <span>
-                  <strong>Home Delivery</strong>
-                  <small>Have your order delivered to your address.</small>
-                </span>
-              </label>
+            {!hasPhysicalItems && (
+              <div className="checkout-quote-success">
+                <strong>
+                  Digital delivery selected
+                </strong>
 
-              <label
-                className={
-                  formData.deliveryMethod === "pickup"
-                    ? "delivery-option active"
-                    : "delivery-option"
-                }
-              >
-                <input
-                  type="radio"
-                  name="deliveryMethod"
-                  value="pickup"
-                  checked={formData.deliveryMethod === "pickup"}
-                  onChange={handleChange}
-                />
+                <p>
+                  Your purchase contains digital products
+                  only. No shipping address, store pickup,
+                  or physical delivery fee is required.
+                </p>
+              </div>
+            )}
 
-                <span>
-                  <strong>Store Pickup</strong>
-                  <small>Pick up your order from ABS CUT.</small>
-                </span>
-              </label>
-            </div>
+            {/* PHYSICAL OR MIXED CART */}
 
-            {formData.deliveryMethod === "delivery" && (
+            {hasPhysicalItems && (
               <>
-                <div className="checkout-form-group">
-                  <label htmlFor="address">Delivery Address</label>
+                {isMixedCart && (
+                  <p className="checkout-payment-note">
+                    Your cart contains physical and digital
+                    products. Delivery arrangements apply
+                    only to your physical products.
+                  </p>
+                )}
 
-                  <input
-                    id="address"
-                    name="address"
-                    type="text"
-                    value={formData.address}
-                    onChange={handleChange}
-                    placeholder="Enter your delivery address"
-                    autoComplete="street-address"
-                  />
+                <div className="delivery-methods">
 
-                  {errors.address && (
-                    <small className="checkout-error">{errors.address}</small>
-                  )}
-                </div>
+                  {/* HOME DELIVERY */}
 
-                <div className="checkout-form-row">
-                  <div className="checkout-form-group">
-                    <label htmlFor="city">City</label>
-
+                  <label
+                    className={
+                      formData.deliveryMethod === "delivery"
+                        ? "delivery-option active"
+                        : "delivery-option"
+                    }
+                  >
                     <input
-                      id="city"
-                      name="city"
-                      type="text"
-                      value={formData.city}
+                      type="radio"
+                      name="deliveryMethod"
+                      value="delivery"
+                      checked={
+                        formData.deliveryMethod === "delivery"
+                      }
                       onChange={handleChange}
-                      placeholder="City"
-                      autoComplete="address-level2"
+                      disabled={!!transferInfo}
                     />
 
-                    {errors.city && (
-                      <small className="checkout-error">{errors.city}</small>
-                    )}
-                  </div>
+                    <span>
+                      <strong>Home Delivery</strong>
 
-                  <div className="checkout-form-group">
-                    <label htmlFor="state">State</label>
+                      <small>
+                        Have your order delivered to your
+                        address.
+                      </small>
+                    </span>
+                  </label>
 
+                  {/* STORE PICKUP */}
+
+                  <label
+                    className={
+                      formData.deliveryMethod === "pickup"
+                        ? "delivery-option active"
+                        : "delivery-option"
+                    }
+                  >
                     <input
-                      id="state"
-                      name="state"
-                      type="text"
-                      value={formData.state}
+                      type="radio"
+                      name="deliveryMethod"
+                      value="pickup"
+                      checked={
+                        formData.deliveryMethod === "pickup"
+                      }
                       onChange={handleChange}
-                      placeholder="State"
-                      autoComplete="address-level1"
+                      disabled={!!transferInfo}
                     />
 
-                    {errors.state && (
-                      <small className="checkout-error">{errors.state}</small>
-                    )}
-                  </div>
+                    <span>
+                      <strong>Store Pickup</strong>
+
+                      <small>
+                        Pick up your order from ABS CUT.
+                      </small>
+                    </span>
+                  </label>
+
                 </div>
+
+                {/* HOME DELIVERY FIELDS */}
+
+                {formData.deliveryMethod === "delivery" && (
+                  <>
+
+                    {/* FULL ADDRESS */}
+
+                    <div className="checkout-form-group">
+                      <label htmlFor="address">
+                        Full Delivery Address
+                      </label>
+
+                      <input
+                        id="address"
+                        name="address"
+                        type="text"
+                        value={formData.address}
+                        onChange={handleChange}
+                        placeholder="House number, street name and address"
+                        autoComplete="street-address"
+                        disabled={!!transferInfo}
+                      />
+
+                      {errors.address && (
+                        <small className="checkout-error">
+                          {errors.address}
+                        </small>
+                      )}
+                    </div>
+
+                    {/* STATE AND CITY */}
+
+                    <div className="checkout-form-row">
+
+                      <div className="checkout-form-group">
+                        <label htmlFor="state">
+                          State / Region
+                        </label>
+
+                        <select
+                          id="state"
+                          name="state"
+                          value={formData.state}
+                          onChange={handleChange}
+                          disabled={
+                            !!transferInfo ||
+                            deliveryZonesLoading ||
+                            availableStates.length === 0
+                          }
+                        >
+                          <option value="">
+                            {deliveryZonesLoading
+                              ? "Loading delivery locations..."
+                              : "Select your state"}
+                          </option>
+
+                          {availableStates.map((state) => (
+                            <option
+                              key={state}
+                              value={state}
+                            >
+                              {state}
+                            </option>
+                          ))}
+                        </select>
+
+                        {errors.state && (
+                          <small className="checkout-error">
+                            {errors.state}
+                          </small>
+                        )}
+                      </div>
+
+                      <div className="checkout-form-group">
+                        <label htmlFor="city">
+                          City / Town
+                        </label>
+
+                        <select
+                          id="city"
+                          name="city"
+                          value={formData.city}
+                          onChange={handleChange}
+                          disabled={
+                            !!transferInfo ||
+                            !formData.state ||
+                            availableCities.length === 0
+                          }
+                        >
+                          <option value="">
+                            {!formData.state
+                              ? "Select a state first"
+                              : "Select your city"}
+                          </option>
+
+                          {availableCities.map((city) => (
+                            <option
+                              key={city}
+                              value={city}
+                            >
+                              {city}
+                            </option>
+                          ))}
+                        </select>
+
+                        {errors.city && (
+                          <small className="checkout-error">
+                            {errors.city}
+                          </small>
+                        )}
+                      </div>
+
+                    </div>
+
+                    {/* AREA AND LANDMARK */}
+
+                    <div className="checkout-form-row">
+
+                      <div className="checkout-form-group">
+                        <label htmlFor="area">
+                          Area / Neighborhood
+                          {areaRequired
+                            ? " *"
+                            : " (Optional)"}
+                        </label>
+
+                        {availableAreas.length > 0 ? (
+                          <select
+                            id="area"
+                            name="area"
+                            value={formData.area}
+                            onChange={handleChange}
+                            disabled={
+                              !!transferInfo ||
+                              !formData.city
+                            }
+                          >
+                            <option value="">
+                              {areaRequired
+                                ? "Select your delivery area"
+                                : "Select an area or leave blank"}
+                            </option>
+
+                            {availableAreas.map((area) => (
+                              <option
+                                key={area}
+                                value={area}
+                              >
+                                {area}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            id="area"
+                            name="area"
+                            type="text"
+                            value={formData.area}
+                            onChange={handleChange}
+                            placeholder="Area or neighborhood (optional)"
+                            disabled={
+                              !!transferInfo ||
+                              !formData.city
+                            }
+                          />
+                        )}
+
+                        {errors.area && (
+                          <small className="checkout-error">
+                            {errors.area}
+                          </small>
+                        )}
+                      </div>
+
+                      <div className="checkout-form-group">
+                        <label htmlFor="landmark">
+                          Nearby Landmark
+                        </label>
+
+                        <input
+                          id="landmark"
+                          name="landmark"
+                          type="text"
+                          value={formData.landmark}
+                          onChange={handleChange}
+                          placeholder="Nearby landmark (optional)"
+                          disabled={!!transferInfo}
+                        />
+                      </div>
+
+                    </div>
+
+                    {/* DELIVERY LOCATION MESSAGES */}
+
+                    {deliveryZonesLoading && (
+                      <p className="checkout-payment-note">
+                        Loading available delivery locations...
+                      </p>
+                    )}
+
+                    {deliveryZonesError && (
+                      <p
+                        className="checkout-error"
+                        role="alert"
+                      >
+                        {deliveryZonesError}
+                      </p>
+                    )}
+
+                    {!deliveryZonesLoading &&
+                      !deliveryZonesError &&
+                      deliveryZones.length === 0 && (
+                        <p
+                          className="checkout-error"
+                          role="alert"
+                        >
+                          No delivery zones are currently
+                          configured. Please contact ABS CUT
+                          for assistance.
+                        </p>
+                      )}
+
+                    {!deliveryZonesLoading &&
+                      !deliveryZonesError &&
+                      deliveryZones.length > 0 &&
+                      availableStates.length === 0 && (
+                        <p
+                          className="checkout-error"
+                          role="alert"
+                        >
+                          No active delivery locations are
+                          available.
+                        </p>
+                      )}
+
+                    {formData.state &&
+                      availableCities.length === 0 &&
+                      !deliveryZonesLoading && (
+                        <p
+                          className="checkout-error"
+                          role="alert"
+                        >
+                          No active delivery cities are
+                          configured for this state.
+                        </p>
+                      )}
+
+                    {/* DELIVERY QUOTATION */}
+
+                    <div className="checkout-delivery-quote">
+
+                      <button
+                        type="button"
+                        className="checkout-quote-button"
+                        onClick={calculateDeliveryQuote}
+                        disabled={
+                          deliveryQuoteLoading ||
+                          !!transferInfo ||
+                          deliveryZonesLoading ||
+                          !formData.address.trim() ||
+                          !formData.city ||
+                          !formData.state ||
+                          (areaRequired && !formData.area)
+                        }
+                      >
+                        {deliveryQuoteLoading
+                          ? "CALCULATING DELIVERY..."
+                          : deliveryQuote
+                            ? "RECALCULATE DELIVERY FEE"
+                            : "CALCULATE DELIVERY FEE"}
+                      </button>
+
+                      {deliveryQuote && (
+                        <div
+                          className="checkout-quote-success"
+                          role="status"
+                        >
+                          <strong>
+                            <span aria-hidden="true">
+                              ✓{" "}
+                            </span>
+                            Delivery quotation available
+                          </strong>
+
+                          <p>
+                            Delivery zone:{" "}
+                            {deliveryQuote.zoneName}
+                          </p>
+
+                          <p>
+                            Delivery fee:{" "}
+                            {formatPrice(
+                              deliveryQuote.fee,
+                            )}
+                          </p>
+
+                          {deliveryQuote.estimatedDelivery && (
+                            <p>
+                              Estimated delivery:{" "}
+                              {deliveryQuote.estimatedDelivery}
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {deliveryQuoteError && (
+                        <p
+                          className="checkout-error"
+                          role="alert"
+                        >
+                          {deliveryQuoteError}
+                        </p>
+                      )}
+
+                      {errors.deliveryQuote && (
+                        <p
+                          className="checkout-error"
+                          role="alert"
+                        >
+                          {errors.deliveryQuote}
+                        </p>
+                      )}
+
+                    </div>
+                  </>
+                )}
+
+                {/* STORE PICKUP MESSAGE */}
+
+                {formData.deliveryMethod === "pickup" && (
+                  <div className="checkout-quote-success">
+                    <strong>Store pickup selected</strong>
+
+                    <p>
+                      No delivery charge will be added to
+                      your order.
+                    </p>
+                  </div>
+                )}
               </>
             )}
+
           </div>
 
-          {/* ORDER NOTES */}
+          {/* ============================================
+              03. ORDER NOTES
+          ============================================ */}
 
           <div className="checkout-card">
+
             <div className="checkout-card-header">
               <div className="checkout-step">03</div>
 
@@ -754,7 +1944,9 @@ function Checkout() {
             </div>
 
             <div className="checkout-form-group">
-              <label htmlFor="notes">Notes</label>
+              <label htmlFor="notes">
+                Notes
+              </label>
 
               <textarea
                 id="notes"
@@ -762,14 +1954,19 @@ function Checkout() {
                 value={formData.notes}
                 onChange={handleChange}
                 placeholder="Any special instructions for your order..."
-                rows="5"
+                rows={4}
+                disabled={!!transferInfo}
               />
             </div>
+
           </div>
 
-          {/* PAYMENT METHOD */}
+          {/* ============================================
+              04. PAYMENT METHOD
+          ============================================ */}
 
           <div className="checkout-card">
+
             <div className="checkout-card-header">
               <div className="checkout-step">04</div>
 
@@ -780,78 +1977,91 @@ function Checkout() {
             </div>
 
             <div className="delivery-methods">
-              <label
-                className={
-                  paymentMethod === "paystack"
-                    ? "delivery-option active"
-                    : "delivery-option"
-                }
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="paystack"
-                  checked={paymentMethod === "paystack"}
-                  onChange={() => setPaymentMethod("paystack")}
-                  disabled={orderLoading || !!transferInfo}
-                />
 
-                <span>
-                  <strong>Paystack</strong>
-                  <small>Use your existing Paystack checkout.</small>
-                </span>
-              </label>
+              {PAYMENT_METHODS.map((method) => (
+                <label
+                  key={method.value}
+                  className={[
+                    "delivery-option",
+                    paymentMethod === method.value
+                      ? "active"
+                      : "",
+                    method.unavailable
+                      ? "payment-unavailable"
+                      : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
 
-              <label
-                className={
-                  paymentMethod === "flutterwave"
-                    ? "delivery-option active"
-                    : "delivery-option"
-                }
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="flutterwave"
-                  checked={paymentMethod === "flutterwave"}
-                  onChange={() => setPaymentMethod("flutterwave")}
-                  disabled={orderLoading || !!transferInfo}
-                />
+                  aria-disabled={method.unavailable}
 
-                <span>
-                  <strong>Flutterwave</strong>
-                  <small>Continue to Flutterwave to make your payment.</small>
-                </span>
-              </label>
+                  title={
+                    method.unavailable
+                      ? `${method.title} is temporarily under maintenance`
+                      : undefined
+                  }
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={method.value}
+                    checked={
+                      paymentMethod === method.value
+                    }
+                    onChange={() =>
+                      handlePaymentMethodChange(
+                        method.value,
+                      )
+                    }
+                    disabled={
+                      method.unavailable ||
+                      orderLoading ||
+                      !!transferInfo
+                    }
+                  />
 
-              <label
-                className={
-                  paymentMethod === "bank_transfer"
-                    ? "delivery-option active"
-                    : "delivery-option"
-                }
-              >
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="bank_transfer"
-                  checked={paymentMethod === "bank_transfer"}
-                  onChange={() => setPaymentMethod("bank_transfer")}
-                  disabled={orderLoading || !!transferInfo}
-                />
+                  <span>
+                    <strong>{method.title}</strong>
 
-                <span>
-                  <strong>OPay / Bank Transfer</strong>
-                  <small>Transfer directly to the ABS CUT account.</small>
-                </span>
-              </label>
+                    <small>
+                      {method.description}
+                    </small>
+
+                    {method.unavailable && (
+                      <span className="checkout-maintenance-notice">
+                        <span aria-hidden="true">
+                          ⏳
+                        </span>
+                        Under Maintenance
+                      </span>
+                    )}
+
+                    {!method.unavailable && (
+                      <span className="checkout-payment-available">
+                        Available
+                      </span>
+                    )}
+                  </span>
+                </label>
+              ))}
+
             </div>
+
+            <p className="checkout-payment-note">
+              Paystack and Flutterwave are temporarily
+              unavailable. We are working to restore them.
+              Bank transfer is currently available.
+            </p>
+
           </div>
 
-          {/* BANK TRANSFER INSTRUCTIONS */}
+          {/* ============================================
+              05. BANK TRANSFER INSTRUCTIONS
+          ============================================ */}
 
           {transferInfo && (
             <div className="checkout-card">
+
               <div className="checkout-card-header">
                 <div className="checkout-step">05</div>
 
@@ -862,292 +2072,494 @@ function Checkout() {
               </div>
 
               <p>
-                Transfer the exact amount below and use the payment reference if
-                your banking app allows it. Your payment remains pending until
-                ABS CUT verifies that the funds have arrived.
+                Transfer the exact amount displayed below.
+                Once you have made the transfer, enter the
+                sender's name and upload your receipt.
+                ABS CUT must verify the funds before your
+                payment is confirmed.
               </p>
 
+              {/* BANK DETAILS */}
+
               <div className="checkout-summary-details">
+
                 <div>
                   <span>Amount to Transfer</span>
-                  <strong>{formatPrice(transferInfo.amount)}</strong>
+
+                  <strong>
+                    {formatPrice(transferInfo.amount)}
+                  </strong>
                 </div>
 
                 <div>
-                  <span>Bank / Provider</span>
-                  <strong>{transferInfo.bankName || "Not provided"}</strong>
+                  <span>Bank</span>
+
+                  <strong>
+                    {transferInfo.bankName ||
+                      "Not provided"}
+                  </strong>
                 </div>
 
                 <div>
                   <span>Account Name</span>
-                  <strong>{transferInfo.accountName || "Not provided"}</strong>
+
+                  <strong>
+                    {transferInfo.accountName ||
+                      "Not provided"}
+                  </strong>
                 </div>
 
                 <div>
                   <span>Account Number</span>
+
                   <strong>
-                    {transferInfo.accountNumber || "Not provided"}
+                    {transferInfo.accountNumber ||
+                      "Not provided"}
                   </strong>
                 </div>
 
                 <div>
                   <span>Payment Reference</span>
-                  <strong>{transferInfo.reference}</strong>
+
+                  <strong>
+                    {transferInfo.reference}
+                  </strong>
                 </div>
+
               </div>
 
-              {(!transferInfo.bankName ||
-                !transferInfo.accountName ||
-                !transferInfo.accountNumber) && (
-                <p className="checkout-error">
-                  Some bank details are missing. Please contact ABS CUT before
-                  transferring any money.
-                </p>
-              )}
-
-              {!transferSubmitted && (
-                <div className="checkout-form-group">
-                  <label htmlFor="transferSenderName">
-                    Name Used for the Transfer
-                  </label>
-
-                  {!transferSubmitted && (
-                    <div className="checkout-form-group receipt-upload">
-                      <label htmlFor="bankTransferReceipt">
-                        Upload Payment Receipt
-                      </label>
-
-                      <p>
-                        After transferring, upload a screenshot or receipt from
-                        your banking app.
-                      </p>
-
-                      <input
-                        id="bankTransferReceipt"
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                        onChange={handleReceiptChange}
-                        disabled={transferSubmitting}
-                      />
-
-                      {receiptFile && (
-                        <div className="receipt-file-selected">
-                          <span aria-hidden="true">✓</span>
-
-                          <span>
-                            <strong>{receiptFile.name}</strong>
-                            <small>
-                              {(receiptFile.size / 1024).toFixed(0)} KB
-                            </small>
-                          </span>
-
-                          <button
-                            type="button"
-                            onClick={() => setReceiptFile(null)}
-                            disabled={transferSubmitting}
-                            aria-label="Remove selected receipt"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      )}
-
-                      <small>JPG, PNG, or WebP · Maximum 5MB</small>
-                    </div>
-                  )}
-
-                  <input
-                    id="transferSenderName"
-                    type="text"
-                    value={transferSenderName}
-                    onChange={(event) => {
-                      setTransferSenderName(event.target.value);
-                      setTransferMessage("");
-                    }}
-                    placeholder="Enter the sender's account name"
-                    disabled={transferSubmitting}
-                  />
-                </div>
-              )}
-
-              {transferMessage && (
+              {!transferInfo.bankName ||
+              !transferInfo.accountName ||
+              !transferInfo.accountNumber ? (
                 <p
-                  className={transferSubmitted ? "" : "checkout-error"}
+                  className="checkout-error"
+                  role="alert"
+                >
+                  Some bank details are missing. Contact
+                  ABS CUT before transferring money.
+                </p>
+              ) : null}
+
+              {/* RECEIPT ALREADY SUBMITTED */}
+
+              {transferSubmitted ? (
+                <div
+                  className="checkout-transfer-success"
                   role="status"
                 >
+                  <strong>
+                    Receipt submitted — awaiting verification
+                  </strong>
+
+                  <p>
+                    ABS CUT will compare your submission
+                    with its bank records. Your payment is
+                    not confirmed yet. Do not make another
+                    transfer for this order unless ABS CUT
+                    instructs you to do so.
+                  </p>
+                </div>
+              ) : (
+                <>
+
+                  {/* SENDER NAME */}
+
+                  <div className="checkout-form-group">
+                    <label htmlFor="transferSenderName">
+                      Name Used for the Transfer
+                    </label>
+
+                    <input
+                      id="transferSenderName"
+                      type="text"
+                      value={transferSenderName}
+                      onChange={(event) => {
+                        setTransferSenderName(
+                          event.target.value,
+                        );
+
+                        setTransferMessage("");
+                      }}
+                      placeholder="Name on the sending bank account"
+                      autoComplete="name"
+                      disabled={transferSubmitting}
+                    />
+
+                    <small>
+                      Enter the name shown on the account
+                      you transferred from.
+                    </small>
+                  </div>
+
+                  {/* RECEIPT UPLOAD */}
+
+                  <div className="checkout-form-group receipt-upload">
+
+                    <label htmlFor="bankTransferReceipt">
+                      Bank Transfer Receipt
+                    </label>
+
+                    <p>
+                      Upload a clear screenshot or image
+                      of the transfer receipt from your
+                      banking app.
+                    </p>
+
+                    <input
+                      id="bankTransferReceipt"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handleReceiptChange}
+                      disabled={transferSubmitting}
+                    />
+
+                    {receiptFile && (
+                      <div className="receipt-file-selected">
+
+                        <span aria-hidden="true">
+                          ✓
+                        </span>
+
+                        <span>
+                          <strong>
+                            {receiptFile.name}
+                          </strong>
+
+                          <small>
+                            {(receiptFile.size / 1024).toFixed(0)} KB
+                          </small>
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setReceiptFile(null)
+                          }
+                          disabled={transferSubmitting}
+                          aria-label="Remove selected receipt"
+                        >
+                          Remove
+                        </button>
+
+                      </div>
+                    )}
+
+                    {transferInfo.receiptUrl &&
+                      !receiptFile && (
+                        <small>
+                          A receipt has already been uploaded
+                          for this payment. Choose another
+                          image only if you need to replace
+                          it before submitting.
+                        </small>
+                      )}
+
+                    <small>
+                      JPG, PNG, or WebP. Maximum file size:
+                      5MB.
+                    </small>
+
+                  </div>
+
+                  {transferMessage && (
+                    <p
+                      className="checkout-error"
+                      role="alert"
+                    >
+                      {transferMessage}
+                    </p>
+                  )}
+
+                  {/* SUBMIT RECEIPT */}
+
+                  <button
+                    type="button"
+                    className="checkout-submit-button"
+                    onClick={handleTransferSubmit}
+                    disabled={
+                      transferSubmitting ||
+                      !transferSenderName.trim() ||
+                      (!receiptFile &&
+                        !transferInfo.receiptUrl) ||
+                      !transferInfo.bankName ||
+                      !transferInfo.accountName ||
+                      !transferInfo.accountNumber
+                    }
+                  >
+                    <span>
+                      {receiptUploading
+                        ? "UPLOADING RECEIPT..."
+                        : transferSubmitting
+                          ? "SUBMITTING RECEIPT..."
+                          : "SUBMIT PAYMENT RECEIPT"}
+                    </span>
+
+                    <strong>
+                      {transferSubmitting ? "..." : "→"}
+                    </strong>
+                  </button>
+
+                </>
+              )}
+
+              {transferSubmitted && transferMessage && (
+                <p role="status">
                   {transferMessage}
                 </p>
               )}
 
-              {/* {!transferSubmitted && (
-                <button
-                  type="button"
-                  className="checkout-submit-button"
-                  disabled={
-                    transferSubmitting ||
-                    !transferSenderName.trim() ||
-                    !transferInfo.bankName ||
-                    !transferInfo.accountName ||
-                    !transferInfo.accountNumber
-                  }
-                  onClick={handleTransferSubmit}
-                >
-                  <span>
-                    {transferSubmitting
-                      ? "SUBMITTING..."
-                      : "I HAVE MADE THE TRANSFER"}
-                  </span>
-
-                  <strong>{transferSubmitting ? "..." : "→"}</strong>
-                </button>
-              )} */}
-
-              {!transferSubmitted && (
-                <button
-                  type="button"
-                  className="checkout-submit-button"
-                  disabled={
-                    transferSubmitting ||
-                    !transferSenderName.trim() ||
-                    !receiptFile ||
-                    !transferInfo.bankName ||
-                    !transferInfo.accountName ||
-                    !transferInfo.accountNumber
-                  }
-                  onClick={handleTransferSubmit}
-                >
-                  <span>
-                    {receiptUploading
-                      ? "UPLOADING RECEIPT..."
-                      : transferSubmitting
-                        ? "SUBMITTING PAYMENT DETAILS..."
-                        : "SUBMIT PAYMENT RECEIPT"}
-                  </span>
-
-                  <strong>{transferSubmitting ? "..." : "→"}</strong>
-                </button>
-              )}
-
-              {transferSubmitted && (
-                <p>
-                  Keep your transfer receipt until ABS CUT confirms your
-                  payment. Do not transfer again unless instructed.
-                </p>
-              )}
             </div>
           )}
 
-          {/* ERRORS */}
+          {/* ============================================
+              CHECKOUT ERRORS
+          ============================================ */}
 
           {errors.submit && (
-            <div className="checkout-submit-error" role="alert">
+            <div
+              className="checkout-submit-error"
+              role="alert"
+            >
               {errors.submit}
             </div>
           )}
 
-          {/* PLACE ORDER */}
+          {/* ============================================
+              GET BANK TRANSFER DETAILS
+          ============================================ */}
 
-          <button
-            type="submit"
-            className="checkout-submit-button"
-            disabled={orderLoading || !!transferInfo}
-          >
-            <span>
-              {orderLoading
-                ? "CONNECTING TO PAYMENT..."
-                : transferInfo
-                  ? "BANK TRANSFER INITIALIZED"
-                  : "PROCEED TO PAYMENT"}
-            </span>
+          {!transferInfo && (
+            <button
+              type="submit"
+              className="checkout-submit-button"
+              disabled={
+                orderLoading ||
+                deliveryQuoteLoading
+              }
+            >
+              <span>
+                {orderLoading
+                  ? "PREPARING BANK TRANSFER..."
+                  : "GET BANK TRANSFER DETAILS"}
+              </span>
 
-            <strong>{orderLoading ? "..." : "→"}</strong>
-          </button>
+              <strong>
+                {orderLoading ? "..." : "→"}
+              </strong>
+            </button>
+          )}
+
         </form>
 
-        {/* ORDER SUMMARY */}
+        {/* ==============================================
+            ORDER SUMMARY
+        ============================================== */}
 
         <aside className="checkout-summary">
+
           <div className="checkout-summary-header">
             <p>YOUR ORDER</p>
             <h2>Order Summary</h2>
           </div>
 
+          {/* CART PRODUCTS */}
+
           <div className="checkout-products">
-            {cartItems.map((item) => (
-              <div className="checkout-product" key={item.id}>
-                {/* <div className="checkout-product-image">
-                  <img src={item.image} alt={item.name} />
 
-                  <span>{item.quantity}</span>
-                </div> */}
-                <div className="checkout-product-image">
-                  {item.video ? (
-                    <video
-                      src={item.video}
-                      controls
-                      playsInline
-                      preload="metadata"
-                      aria-label={`${item.name} product video`}
-                      onError={(event) => {
-                        event.currentTarget.style.display = "none";
-                      }}
-                    >
-                      Your browser does not support video playback.
-                    </video>
-                  ) : item.image ? (
-                    <img src={item.image} alt={item.name} loading="lazy" />
-                  ) : (
-                    <div className="checkout-product-media-placeholder">
-                      <span>ABS CUT</span>
-                      <small>Preview unavailable</small>
-                    </div>
-                  )}
+            {cartItems.map((item, index) => {
+              const purchaseMode =
+                getPurchaseMode(item);
 
-                  <span className="checkout-product-quantity">
-                    {item.quantity}
-                  </span>
+              const priceUnit =
+                getPriceUnit(item);
+
+              const quantity =
+                Number(item.quantity || 0);
+
+              const unitPrice =
+                Number(item.price || 0);
+
+              const itemTotal =
+                unitPrice * quantity;
+
+              const productKey =
+                getProductId(item) ||
+                `${item.name}-${index}`;
+
+              return (
+                <div
+                  className="checkout-product"
+                  key={`${productKey}-${purchaseMode}`}
+                >
+
+                  {/* PRODUCT IMAGE */}
+
+                  <div className="checkout-product-image">
+
+                    {item.video ? (
+                      <video
+                        src={item.video}
+                        muted
+                        playsInline
+                        preload="metadata"
+                      />
+                    ) : item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="checkout-product-media-placeholder">
+                        <span>ABS CUT</span>
+                        <small>
+                          Preview unavailable
+                        </small>
+                      </div>
+                    )}
+
+                    <span className="checkout-product-quantity">
+                      {quantity}
+                    </span>
+
+                  </div>
+
+                  {/* PRODUCT INFORMATION */}
+
+                  <div className="checkout-product-info">
+
+                    <h3>{item.name}</h3>
+
+                    <p>{item.category}</p>
+
+                    <small>
+                      {purchaseMode === "digital"
+                        ? "Digital Purchase"
+                        : "Physical Purchase"}
+                    </small>
+
+                    <small>
+                      {getUnitLabel(priceUnit)}
+                    </small>
+
+                  </div>
+
+                  {/* ITEM TOTAL */}
+
+                  <strong>
+                    {formatPrice(itemTotal)}
+                  </strong>
+
                 </div>
-                <div className="checkout-product-info">
-                  <h3>{item.name}</h3>
-                  <p>{item.category}</p>
-                </div>
+              );
+            })}
 
-                <strong>{formatPrice(item.price * item.quantity)}</strong>
-              </div>
-            ))}
           </div>
 
+          {/* ORDER TOTALS */}
+
           <div className="checkout-summary-details">
+
             <div>
-              <span>Items</span>
-              <strong>{totalItems}</strong>
+              <span>Order Lines</span>
+
+              <strong>
+                {cartItems.length}
+              </strong>
+            </div>
+
+            <div>
+              <span>Physical Products</span>
+
+              <strong>
+                {physicalCartItems.length}
+              </strong>
+            </div>
+
+            <div>
+              <span>Digital Products</span>
+
+              <strong>
+                {digitalCartItems.length}
+              </strong>
             </div>
 
             <div>
               <span>Subtotal</span>
-              <strong>{formatPrice(totalPrice)}</strong>
+
+              <strong>
+                {formatPrice(totalPrice)}
+              </strong>
+            </div>
+
+            <div>
+              <span>Delivery Fee</span>
+
+              <strong>
+                {!hasPhysicalItems
+                  ? formatPrice(0)
+                  : formData.deliveryMethod === "pickup"
+                    ? formatPrice(0)
+                    : deliveryQuote
+                      ? formatPrice(deliveryQuote.fee)
+                      : "Awaiting quotation"}
+              </strong>
             </div>
 
             <div className="checkout-summary-divider" />
 
             <div className="checkout-grand-total">
-              <span>Total</span>
-              <strong>{formatPrice(totalPrice)}</strong>
+              <span>Estimated Total</span>
+
+              <strong>
+                {formatPrice(estimatedTotal)}
+              </strong>
             </div>
+
+            {hasPhysicalItems &&
+              formData.deliveryMethod === "delivery" &&
+              !deliveryQuote && (
+                <small>
+                  Calculate your delivery fee to see the
+                  estimated total. Your final amount is
+                  confirmed by the server when the order
+                  is created.
+                </small>
+              )}
+
           </div>
+
+          {/* SUMMARY NOTE */}
 
           <div className="checkout-summary-note">
-            <span>✓</span>
+
+            <span aria-hidden="true">
+              ✓
+            </span>
 
             <p>
-              {paymentMethod === "paystack"
-                ? "You will be redirected to Paystack to complete your payment."
-                : paymentMethod === "flutterwave"
-                  ? "You will be redirected to Flutterwave to complete your payment."
-                  : "Your bank-transfer payment will remain pending until ABS CUT verifies receipt of the funds."}
+              {transferSubmitted
+                ? "Your receipt has been submitted and your payment is awaiting verification."
+
+                : transferInfo
+                  ? "Your transfer remains pending until ABS CUT verifies the actual bank credit."
+
+                  : isDigitalOnly
+                    ? "Digital-only order. No physical delivery fee is required."
+
+                    : formData.deliveryMethod === "pickup"
+                      ? "Store pickup selected. No delivery charge will be added."
+
+                      : deliveryQuote
+                        ? "Your delivery quotation is ready. The backend will verify the fee again when creating your order."
+
+                        : "Select your delivery location and calculate your delivery fee before proceeding to payment."}
             </p>
+
           </div>
+
         </aside>
+
       </section>
     </main>
   );

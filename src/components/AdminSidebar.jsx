@@ -27,6 +27,13 @@ function AdminSidebar() {
       end: true,
     },
 
+
+    {
+      path: "/admin/delivery-zones",
+      label: "Delivery Zones",
+      icon: "🚚",
+    },
+  
     {
       path: "/admin/products",
       label: "Products",

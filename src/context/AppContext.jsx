@@ -1,18 +1,115 @@
-
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import { apiRequest } from "../services/api";
 
+const AppContext = createContext(null);
+
 // =========================================================
-// ABS CUT APP CONTEXT
+// CART HELPERS
 // =========================================================
 
-const AppContext = createContext(null);
+const getProductId = (item) =>
+  String(
+    item?.product?._id ||
+      item?.product?.id ||
+      item?._id ||
+      item?.id ||
+      item?.productId ||
+      "",
+  );
+
+const getPurchaseMode = (item) =>
+  item?.purchaseMode === "digital" ? "digital" : "physical";
+
+const getPriceUnit = (item) => {
+  if (item?.priceUnit) {
+    return item.priceUnit;
+  }
+
+  if (item?.productType === "raw_material") {
+    return "yard";
+  }
+
+  if (item?.productType === "ready_to_wear") {
+    return "piece";
+  }
+
+  return "design";
+};
+
+const getQuantityStep = (item) =>
+  getPriceUnit(item) === "yard" && getPurchaseMode(item) === "physical"
+    ? 0.5
+    : 1;
+
+const getUnitPrice = (product, purchaseMode) => {
+  if (purchaseMode === "digital") {
+    return Number(product.digitalPrice ?? product.price ?? 0);
+  }
+
+  return Number(product.physicalPrice ?? product.price ?? 0);
+};
+
+const normalizeCartItem = (item) => {
+  const product =
+    item?.product && typeof item.product === "object" ? item.product : item;
+
+  if (!product) {
+    return null;
+  }
+
+  const productId = getProductId(product);
+
+  if (!productId) {
+    return null;
+  }
+
+  const purchaseMode = getPurchaseMode(item);
+  const priceUnit = item?.priceUnit || getPriceUnit(product);
+
+  const quantity = Number(item?.quantity ?? 1);
+
+  return {
+    ...product,
+
+    id: productId,
+    _id: productId,
+
+    purchaseMode,
+    priceUnit,
+
+    quantity: Number.isFinite(quantity) && quantity > 0 ? quantity : 1,
+
+    price: getUnitPrice(product, purchaseMode),
+  };
+};
+
+const normalizeCartItems = (items = []) =>
+  (Array.isArray(items) ? items : []).map(normalizeCartItem).filter(Boolean);
+
+const getCartItemKey = (item) =>
+  `${getProductId(item)}-${getPurchaseMode(item)}`;
+
+const isSameCartItem = (first, second) =>
+  getProductId(first) === getProductId(second) &&
+  getPurchaseMode(first) === getPurchaseMode(second);
+
+// Accept either a complete cart item or a product ID.
+// Passing the complete item is recommended because the same
+// product can exist in both physical and digital modes.
+const resolveCartItem = (itemOrId, purchaseMode) => {
+  if (itemOrId && typeof itemOrId === "object") {
+    return {
+      productId: getProductId(itemOrId),
+      purchaseMode: getPurchaseMode(itemOrId),
+    };
+  }
+
+  return {
+    productId: String(itemOrId || ""),
+    purchaseMode: purchaseMode || "physical",
+  };
+};
 
 // =========================================================
 // APP PROVIDER
@@ -25,170 +122,106 @@ export function AppProvider({ children }) {
 
   const [cartItems, setCartItems] = useState(() => {
     try {
-      const savedCart =
-        localStorage.getItem("absCutCart");
+      const savedCart = localStorage.getItem("absCutCart");
 
       if (!savedCart) {
         return [];
       }
 
-      const parsedCart =
-        JSON.parse(savedCart);
+      const parsedCart = JSON.parse(savedCart);
 
       if (!Array.isArray(parsedCart)) {
         return [];
       }
 
-      return parsedCart;
+      return normalizeCartItems(parsedCart);
     } catch (error) {
-      console.error(
-        "Could not load ABS CUT cart:",
-        error
-      );
+      console.error("Could not load ABS CUT cart:", error);
 
       return [];
     }
   });
 
-  const [cartLoading, setCartLoading] =
-    useState(false);
+  const [cartLoading, setCartLoading] = useState(false);
 
-  const [cartActionLoading, setCartActionLoading] =
-    useState(null);
+  const [cartActionLoading, setCartActionLoading] = useState(null);
 
-  const [cartMergePending, setCartMergePending] =
-    useState(false);
+  const [cartMergePending, setCartMergePending] = useState(false);
 
   // =======================================================
   // AUTHENTICATION STATE
   // =======================================================
 
-  const [currentUser, setCurrentUser] =
-    useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  const [token, setToken] =
-    useState(null);
+  const [token, setToken] = useState(null);
 
-  const [authLoading, setAuthLoading] =
-    useState(true);
+  const [authLoading, setAuthLoading] = useState(true);
 
   // =======================================================
   // VERIFY AUTHENTICATION
   // =======================================================
 
   useEffect(() => {
-    const verifyAuthentication =
-      async () => {
-        const savedToken =
-          localStorage.getItem(
-            "absCutToken"
-          );
+    const verifyAuthentication = async () => {
+      const savedToken = localStorage.getItem("absCutToken");
 
-        // No saved token means
-        // the user is a guest.
-        if (!savedToken) {
-          setAuthLoading(false);
-          return;
+      if (!savedToken) {
+        setAuthLoading(false);
+        return;
+      }
+
+      try {
+        const data = await apiRequest("/users/profile");
+
+        if (!data.success || !data.user) {
+          throw new Error("Unable to verify user account.");
         }
 
-        try {
-          const data =
-            await apiRequest(
-              "/users/profile"
-            );
+        const safeUser = {
+          id: data.user._id || data.user.id,
 
-          if (
-            data.success &&
-            data.user
-          ) {
-            // ------------------------------------------------
-            // IMPORTANT:
-            // Keep the user's ROLE.
-            // This is required by AdminRoute.
-            // ------------------------------------------------
+          firstName: data.user.firstName,
+          lastName: data.user.lastName,
+          username: data.user.username || "",
 
-            const safeUser = {
-              id:
-                data.user._id ||
-                data.user.id,
+          avatar: data.user.avatar || "",
 
-              firstName:
-                data.user.firstName,
+          phone: data.user.phone,
+          email: data.user.email,
 
-              lastName:
-                data.user.lastName,
+          role: data.user.role || "customer",
+        };
 
-              phone:
-                data.user.phone,
+        setCurrentUser(safeUser);
+        setToken(savedToken);
 
-              email:
-                data.user.email,
+        localStorage.setItem("absCutCurrentUser", JSON.stringify(safeUser));
 
-              role:
-                data.user.role ||
-                "customer",
-            };
+        localStorage.setItem(
+          "absCutCustomer",
+          JSON.stringify({
+            firstName: safeUser.firstName,
+            lastName: safeUser.lastName,
+            phone: safeUser.phone,
+            email: safeUser.email,
+          }),
+        );
+      } catch (error) {
+        console.error("ABS CUT authentication verification failed:", error);
 
-            setCurrentUser(
-              safeUser
-            );
+        localStorage.removeItem("absCutCurrentUser");
 
-            setToken(
-              savedToken
-            );
+        localStorage.removeItem("absCutCustomer");
 
-            localStorage.setItem(
-              "absCutCurrentUser",
-              JSON.stringify(
-                safeUser
-              )
-            );
+        localStorage.removeItem("absCutToken");
 
-            localStorage.setItem(
-              "absCutCustomer",
-              JSON.stringify({
-                firstName:
-                  safeUser.firstName,
-
-                lastName:
-                  safeUser.lastName,
-
-                phone:
-                  safeUser.phone,
-
-                email:
-                  safeUser.email,
-              })
-            );
-          } else {
-            throw new Error(
-              "Unable to verify user account."
-            );
-          }
-        } catch (error) {
-          console.error(
-            "ABS CUT authentication verification failed:",
-            error
-          );
-
-          localStorage.removeItem(
-            "absCutCurrentUser"
-          );
-
-          localStorage.removeItem(
-            "absCutCustomer"
-          );
-
-          localStorage.removeItem(
-            "absCutToken"
-          );
-
-          setCurrentUser(null);
-          setToken(null);
-        } finally {
-          setAuthLoading(false);
-        }
-      };
+        setCurrentUser(null);
+        setToken(null);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
 
     verifyAuthentication();
   }, []);
@@ -199,162 +232,111 @@ export function AppProvider({ children }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(
-        "absCutCart",
-        JSON.stringify(cartItems)
-      );
+      localStorage.setItem("absCutCart", JSON.stringify(cartItems));
     } catch (error) {
-      console.error(
-        "Could not save ABS CUT cart:",
-        error
-      );
+      console.error("Could not save ABS CUT cart:", error);
     }
   }, [cartItems]);
 
   // =======================================================
-  // LOAD MONGODB CART
+  // SERVER CART RESPONSE HANDLER
   // =======================================================
 
-  const loadServerCart =
-    async () => {
-      if (!currentUser) {
-        return;
+  const applyServerCart = (cart) => {
+    const items = normalizeCartItems(cart?.items || []);
+
+    setCartItems(items);
+
+    return items;
+  };
+
+  // =======================================================
+  // LOAD SERVER CART
+  // =======================================================
+
+  const loadServerCart = async () => {
+    if (!currentUser) {
+      return;
+    }
+
+    try {
+      setCartLoading(true);
+
+      const data = await apiRequest("/cart");
+
+      if (data.success && data.cart) {
+        applyServerCart(data.cart);
       }
-
-      try {
-        setCartLoading(true);
-
-        const data =
-          await apiRequest(
-            "/cart"
-          );
-
-        if (
-          data.success &&
-          data.cart
-        ) {
-          const serverItems =
-            (
-              data.cart.items ||
-              []
-            )
-              .filter(
-                (item) =>
-                  item.product
-              )
-              .map(
-                (item) => ({
-                  ...item.product,
-
-                  id:
-                    item.product._id,
-
-                  _id:
-                    item.product._id,
-
-                  quantity:
-                    Number(
-                      item.quantity
-                    ),
-                })
-              );
-
-          setCartItems(
-            serverItems
-          );
-        }
-      } catch (error) {
-        console.error(
-          "ABS CUT server cart error:",
-          error
-        );
-      } finally {
-        setCartLoading(false);
-      }
-    };
-
-  // =======================================================
-  // LOAD SERVER CART WHEN USER LOGS IN
-  // =======================================================
+    } catch (error) {
+      console.error("ABS CUT server cart error:", error);
+    } finally {
+      setCartLoading(false);
+    }
+  };
 
   useEffect(() => {
-    if (
-      currentUser &&
-      !authLoading &&
-      !cartMergePending
-    ) {
+    if (currentUser && !authLoading && !cartMergePending) {
       loadServerCart();
     }
-  }, [
-    currentUser,
-    authLoading,
-    cartMergePending,
-  ]);
+  }, [currentUser, authLoading, cartMergePending]);
 
   // =======================================================
   // ADD TO CART
   // =======================================================
 
-  const addToCart = async (
-    product,
-    quantity = 1
-  ) => {
-    const productId =
-      product._id ||
-      product.id;
+  const addToCart = async (product, quantity = 1) => {
+    const productId = getProductId(product);
+    const amount = Number(quantity);
 
-    const amount =
-      Number(quantity);
+    if (!productId) {
+      throw new Error("Invalid product. Product ID is missing.");
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      throw new Error("Please enter a valid quantity.");
+    }
+
+    const purchaseMode = getPurchaseMode(product);
+
+    const priceUnit = product.priceUnit || getPriceUnit(product);
+
+    const cartProduct = {
+      ...product,
+
+      id: productId,
+      _id: productId,
+
+      purchaseMode,
+      priceUnit,
+
+      price: getUnitPrice(product, purchaseMode),
+
+      quantity: amount,
+    };
 
     // -----------------------------------------------------
     // GUEST CART
     // -----------------------------------------------------
 
     if (!currentUser) {
-      setCartItems(
-        (currentItems) => {
-          const existingItem =
-            currentItems.find(
-              (item) =>
-                (item._id ||
-                  item.id) ===
-                productId
-            );
+      setCartItems((currentItems) => {
+        const existingItem = currentItems.find((item) =>
+          isSameCartItem(item, cartProduct),
+        );
 
-          if (existingItem) {
-            return currentItems.map(
-              (item) =>
-                (item._id ||
-                  item.id) ===
-                productId
-                  ? {
-                      ...item,
-
-                      quantity:
-                        Number(
-                          item.quantity
-                        ) +
-                        amount,
-                    }
-                  : item
-            );
-          }
-
-          return [
-            ...currentItems,
-
-            {
-              ...product,
-
-              id: productId,
-
-              _id: productId,
-
-              quantity: amount,
-            },
-          ];
+        if (existingItem) {
+          return currentItems.map((item) =>
+            isSameCartItem(item, cartProduct)
+              ? {
+                  ...item,
+                  quantity: Number(item.quantity) + amount,
+                }
+              : item,
+          );
         }
-      );
+
+        return [...currentItems, cartProduct];
+      });
 
       return;
     }
@@ -364,59 +346,22 @@ export function AppProvider({ children }) {
     // -----------------------------------------------------
 
     try {
-      const data =
-        await apiRequest(
-          "/cart",
-          {
-            method: "POST",
+      const data = await apiRequest("/cart", {
+        method: "POST",
 
-            body: JSON.stringify({
-              productId,
+        body: JSON.stringify({
+          productId,
+          quantity: amount,
+          purchaseMode,
+          priceUnit,
+        }),
+      });
 
-              quantity: amount,
-            }),
-          }
-        );
-
-      if (
-        data.success &&
-        data.cart
-      ) {
-        const serverItems =
-          (
-            data.cart.items ||
-            []
-          )
-            .filter(
-              (item) =>
-                item.product
-            )
-            .map(
-              (item) => ({
-                ...item.product,
-
-                id:
-                  item.product._id,
-
-                _id:
-                  item.product._id,
-
-                quantity:
-                  Number(
-                    item.quantity
-                  ),
-              })
-            );
-
-        setCartItems(
-          serverItems
-        );
+      if (data.success && data.cart) {
+        applyServerCart(data.cart);
       }
     } catch (error) {
-      console.error(
-        "ABS CUT add to cart error:",
-        error
-      );
+      console.error("ABS CUT add to cart error:", error);
 
       throw error;
     }
@@ -426,685 +371,302 @@ export function AppProvider({ children }) {
   // REMOVE FROM CART
   // =======================================================
 
-  const removeFromCart =
-    async (productId) => {
-      if (cartActionLoading) {
-        return;
-      }
+  const removeFromCart = async (itemOrId, purchaseMode) => {
+    const { productId, purchaseMode: mode } = resolveCartItem(
+      itemOrId,
+      purchaseMode,
+    );
 
-      setCartActionLoading(
-        productId
+    if (!productId || cartActionLoading) {
+      return;
+    }
+
+    const actionKey = `${productId}-${mode}`;
+
+    setCartActionLoading(actionKey);
+
+    // -----------------------------------------------------
+    // GUEST CART
+    // -----------------------------------------------------
+
+    if (!currentUser) {
+      setCartItems((currentItems) =>
+        currentItems.filter(
+          (item) =>
+            !(
+              getProductId(item) === productId && getPurchaseMode(item) === mode
+            ),
+        ),
       );
 
-      // ---------------------------------------------------
-      // GUEST CART
-      // ---------------------------------------------------
+      setCartActionLoading(null);
+      return;
+    }
 
-      if (!currentUser) {
-        setCartItems(
-          (currentItems) =>
-            currentItems.filter(
-              (item) =>
-                (item._id ||
-                  item.id) !==
-                productId
-            )
-        );
+    // -----------------------------------------------------
+    // SERVER CART
+    // -----------------------------------------------------
 
-        setCartActionLoading(
-          null
-        );
+    try {
+      const data = await apiRequest(`/cart/${productId}?purchaseMode=${mode}`, {
+        method: "DELETE",
+      });
 
-        return;
+      if (data.success && data.cart) {
+        applyServerCart(data.cart);
       }
+    } catch (error) {
+      console.error("ABS CUT remove cart item error:", error);
 
-      // ---------------------------------------------------
-      // SERVER CART
-      // ---------------------------------------------------
+      throw error;
+    } finally {
+      setCartActionLoading(null);
+    }
+  };
 
-      try {
-        const data =
-          await apiRequest(
-            `/cart/${productId}`,
-            {
-              method: "DELETE",
-            }
-          );
+  // =======================================================
+  // UPDATE CART QUANTITY
+  // =======================================================
 
-        if (
-          data.success &&
-          data.cart
-        ) {
-          const serverItems =
-            (
-              data.cart.items ||
-              []
-            )
-              .filter(
-                (item) =>
-                  item.product
-              )
-              .map(
-                (item) => ({
-                  ...item.product,
+  const updateCartQuantity = async (itemOrId, newQuantity, purchaseMode) => {
+    const { productId, purchaseMode: mode } = resolveCartItem(
+      itemOrId,
+      purchaseMode,
+    );
 
-                  id:
-                    item.product._id,
+    const quantity = Number(newQuantity);
 
-                  _id:
-                    item.product._id,
+    if (!productId || cartActionLoading) {
+      return;
+    }
 
-                  quantity:
-                    Number(
-                      item.quantity
-                    ),
-                })
-              );
+    if (!Number.isFinite(quantity) || quantity < 0) {
+      throw new Error("Please enter a valid quantity.");
+    }
 
-          setCartItems(
-            serverItems
-          );
-        }
-      } catch (error) {
-        console.error(
-          "ABS CUT remove cart item error:",
-          error
-        );
+    if (quantity === 0) {
+      return removeFromCart(productId, mode);
+    }
 
-        throw error;
-      } finally {
-        setCartActionLoading(
-          null
-        );
+    const actionKey = `${productId}-${mode}`;
+
+    setCartActionLoading(actionKey);
+
+    // -----------------------------------------------------
+    // GUEST CART
+    // -----------------------------------------------------
+
+    if (!currentUser) {
+      setCartItems((currentItems) =>
+        currentItems.map((item) =>
+          getProductId(item) === productId && getPurchaseMode(item) === mode
+            ? {
+                ...item,
+                quantity,
+              }
+            : item,
+        ),
+      );
+
+      setCartActionLoading(null);
+      return;
+    }
+
+    // -----------------------------------------------------
+    // SERVER CART
+    // -----------------------------------------------------
+
+    try {
+      const data = await apiRequest(`/cart/${productId}`, {
+        method: "PUT",
+
+        body: JSON.stringify({
+          quantity,
+          purchaseMode: mode,
+        }),
+      });
+
+      if (data.success && data.cart) {
+        applyServerCart(data.cart);
       }
-    };
+    } catch (error) {
+      console.error("ABS CUT update cart quantity error:", error);
+
+      throw error;
+    } finally {
+      setCartActionLoading(null);
+    }
+  };
 
   // =======================================================
   // INCREASE QUANTITY
   // =======================================================
 
-  const increaseQuantity =
-    async (productId) => {
-      if (cartActionLoading) {
-        return;
-      }
+  const increaseQuantity = async (itemOrId, purchaseMode) => {
+    const { productId, purchaseMode: mode } = resolveCartItem(
+      itemOrId,
+      purchaseMode,
+    );
 
-      const item =
-        cartItems.find(
-          (cartItem) =>
-            (cartItem._id ||
-              cartItem.id) ===
-            productId
-        );
+    const item = cartItems.find(
+      (cartItem) =>
+        getProductId(cartItem) === productId &&
+        getPurchaseMode(cartItem) === mode,
+    );
 
-      if (!item) {
-        return;
-      }
+    if (!item) {
+      return;
+    }
 
-      const newQuantity =
-        Number(
-          item.quantity
-        ) + 1;
+    const step = getQuantityStep(item);
 
-      setCartActionLoading(
-        productId
-      );
+    const newQuantity = Number(item.quantity) + step;
 
-      // ---------------------------------------------------
-      // GUEST CART
-      // ---------------------------------------------------
-
-      if (!currentUser) {
-        setCartItems(
-          (currentItems) =>
-            currentItems.map(
-              (cartItem) =>
-                (cartItem._id ||
-                  cartItem.id) ===
-                productId
-                  ? {
-                      ...cartItem,
-
-                      quantity:
-                        newQuantity,
-                    }
-                  : cartItem
-            )
-        );
-
-        setCartActionLoading(
-          null
-        );
-
-        return;
-      }
-
-      // ---------------------------------------------------
-      // SERVER CART
-      // ---------------------------------------------------
-
-      try {
-        const data =
-          await apiRequest(
-            `/cart/${productId}`,
-            {
-              method: "PUT",
-
-              body: JSON.stringify({
-                quantity:
-                  newQuantity,
-              }),
-            }
-          );
-
-        if (
-          data.success &&
-          data.cart
-        ) {
-          const serverItems =
-            (
-              data.cart.items ||
-              []
-            )
-              .filter(
-                (item) =>
-                  item.product
-              )
-              .map(
-                (item) => ({
-                  ...item.product,
-
-                  id:
-                    item.product._id,
-
-                  _id:
-                    item.product._id,
-
-                  quantity:
-                    Number(
-                      item.quantity
-                    ),
-                })
-              );
-
-          setCartItems(
-            serverItems
-          );
-        }
-      } catch (error) {
-        console.error(
-          "ABS CUT increase quantity error:",
-          error
-        );
-
-        throw error;
-      } finally {
-        setCartActionLoading(
-          null
-        );
-      }
-    };
+    return updateCartQuantity(productId, Number(newQuantity.toFixed(2)), mode);
+  };
 
   // =======================================================
   // DECREASE QUANTITY
   // =======================================================
 
-  const decreaseQuantity =
-    async (productId) => {
-      if (cartActionLoading) {
-        return;
-      }
+  const decreaseQuantity = async (itemOrId, purchaseMode) => {
+    const { productId, purchaseMode: mode } = resolveCartItem(
+      itemOrId,
+      purchaseMode,
+    );
 
-      const item =
-        cartItems.find(
-          (cartItem) =>
-            (cartItem._id ||
-              cartItem.id) ===
-            productId
-        );
+    const item = cartItems.find(
+      (cartItem) =>
+        getProductId(cartItem) === productId &&
+        getPurchaseMode(cartItem) === mode,
+    );
 
-      if (!item) {
-        return;
-      }
+    if (!item) {
+      return;
+    }
 
-      const newQuantity =
-        Number(
-          item.quantity
-        ) - 1;
+    const step = getQuantityStep(item);
 
-      setCartActionLoading(
-        productId
-      );
+    const newQuantity = Math.max(
+      0,
+      Number((Number(item.quantity) - step).toFixed(2)),
+    );
 
-      // ---------------------------------------------------
-      // REMOVE WHEN ZERO
-      // ---------------------------------------------------
-
-      if (
-        newQuantity <= 0
-      ) {
-        if (!currentUser) {
-          setCartItems(
-            (currentItems) =>
-              currentItems.filter(
-                (cartItem) =>
-                  (cartItem._id ||
-                    cartItem.id) !==
-                  productId
-              )
-          );
-
-          setCartActionLoading(
-            null
-          );
-
-          return;
-        }
-
-        try {
-          const data =
-            await apiRequest(
-              `/cart/${productId}`,
-              {
-                method: "DELETE",
-              }
-            );
-
-          if (
-            data.success &&
-            data.cart
-          ) {
-            const serverItems =
-              (
-                data.cart
-                  .items || []
-              )
-                .filter(
-                  (item) =>
-                    item.product
-                )
-                .map(
-                  (item) => ({
-                    ...item.product,
-
-                    id:
-                      item.product._id,
-
-                    _id:
-                      item.product._id,
-
-                    quantity:
-                      Number(
-                        item.quantity
-                      ),
-                  })
-                );
-
-            setCartItems(
-              serverItems
-            );
-          }
-        } catch (error) {
-          console.error(
-            "ABS CUT decrease/remove error:",
-            error
-          );
-
-          throw error;
-        } finally {
-          setCartActionLoading(
-            null
-          );
-        }
-
-        return;
-      }
-
-      // ---------------------------------------------------
-      // SERVER CART
-      // ---------------------------------------------------
-
-      if (!currentUser) {
-        setCartItems(
-          (currentItems) =>
-            currentItems.map(
-              (cartItem) =>
-                (cartItem._id ||
-                  cartItem.id) ===
-                productId
-                  ? {
-                      ...cartItem,
-
-                      quantity:
-                        newQuantity,
-                    }
-                  : cartItem
-            )
-        );
-
-        setCartActionLoading(
-          null
-        );
-
-        return;
-      }
-
-      try {
-        const data =
-          await apiRequest(
-            `/cart/${productId}`,
-            {
-              method: "PUT",
-
-              body: JSON.stringify({
-                quantity:
-                  newQuantity,
-              }),
-            }
-          );
-
-        if (
-          data.success &&
-          data.cart
-        ) {
-          const serverItems =
-            (
-              data.cart.items ||
-              []
-            )
-              .filter(
-                (item) =>
-                  item.product
-              )
-              .map(
-                (item) => ({
-                  ...item.product,
-
-                  id:
-                    item.product._id,
-
-                  _id:
-                    item.product._id,
-
-                  quantity:
-                    Number(
-                      item.quantity
-                    ),
-                })
-              );
-
-          setCartItems(
-            serverItems
-          );
-        }
-      } catch (error) {
-        console.error(
-          "ABS CUT decrease quantity error:",
-          error
-        );
-
-        throw error;
-      } finally {
-        setCartActionLoading(
-          null
-        );
-      }
-    };
+    return updateCartQuantity(productId, newQuantity, mode);
+  };
 
   // =======================================================
   // CLEAR CART
   // =======================================================
 
-  const clearCart =
-    async () => {
-      // ---------------------------------------------------
-      // GUEST CART
-      // ---------------------------------------------------
+  const clearCart = async () => {
+    if (!currentUser) {
+      setCartItems([]);
+      return;
+    }
 
-      if (!currentUser) {
+    try {
+      const data = await apiRequest("/cart", {
+        method: "DELETE",
+      });
+
+      if (data.success) {
         setCartItems([]);
-        return;
       }
+    } catch (error) {
+      console.error("ABS CUT clear cart error:", error);
 
-      // ---------------------------------------------------
-      // SERVER CART
-      // ---------------------------------------------------
-
-      try {
-        const data =
-          await apiRequest(
-            "/cart",
-            {
-              method: "DELETE",
-            }
-          );
-
-        if (data.success) {
-          setCartItems([]);
-        }
-      } catch (error) {
-        console.error(
-          "ABS CUT clear cart error:",
-          error
-        );
-
-        throw error;
-      }
-    };
+      throw error;
+    }
+  };
 
   // =======================================================
-  // TOTAL ITEMS
+  // TOTAL QUANTITY
   // =======================================================
 
-  const totalItems =
-    cartItems.reduce(
-      (total, item) =>
-        total +
-        Number(
-          item.quantity
-        ),
-      0
-    );
+  const totalItems = cartItems.reduce(
+    (total, item) => total + Number(item.quantity || 0),
+    0,
+  );
 
   // =======================================================
   // TOTAL PRICE
   // =======================================================
 
-  const totalPrice =
-    cartItems.reduce(
-      (total, item) =>
-        total +
-        Number(item.price) *
-          Number(
-            item.quantity
-          ),
-      0
-    );
+  const totalPrice = cartItems.reduce(
+    (total, item) =>
+      total + Number(item.price || 0) * Number(item.quantity || 0),
+    0,
+  );
 
   // =======================================================
   // LOGIN
   // =======================================================
 
-  const login = async (
-    user,
-    authToken
-  ) => {
-    if (
-      !user ||
-      !authToken
-    ) {
+  const login = async (user, authToken) => {
+    if (!user || !authToken) {
       return;
     }
 
-    // ---------------------------------------------------
-    // IMPORTANT:
-    // Keep ROLE when logging in.
-    // ---------------------------------------------------
-
     const safeUser = {
-      id:
-        user.id ||
-        user._id,
-
-      firstName:
-        user.firstName,
-
-      lastName:
-        user.lastName,
-
-      phone:
-        user.phone,
-
-      email:
-        user.email,
-
-      role:
-        user.role ||
-        "customer",
+      id: user.id || user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username || "",
+      avatar: user.avatar || "",
+      phone: user.phone,
+      email: user.email,
+      role: user.role || "customer",
     };
 
-    // ---------------------------------------------------
-    // SAVE GUEST CART
-    // ---------------------------------------------------
+    const guestCart = Array.isArray(cartItems) ? [...cartItems] : [];
 
-    const guestCart =
-      Array.isArray(
-        cartItems
-      )
-        ? [...cartItems]
-        : [];
+    localStorage.setItem("absCutCurrentUser", JSON.stringify(safeUser));
 
-    // ---------------------------------------------------
-    // SAVE USER
-    // ---------------------------------------------------
-
-    localStorage.setItem(
-      "absCutCurrentUser",
-      JSON.stringify(
-        safeUser
-      )
-    );
-
-    localStorage.setItem(
-      "absCutToken",
-      authToken
-    );
+    localStorage.setItem("absCutToken", authToken);
 
     localStorage.setItem(
       "absCutCustomer",
       JSON.stringify({
-        firstName:
-          safeUser.firstName,
-
-        lastName:
-          safeUser.lastName,
-
-        phone:
-          safeUser.phone,
-
-        email:
-          safeUser.email,
-      })
+        firstName: safeUser.firstName,
+        lastName: safeUser.lastName,
+        username: safeUser.username,
+        phone: safeUser.phone,
+        email: safeUser.email,
+      }),
     );
 
-    // ---------------------------------------------------
-    // SET AUTHENTICATION
-    // ---------------------------------------------------
+    setToken(authToken);
+    setCurrentUser(safeUser);
 
-    setCurrentUser(
-      safeUser
-    );
-
-    setToken(
-      authToken
-    );
-
-    // ---------------------------------------------------
+    // -----------------------------------------------------
     // MERGE GUEST CART
-    // ---------------------------------------------------
+    // -----------------------------------------------------
 
-    if (
-      guestCart.length > 0
-    ) {
+    if (guestCart.length > 0) {
+      setCartMergePending(true);
+
       try {
-        setCartMergePending(
-          true
-        );
+        const data = await apiRequest("/cart/merge", {
+          method: "POST",
 
-        const response =
-          await fetch(
-            "http://localhost:5000/api/cart/merge",
-            {
-              method: "POST",
+          body: JSON.stringify({
+            items: guestCart.map((item) => ({
+              productId: getProductId(item),
+              quantity: Number(item.quantity),
+              purchaseMode: getPurchaseMode(item),
+              priceUnit: getPriceUnit(item),
+            })),
+          }),
+        });
 
-              headers: {
-                "Content-Type":
-                  "application/json",
-
-                Authorization:
-                  `Bearer ${authToken}`,
-              },
-
-              body: JSON.stringify({
-                items:
-                  guestCart,
-              }),
-            }
-          );
-
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.message ||
-              "Unable to merge cart."
-          );
-        }
-
-        if (
-          data.success &&
-          data.cart
-        ) {
-          const mergedItems =
-            (
-              data.cart
-                .items || []
-            )
-              .filter(
-                (item) =>
-                  item.product
-              )
-              .map(
-                (item) => ({
-                  ...item.product,
-
-                  id:
-                    item.product._id,
-
-                  _id:
-                    item.product._id,
-
-                  quantity:
-                    Number(
-                      item.quantity
-                    ),
-                })
-              );
-
-          setCartItems(
-            mergedItems
-          );
+        if (data.success && data.cart) {
+          applyServerCart(data.cart);
         }
       } catch (error) {
-        console.error(
-          "ABS CUT guest cart merge error:",
-          error
-        );
+        console.error("ABS CUT guest cart merge error:", error);
       } finally {
-        setCartMergePending(
-          false
-        );
+        setCartMergePending(false);
       }
     }
   };
@@ -1114,133 +676,91 @@ export function AppProvider({ children }) {
   // =======================================================
 
   const logout = () => {
-    localStorage.removeItem(
-      "absCutCurrentUser"
-    );
+    localStorage.removeItem("absCutCurrentUser");
 
-    localStorage.removeItem(
-      "absCutCustomer"
-    );
+    localStorage.removeItem("absCutCustomer");
 
-    localStorage.removeItem(
-      "absCutToken"
-    );
+    localStorage.removeItem("absCutToken");
 
     setCurrentUser(null);
-
     setToken(null);
+
+    // Do not expose the previous user's server cart
+    // as a guest cart after logout.
+    setCartItems([]);
   };
 
   // =======================================================
   // UPDATE CURRENT USER
   // =======================================================
 
-  const updateCurrentUser =
-    (updates) => {
-      setCurrentUser(
-        (currentUser) => {
-          if (!currentUser) {
-            return null;
-          }
+  const updateCurrentUser = (updates) => {
+    setCurrentUser((existingUser) => {
+      if (!existingUser) {
+        return null;
+      }
 
-          const updatedUser = {
-            ...currentUser,
-            ...updates,
-          };
+      const updatedUser = {
+        ...existingUser,
+        ...updates,
+      };
 
-          localStorage.setItem(
-            "absCutCurrentUser",
-            JSON.stringify(
-              updatedUser
-            )
-          );
+      localStorage.setItem("absCutCurrentUser", JSON.stringify(updatedUser));
 
-          localStorage.setItem(
-            "absCutCustomer",
-            JSON.stringify({
-              firstName:
-                updatedUser.firstName,
-
-              lastName:
-                updatedUser.lastName,
-
-              phone:
-                updatedUser.phone,
-
-              email:
-                updatedUser.email,
-            })
-          );
-
-          return updatedUser;
-        }
+      localStorage.setItem(
+        "absCutCustomer",
+        JSON.stringify({
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          username: updatedUser.username,
+          phone: updatedUser.phone,
+          email: updatedUser.email,
+        }),
       );
-    };
+
+      return updatedUser;
+    });
+  };
 
   // =======================================================
   // AUTH STATUS
   // =======================================================
 
-  const isAuthenticated =
-    Boolean(
-      currentUser
-    );
+  const isAuthenticated = Boolean(currentUser);
 
   // =======================================================
   // CONTEXT VALUE
   // =======================================================
 
   const value = {
-    // ---------------------------------------------------
-    // CART
-    // ---------------------------------------------------
-
+    // Cart
     cartItems,
-
     cartLoading,
-
     cartActionLoading,
+    cartMergePending,
 
     addToCart,
-
     removeFromCart,
-
     increaseQuantity,
-
     decreaseQuantity,
-
+    updateCartQuantity,
     clearCart,
 
     totalItems,
-
     totalPrice,
 
-    // ---------------------------------------------------
-    // AUTHENTICATION
-    // ---------------------------------------------------
-
+    // Authentication
     currentUser,
-
     token,
-
     isAuthenticated,
-
     authLoading,
 
     login,
-
     logout,
-
     updateCurrentUser,
   };
 
-  return (
-    <AppContext.Provider
-      value={value}
-    >
-      {children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
 // =========================================================
@@ -1248,15 +768,10 @@ export function AppProvider({ children }) {
 // =========================================================
 
 export function useApp() {
-  const context =
-    useContext(
-      AppContext
-    );
+  const context = useContext(AppContext);
 
   if (!context) {
-    throw new Error(
-      "useApp must be used inside AppProvider."
-    );
+    throw new Error("useApp must be used inside AppProvider.");
   }
 
   return context;
@@ -1267,15 +782,10 @@ export function useApp() {
 // =========================================================
 
 export function useCart() {
-  const context =
-    useContext(
-      AppContext
-    );
+  const context = useContext(AppContext);
 
   if (!context) {
-    throw new Error(
-      "useCart must be used inside AppProvider."
-    );
+    throw new Error("useCart must be used inside AppProvider.");
   }
 
   return context;
@@ -1286,15 +796,10 @@ export function useCart() {
 // =========================================================
 
 export function useAuth() {
-  const context =
-    useContext(
-      AppContext
-    );
+  const context = useContext(AppContext);
 
   if (!context) {
-    throw new Error(
-      "useAuth must be used inside AppProvider."
-    );
+    throw new Error("useAuth must be used inside AppProvider.");
   }
 
   return context;

@@ -1,0 +1,1017 @@
+/* =========================================================
+   ABS CUT — PARTY MATERIALS
+   Luxury green & gold
+   Responsive · Animated · Component-scoped
+========================================================= */
+
+.abs-party-materials-page {
+  --party-primary: var(--primary, #0b3d2e);
+  --party-primary-dark: var(--primary-dark, #10251d);
+  --party-gold: var(--secondary, #c9a227);
+  --party-bg: var(--background, #f8f5ed);
+  --party-white: #ffffff;
+  --party-text: var(--text, #1e2924);
+  --party-muted: var(--muted, #66736d);
+  --party-border: var(--border, #dedbd2);
+
+  --party-radius: 20px;
+  --party-shadow:
+    0 12px 35px rgba(16, 37, 29, 0.07);
+  --party-shadow-hover:
+    0 20px 48px rgba(16, 37, 29, 0.13);
+
+  width: 100%;
+  min-height: 100vh;
+  padding: 55px 24px 90px;
+  color: var(--party-text);
+  background:
+    radial-gradient(
+      circle at 5% 5%,
+      rgba(201, 162, 39, 0.07),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 95% 30%,
+      rgba(11, 61, 46, 0.045),
+      transparent 30%
+    ),
+    var(--party-bg);
+
+  animation: partyMaterialsEnter 0.7s ease both;
+}
+
+.abs-party-materials-page,
+.abs-party-materials-page * {
+  box-sizing: border-box;
+}
+
+.abs-party-materials-page button,
+.abs-party-materials-page input,
+.abs-party-materials-page select,
+.abs-party-materials-page textarea {
+  font: inherit;
+}
+
+.abs-party-materials-page button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.abs-party-materials-page .abs-feature-hero {
+  position: relative;
+  max-width: 950px;
+  margin: 0 auto 55px;
+  padding: 65px 35px;
+  overflow: hidden;
+  text-align: center;
+  border: 1px solid rgba(201, 162, 39, 0.22);
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      rgba(201, 162, 39, 0.13),
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f5f0e3
+    );
+  box-shadow: var(--party-shadow);
+  animation: partyMaterialsHero 0.85s ease both;
+}
+
+.abs-party-materials-page .abs-feature-hero::before,
+.abs-party-materials-page .abs-feature-hero::after {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  content: "";
+  pointer-events: none;
+  border: 1px solid rgba(201, 162, 39, 0.17);
+  border-radius: 50%;
+}
+
+.abs-party-materials-page .abs-feature-hero::before {
+  top: -105px;
+  left: -75px;
+}
+
+.abs-party-materials-page .abs-feature-hero::after {
+  right: -85px;
+  bottom: -120px;
+}
+
+.abs-party-materials-page .abs-feature-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--party-gold);
+  font-size: 0.73rem;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+.abs-party-materials-page .abs-feature-eyebrow::before,
+.abs-party-materials-page .abs-feature-eyebrow::after {
+  width: 24px;
+  height: 1px;
+  content: "";
+  background: var(--party-gold);
+}
+
+.abs-party-materials-page .abs-feature-hero h1 {
+  margin: 18px 0 15px;
+  color: var(--party-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -1.8px;
+}
+
+.abs-party-materials-page .abs-feature-hero h1 em {
+  color: var(--party-gold);
+  font-weight: 500;
+}
+
+.abs-party-materials-page .abs-feature-hero > p {
+  max-width: 690px;
+  margin: 0 auto;
+  color: var(--party-muted);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.abs-party-materials-page .abs-feature-content {
+  width: 100%;
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.abs-party-materials-page .abs-feature-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px 19px;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  animation: partyMaterialsReveal 0.4s ease both;
+}
+
+.abs-party-materials-page .abs-feature-alert.is-error {
+  color: #9b3434;
+  border-color: rgba(180, 55, 55, 0.2);
+  background: #fff0ee;
+}
+
+.abs-party-materials-page .abs-feature-alert.is-success {
+  color: #17613e;
+  border-color: rgba(23, 97, 62, 0.2);
+  background: #edf8f0;
+}
+
+/* =========================================================
+   COLLECTION TOOLBAR
+========================================================= */
+
+.abs-party-materials-page .abs-material-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 27px;
+  padding: 25px 28px;
+  border: 1px solid var(--party-border);
+  border-radius: 17px;
+  background: var(--party-white);
+  box-shadow: 0 5px 20px rgba(16, 37, 29, 0.035);
+}
+
+.abs-party-materials-page .abs-material-toolbar h2 {
+  margin: 0 0 8px;
+  color: var(--party-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.45rem, 2.5vw, 1.9rem);
+  font-weight: 600;
+}
+
+.abs-party-materials-page .abs-material-toolbar p {
+  margin: 0;
+  color: var(--party-muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.abs-party-materials-page .abs-feature-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 190px;
+  color: var(--party-primary-dark);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+/* =========================================================
+   FORM FIELDS AND FILTERS
+========================================================= */
+
+.abs-party-materials-page .abs-feature-field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  color: var(--party-primary-dark);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.abs-party-materials-page .abs-feature-field input,
+.abs-party-materials-page .abs-feature-field select,
+.abs-party-materials-page .abs-feature-field textarea,
+.abs-party-materials-page .abs-feature-filter select {
+  width: 100%;
+  min-width: 0;
+  min-height: 47px;
+  padding: 11px 13px;
+  color: var(--party-text);
+  border: 1px solid var(--party-border);
+  border-radius: 10px;
+  outline: none;
+  background: #fffefa;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.abs-party-materials-page .abs-feature-field textarea {
+  min-height: 95px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.abs-party-materials-page .abs-feature-field input:hover,
+.abs-party-materials-page .abs-feature-field select:hover,
+.abs-party-materials-page .abs-feature-field textarea:hover,
+.abs-party-materials-page .abs-feature-filter select:hover {
+  border-color: rgba(201, 162, 39, 0.75);
+}
+
+.abs-party-materials-page .abs-feature-field input:focus,
+.abs-party-materials-page .abs-feature-field select:focus,
+.abs-party-materials-page .abs-feature-field textarea:focus,
+.abs-party-materials-page .abs-feature-filter select:focus {
+  border-color: var(--party-gold);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.12);
+}
+
+/* =========================================================
+   MATERIAL GRID
+========================================================= */
+
+.abs-party-materials-page .abs-material-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 25px;
+  align-items: stretch;
+}
+
+/* =========================================================
+   MATERIAL CARD
+========================================================= */
+
+.abs-party-materials-page .abs-material-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--party-border);
+  border-radius: var(--party-radius);
+  background: var(--party-white);
+  box-shadow: 0 8px 25px rgba(16, 37, 29, 0.055);
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+  animation: partyMaterialsReveal 0.65s ease both;
+}
+
+.abs-party-materials-page .abs-material-card:nth-child(2) {
+  animation-delay: 0.07s;
+}
+
+.abs-party-materials-page .abs-material-card:nth-child(3) {
+  animation-delay: 0.14s;
+}
+
+.abs-party-materials-page .abs-material-card:nth-child(4) {
+  animation-delay: 0.21s;
+}
+
+.abs-party-materials-page .abs-material-card:nth-child(5) {
+  animation-delay: 0.28s;
+}
+
+.abs-party-materials-page .abs-material-card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(201, 162, 39, 0.55);
+  box-shadow: var(--party-shadow-hover);
+}
+
+.abs-party-materials-page .abs-material-card.is-selected {
+  border: 2px solid var(--party-gold);
+  box-shadow:
+    0 0 0 4px rgba(201, 162, 39, 0.09),
+    var(--party-shadow);
+}
+
+.abs-party-materials-page .abs-material-card.is-selected::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  content: "";
+  border-top: 45px solid var(--party-gold);
+  border-left: 45px solid transparent;
+}
+
+/* =========================================================
+   MATERIAL IMAGE
+========================================================= */
+
+.abs-party-materials-page .abs-material-image {
+  display: block;
+  width: 100%;
+  height: 245px;
+  object-fit: cover;
+  background: #e9e3d5;
+  transition: transform 0.55s ease;
+}
+
+.abs-party-materials-page .abs-material-card:hover .abs-material-image {
+  transform: scale(1.035);
+}
+
+.abs-party-materials-page .abs-material-card {
+  isolation: isolate;
+}
+
+.abs-party-materials-page .abs-material-card > .abs-material-image {
+  position: relative;
+  z-index: -1;
+}
+
+.abs-party-materials-page .abs-material-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--party-gold);
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(201, 162, 39, 0.15),
+      transparent 65%
+    ),
+    linear-gradient(145deg, #173b2d, #10251d);
+}
+
+.abs-party-materials-page .abs-material-placeholder span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.abs-party-materials-page .abs-material-placeholder small {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   MATERIAL BODY
+========================================================= */
+
+.abs-party-materials-page .abs-material-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 17px;
+  padding: 23px;
+}
+
+.abs-party-materials-page .abs-material-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.abs-party-materials-page .abs-material-tags span {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  color: var(--party-primary);
+  border: 1px solid rgba(11, 61, 46, 0.12);
+  border-radius: 30px;
+  background: rgba(11, 61, 46, 0.055);
+  font-size: 0.69rem;
+  font-weight: 750;
+  letter-spacing: 0.3px;
+}
+
+.abs-party-materials-page .abs-material-tags span:nth-child(2) {
+  color: #8b6b12;
+  border-color: rgba(201, 162, 39, 0.2);
+  background: rgba(201, 162, 39, 0.1);
+}
+
+.abs-party-materials-page .abs-material-body h3 {
+  margin: 0;
+  color: var(--party-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.abs-party-materials-page .abs-material-description {
+  margin: 0;
+  color: var(--party-muted);
+  font-size: 0.86rem;
+  line-height: 1.75;
+}
+
+/* =========================================================
+   PACKAGE CONTROLS
+========================================================= */
+
+.abs-party-materials-page .abs-material-controls {
+  display: grid;
+  grid-template-columns: minmax(85px, 0.7fr) minmax(0, 1.3fr);
+  align-items: end;
+  gap: 15px;
+}
+
+.abs-party-materials-page .abs-material-price {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 70px;
+  padding: 12px 14px;
+  color: var(--party-primary);
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 11px;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 162, 39, 0.11),
+    rgba(201, 162, 39, 0.035)
+  );
+  font-size: 1rem;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.abs-party-materials-page .abs-material-price small {
+  margin-top: 5px;
+  color: var(--party-muted);
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   OPTIONAL HEADWEAR
+========================================================= */
+
+.abs-party-materials-page .abs-material-headwear {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  padding: 15px;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 13px;
+  background: #fcfaf4;
+  animation: partyMaterialsReveal 0.3s ease both;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.abs-party-materials-page .abs-feature-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 49px;
+  padding: 13px 19px;
+  overflow: hidden;
+  color: #fff;
+  border: 1px solid var(--party-gold);
+  border-radius: 11px;
+  background: linear-gradient(
+    120deg,
+    #c9a227,
+    #b58c18
+  );
+  box-shadow: 0 6px 15px rgba(181, 140, 24, 0.15);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.abs-party-materials-page .abs-feature-button::before {
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  content: "";
+  transform: skewX(-25deg);
+  background: rgba(255, 255, 255, 0.17);
+  transition: left 0.55s ease;
+}
+
+.abs-party-materials-page .abs-feature-button:hover:not(:disabled)::before {
+  left: 150%;
+}
+
+.abs-party-materials-page .abs-feature-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--party-primary);
+  background: var(--party-primary);
+  box-shadow: 0 10px 24px rgba(11, 61, 46, 0.19);
+}
+
+.abs-party-materials-page .abs-feature-button:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.abs-party-materials-page .abs-feature-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.abs-party-materials-page .abs-feature-button-secondary {
+  color: var(--party-primary);
+  border-color: rgba(11, 61, 46, 0.3);
+  background: #f1f5ef;
+  box-shadow: none;
+}
+
+.abs-party-materials-page .abs-feature-button-secondary:hover:not(:disabled) {
+  color: #fff;
+  border-color: var(--party-primary);
+  background: var(--party-primary);
+}
+
+/* =========================================================
+   LOADING AND EMPTY STATES
+========================================================= */
+
+.abs-party-materials-page .abs-feature-state,
+.abs-party-materials-page .abs-feature-empty {
+  padding: 55px 25px;
+  border: 1px solid var(--party-border);
+  border-radius: var(--party-radius);
+  background: var(--party-white);
+  text-align: center;
+  box-shadow: var(--party-shadow);
+  animation: partyMaterialsReveal 0.5s ease both;
+}
+
+.abs-party-materials-page .abs-feature-state {
+  color: var(--party-muted);
+  font-size: 0.95rem;
+}
+
+.abs-party-materials-page .abs-feature-empty-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 19px;
+  color: var(--party-gold);
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 50%;
+  background: var(--party-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.abs-party-materials-page .abs-feature-empty h2 {
+  margin: 0 0 10px;
+  color: var(--party-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.7rem;
+}
+
+.abs-party-materials-page .abs-feature-empty p {
+  max-width: 480px;
+  margin: 0 auto 22px;
+  color: var(--party-muted);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.abs-party-materials-page .abs-feature-empty .abs-feature-button {
+  width: auto;
+  min-width: 190px;
+}
+
+/* =========================================================
+   RESERVATION PANEL
+========================================================= */
+
+.abs-party-materials-page .abs-booking-panel {
+  position: relative;
+  margin-top: 75px;
+  padding: 38px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at 100% 0,
+      rgba(201, 162, 39, 0.09),
+      transparent 35%
+    ),
+    #ffffff;
+  box-shadow: var(--party-shadow);
+  animation: partyMaterialsReveal 0.7s ease both;
+}
+
+.abs-party-materials-page .abs-booking-panel::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  content: "";
+  background: linear-gradient(
+    90deg,
+    var(--party-primary),
+    var(--party-gold),
+    var(--party-primary)
+  );
+}
+
+.abs-party-materials-page .abs-booking-heading {
+  max-width: 720px;
+  margin-bottom: 30px;
+}
+
+.abs-party-materials-page .abs-booking-heading h2 {
+  margin: 13px 0 10px;
+  color: var(--party-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.abs-party-materials-page .abs-booking-heading > p {
+  margin: 0;
+  color: var(--party-muted);
+  font-size: 0.91rem;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   BOOKING SUMMARY
+========================================================= */
+
+.abs-party-materials-page .abs-booking-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+  padding: 22px;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 15px;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(201, 162, 39, 0.1),
+      rgba(201, 162, 39, 0.025)
+    );
+}
+
+.abs-party-materials-page .abs-booking-summary > strong {
+  color: var(--party-primary-dark);
+  font-size: 1.05rem;
+  font-weight: 850;
+}
+
+.abs-party-materials-page .abs-booking-summary > span {
+  color: var(--party-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.abs-party-materials-page .abs-booking-selected-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 8px;
+  border-top: 1px solid rgba(201, 162, 39, 0.22);
+}
+
+.abs-party-materials-page .abs-booking-selected-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.15);
+  font-size: 0.84rem;
+}
+
+.abs-party-materials-page .abs-booking-selected-list > div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.abs-party-materials-page .abs-booking-selected-list span {
+  color: var(--party-muted);
+  overflow-wrap: anywhere;
+}
+
+.abs-party-materials-page .abs-booking-selected-list strong {
+  color: var(--party-primary);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   RESERVATION FORM
+========================================================= */
+
+.abs-party-materials-page .abs-feature-form {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+}
+
+.abs-party-materials-page .abs-feature-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.abs-party-materials-page .abs-field-full {
+  grid-column: 1 / -1;
+}
+
+.abs-party-materials-page .abs-feature-form > .abs-feature-button {
+  width: auto;
+  min-width: 260px;
+  align-self: flex-start;
+  padding-right: 27px;
+  padding-left: 27px;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.abs-party-materials-page button:focus-visible,
+.abs-party-materials-page input:focus-visible,
+.abs-party-materials-page select:focus-visible,
+.abs-party-materials-page textarea:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.55);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes partyMaterialsEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes partyMaterialsHero {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes partyMaterialsReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+  .abs-party-materials-page .abs-material-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .abs-party-materials-page .abs-material-image {
+    height: 230px;
+  }
+
+  .abs-party-materials-page .abs-booking-panel {
+    padding: 32px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+  .abs-party-materials-page {
+    padding: 30px 16px 65px;
+  }
+
+  .abs-party-materials-page .abs-feature-hero {
+    margin-bottom: 35px;
+    padding: 48px 22px;
+    border-radius: 21px;
+  }
+
+  .abs-party-materials-page .abs-feature-hero h1 {
+    font-size: clamp(2.2rem, 10vw, 3.1rem);
+    letter-spacing: -1px;
+  }
+
+  .abs-party-materials-page .abs-feature-hero > p {
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  .abs-party-materials-page .abs-material-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 20px;
+    padding: 21px;
+  }
+
+  .abs-party-materials-page .abs-feature-filter {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .abs-party-materials-page .abs-material-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 19px;
+  }
+
+  .abs-party-materials-page .abs-material-image {
+    height: 260px;
+  }
+
+  .abs-party-materials-page .abs-material-body {
+    padding: 21px;
+  }
+
+  .abs-party-materials-page .abs-booking-panel {
+    margin-top: 48px;
+    padding: 27px 21px;
+    border-radius: 19px;
+  }
+
+  .abs-party-materials-page .abs-feature-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 19px;
+  }
+
+  .abs-party-materials-page .abs-field-full {
+    grid-column: auto;
+  }
+
+  .abs-party-materials-page .abs-feature-form > .abs-feature-button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 420px) {
+  .abs-party-materials-page {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .abs-party-materials-page .abs-feature-hero {
+    padding: 40px 17px;
+  }
+
+  .abs-party-materials-page .abs-feature-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 1.7px;
+  }
+
+  .abs-party-materials-page .abs-material-image {
+    height: 215px;
+  }
+
+  .abs-party-materials-page .abs-material-body {
+    padding: 17px;
+  }
+
+  .abs-party-materials-page .abs-material-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .abs-party-materials-page .abs-material-headwear {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .abs-party-materials-page .abs-booking-panel {
+    padding: 24px 16px;
+  }
+
+  .abs-party-materials-page .abs-booking-selected-list > div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-party-materials-page *,
+  .abs-party-materials-page *::before,
+  .abs-party-materials-page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .abs-party-materials-page .abs-material-card:hover,
+  .abs-party-materials-page .abs-feature-button:hover {
+    transform: none;
+  }
+}

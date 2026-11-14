@@ -1,0 +1,510 @@
+
+.tic-tac-toe-page {
+  min-height: 100vh;
+  padding: 65px 20px 90px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(201, 162, 39, 0.11),
+      transparent 35%
+    ),
+    #f8f5ed;
+  color: #1e2924;
+}
+
+.tic-tac-toe-container {
+  width: min(100%, 850px);
+  margin: 0 auto;
+}
+
+/* HEADER */
+
+.tic-header {
+  text-align: center;
+  margin-bottom: 35px;
+  animation: ticFadeUp 0.7s ease both;
+}
+
+.tic-eyebrow {
+  display: inline-block;
+  color: #a78219;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.tic-header h1 {
+  margin: 0;
+  color: #10251d;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 850;
+  letter-spacing: -2px;
+}
+
+.tic-header h1 span {
+  color: #c9a227;
+}
+
+.tic-header p {
+  max-width: 480px;
+  margin: 12px auto 0;
+  color: #66736d;
+  line-height: 1.7;
+}
+
+/* SCOREBOARD */
+
+.tic-scoreboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+  animation: ticFadeUp 0.8s ease both;
+}
+
+.tic-score-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 19px 12px;
+  border: 1px solid #dedbd2;
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 24px rgba(16, 37, 29, 0.04);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.tic-score-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(16, 37, 29, 0.09);
+}
+
+.tic-score-symbol {
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.player-score .tic-score-symbol {
+  color: #0b7650;
+}
+
+.computer-score .tic-score-symbol {
+  color: #b58c1f;
+}
+
+.draw-score .tic-score-symbol {
+  color: #66736d;
+}
+
+.tic-score-label {
+  color: #66736d;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+.tic-score-card strong {
+  color: #10251d;
+  font-size: 1.7rem;
+  font-weight: 850;
+}
+
+/* GAME PANEL */
+
+.tic-game-panel {
+  padding: 28px;
+  border: 1px solid #dedbd2;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 18px 55px rgba(16, 37, 29, 0.07);
+  animation: ticFadeUp 0.9s ease both;
+}
+
+.tic-game-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.tic-game-toolbar > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tic-game-toolbar label {
+  color: #66736d;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.tic-game-toolbar select {
+  padding: 10px 35px 10px 13px;
+  border: 1px solid #dedbd2;
+  border-radius: 10px;
+  outline: none;
+  background: #f8f5ed;
+  color: #10251d;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.25s ease;
+}
+
+.tic-game-toolbar select:focus {
+  border-color: #c9a227;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.13);
+}
+
+.tic-player-info {
+  color: #66736d;
+  font-size: 0.85rem;
+}
+
+.tic-player-info strong {
+  color: #0b3d2e;
+  font-size: 1rem;
+}
+
+/* STATUS */
+
+.tic-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  margin: 24px 0 20px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #f8f5ed;
+  color: #0b3d2e;
+  font-size: 0.92rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+.tic-status-dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #c9a227;
+  box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.13);
+  animation: ticPulse 1.5s infinite;
+}
+
+.tic-status-player {
+  background: rgba(11, 118, 80, 0.09);
+  color: #0b7650;
+}
+
+.tic-status-computer {
+  background: rgba(181, 140, 31, 0.12);
+  color: #856514;
+}
+
+.tic-status-draw {
+  background: #f0eee8;
+  color: #66736d;
+}
+
+/* BOARD */
+
+.tic-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: min(100%, 420px);
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 19px;
+  background: #10251d;
+  box-shadow: 0 14px 35px rgba(16, 37, 29, 0.16);
+}
+
+.tic-cell {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  border: 1px solid rgba(201, 162, 39, 0.22);
+  border-radius: 12px;
+  background: #f8f5ed;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.tic-cell:not(:disabled):hover {
+  transform: scale(0.96);
+  border-color: #c9a227;
+  background: #fff9e9;
+}
+
+.tic-cell:focus-visible {
+  outline: 3px solid #c9a227;
+  outline-offset: 3px;
+}
+
+.tic-cell:disabled {
+  cursor: default;
+}
+
+.tic-cell-mark {
+  display: block;
+  font-size: clamp(2.8rem, 10vw, 5rem);
+  font-weight: 900;
+  line-height: 1;
+  animation: ticMarkIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.3);
+}
+
+.tic-cell-x .tic-cell-mark {
+  color: #0b7650;
+}
+
+.tic-cell-o .tic-cell-mark {
+  color: #c9a227;
+}
+
+.tic-cell-winning {
+  border-color: #c9a227;
+  background: #fff1bf;
+  animation: ticWinner 0.7s ease infinite alternate;
+}
+
+/* ACTIONS */
+
+.tic-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.tic-actions button {
+  min-height: 45px;
+  padding: 11px 23px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.tic-actions button:hover {
+  transform: translateY(-3px);
+}
+
+.tic-new-round {
+  background: #0b3d2e;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(11, 61, 46, 0.16);
+}
+
+.tic-new-round:hover {
+  background: #14543f;
+  box-shadow: 0 9px 20px rgba(11, 61, 46, 0.22);
+}
+
+.tic-reset-scores {
+  border-color: #dedbd2 !important;
+  background: #fff;
+  color: #66736d;
+}
+
+.tic-reset-scores:hover {
+  border-color: #c9a227 !important;
+  color: #10251d;
+}
+
+/* INSTRUCTIONS */
+
+.tic-instructions {
+  margin-top: 45px;
+  animation: ticFadeUp 1s ease both;
+}
+
+.tic-instructions h2 {
+  margin: 0 0 20px;
+  color: #10251d;
+  font-size: 1.35rem;
+  text-align: center;
+}
+
+.tic-instruction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.tic-instruction-grid > div {
+  padding: 19px;
+  border: 1px solid #dedbd2;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.tic-instruction-grid span {
+  color: #c9a227;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.tic-instruction-grid p {
+  margin: 9px 0 0;
+  color: #66736d;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.tic-hard-note {
+  margin: 18px 0 0;
+  color: #66736d;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ANIMATIONS */
+
+@keyframes ticFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ticMarkIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-15deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes ticPulse {
+  50% {
+    opacity: 0.45;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes ticWinner {
+  from {
+    box-shadow: 0 0 0 rgba(201, 162, 39, 0);
+  }
+
+  to {
+    box-shadow: 0 0 18px rgba(201, 162, 39, 0.35);
+  }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+  .tic-tac-toe-page {
+    padding: 42px 14px 65px;
+  }
+
+  .tic-header {
+    margin-bottom: 25px;
+  }
+
+  .tic-scoreboard {
+    gap: 8px;
+  }
+
+  .tic-score-card {
+    padding: 15px 7px;
+    border-radius: 13px;
+  }
+
+  .tic-score-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.7px;
+  }
+
+  .tic-score-card strong {
+    font-size: 1.4rem;
+  }
+
+  .tic-game-panel {
+    padding: 17px 13px;
+    border-radius: 18px;
+  }
+
+  .tic-game-toolbar {
+    align-items: flex-start;
+  }
+
+  .tic-game-toolbar > div {
+    flex-wrap: wrap;
+  }
+
+  .tic-player-info {
+    font-size: 0.76rem;
+  }
+
+  .tic-board {
+    gap: 7px;
+    padding: 7px;
+    border-radius: 14px;
+  }
+
+  .tic-cell {
+    border-radius: 9px;
+  }
+
+  .tic-actions {
+    gap: 8px;
+  }
+
+  .tic-actions button {
+    padding: 10px 16px;
+    font-size: 0.8rem;
+  }
+
+  .tic-instruction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tic-instruction-grid > div {
+    padding: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tic-tac-toe-page *,
+  .tic-tac-toe-page *::before,
+  .tic-tac-toe-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

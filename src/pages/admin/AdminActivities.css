@@ -1,0 +1,1065 @@
+
+/* =========================================================
+   ABS CUT — ADMIN ACTIVITIES
+   Premium Green & Gold Administration Interface
+   File: AdminActivities.css
+========================================================= */
+
+:root {
+  --activity-green: #0b3d2e;
+  --activity-green-dark: #10251d;
+  --activity-green-deep: #071f18;
+  --activity-gold: #c9a227;
+  --activity-gold-light: #e2c45e;
+  --activity-ivory: #f8f5ed;
+  --activity-white: #fffefa;
+  --activity-text: #1e2924;
+  --activity-muted: #66736d;
+  --activity-border: #dedbd2;
+  --activity-danger: #a83b32;
+  --activity-success: #26734d;
+  --activity-shadow: 0 12px 35px rgba(16, 37, 29, 0.08);
+  --activity-radius: 18px;
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.abs-feature-page,
+.abs-admin-feature-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 38px 24px 70px;
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(201, 162, 39, 0.08),
+      transparent 30%
+    ),
+    var(--activity-ivory);
+  color: var(--activity-text);
+  box-sizing: border-box;
+}
+
+.abs-admin-feature-page *,
+.abs-admin-feature-page *::before,
+.abs-admin-feature-page *::after {
+  box-sizing: border-box;
+}
+
+.abs-admin-feature-page {
+  max-width: 100%;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.abs-feature-hero,
+.abs-admin-hero {
+  position: relative;
+  width: min(1250px, 100%);
+  margin: 0 auto 30px;
+  padding: 42px 44px;
+  overflow: hidden;
+  border-radius: 24px;
+  color: var(--activity-white);
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(201, 162, 39, 0.2),
+      transparent 28%
+    ),
+    linear-gradient(
+      125deg,
+      var(--activity-green-dark),
+      var(--activity-green),
+      #174b39
+    );
+  box-shadow: 0 18px 45px rgba(11, 61, 46, 0.17);
+}
+
+.abs-admin-hero::after {
+  content: "";
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  right: -80px;
+  bottom: -150px;
+  border: 1px solid rgba(226, 196, 94, 0.28);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 25px rgba(226, 196, 94, 0.035),
+    0 0 0 55px rgba(226, 196, 94, 0.025);
+  pointer-events: none;
+}
+
+.abs-feature-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 13px;
+  color: var(--activity-gold-light);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.abs-feature-eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 2px;
+  background: var(--activity-gold);
+}
+
+.abs-admin-hero h1,
+.abs-feature-hero h1 {
+  margin: 0;
+  max-width: 750px;
+  color: var(--activity-white);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -1.2px;
+}
+
+.abs-admin-hero p,
+.abs-feature-hero p {
+  max-width: 650px;
+  margin: 15px 0 0;
+  color: rgba(255, 254, 250, 0.78);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.abs-feature-content,
+.abs-admin-content {
+  width: min(1250px, 100%);
+  margin: 0 auto;
+}
+
+.abs-admin-content {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  align-items: start;
+  gap: 25px;
+}
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.abs-feature-alert {
+  width: min(1250px, 100%);
+  margin: 0 auto 22px;
+  padding: 14px 18px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.6;
+  animation: activityAlertIn 0.3s ease both;
+}
+
+.abs-feature-alert.success {
+  color: #205b3d;
+  background: #eaf5ed;
+  border-color: #c8e4d0;
+}
+
+.abs-feature-alert.error {
+  color: #91352e;
+  background: #fff0ee;
+  border-color: #f0c9c4;
+}
+
+.abs-feature-alert.warning {
+  color: #765713;
+  background: #fff8e5;
+  border-color: #ead89d;
+}
+
+@keyframes activityAlertIn {
+  from {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.abs-admin-panel,
+.abs-admin-list-section {
+  min-width: 0;
+  padding: 27px;
+  border: 1px solid rgba(222, 219, 210, 0.9);
+  border-radius: var(--activity-radius);
+  background: var(--activity-white);
+  box-shadow: var(--activity-shadow);
+}
+
+.abs-admin-panel {
+  position: sticky;
+  top: 22px;
+}
+
+.abs-admin-list-section {
+  min-height: 400px;
+}
+
+.abs-admin-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding-bottom: 19px;
+  border-bottom: 1px solid var(--activity-border);
+}
+
+.abs-admin-panel-heading h2,
+.abs-admin-list-section h2 {
+  margin: 0;
+  color: var(--activity-green-dark);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.abs-admin-panel-heading p {
+  margin: 7px 0 0;
+  color: var(--activity-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.abs-feature-form {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.abs-feature-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.abs-feature-field label,
+.abs-feature-field > span {
+  color: var(--activity-text);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.15px;
+}
+
+.abs-feature-field input,
+.abs-feature-field select,
+.abs-feature-field textarea {
+  width: 100%;
+  min-height: 47px;
+  padding: 12px 14px;
+  border: 1px solid var(--activity-border);
+  border-radius: 11px;
+  outline: none;
+  background: #fffefa;
+  color: var(--activity-text);
+  font: inherit;
+  font-size: 13px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.abs-feature-field textarea {
+  min-height: 145px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.abs-feature-field input::placeholder,
+.abs-feature-field textarea::placeholder {
+  color: #9a9f99;
+}
+
+.abs-feature-field input:hover,
+.abs-feature-field select:hover,
+.abs-feature-field textarea:hover {
+  border-color: #b8aa78;
+}
+
+.abs-feature-field input:focus,
+.abs-feature-field select:focus,
+.abs-feature-field textarea:focus {
+  border-color: var(--activity-gold);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.14);
+}
+
+.abs-feature-field input:disabled,
+.abs-feature-field select:disabled,
+.abs-feature-field textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.abs-feature-field small {
+  color: var(--activity-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   POST TYPE SELECTOR
+========================================================= */
+
+.abs-activity-type-selector {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.abs-activity-type {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 100px;
+  padding: 15px 8px;
+  border: 1px solid var(--activity-border);
+  border-radius: 13px;
+  background: #fffefa;
+  color: var(--activity-muted);
+  cursor: pointer;
+  text-align: center;
+  transition:
+    border-color 0.22s ease,
+    background 0.22s ease,
+    color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.abs-activity-type:hover {
+  border-color: var(--activity-gold);
+  transform: translateY(-2px);
+}
+
+.abs-activity-type.active,
+.abs-activity-type[aria-pressed="true"] {
+  border-color: var(--activity-gold);
+  background: linear-gradient(
+    145deg,
+    #fffaf0,
+    #f8f3e5
+  );
+  color: var(--activity-green);
+  box-shadow: 0 5px 16px rgba(201, 162, 39, 0.12);
+}
+
+.abs-activity-type svg,
+.abs-activity-type .icon {
+  width: 23px;
+  height: 23px;
+  color: var(--activity-gold);
+}
+
+.abs-activity-type strong {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.abs-activity-type small {
+  color: var(--activity-muted);
+  font-size: 10px;
+}
+
+/* =========================================================
+   FILE UPLOAD
+========================================================= */
+
+.abs-feature-field input[type="file"] {
+  min-height: auto;
+  padding: 12px;
+  border: 1px dashed #c7bd9d;
+  border-radius: 12px;
+  background: #faf8f1;
+  cursor: pointer;
+}
+
+.abs-feature-field input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 9px 13px;
+  border: none;
+  border-radius: 8px;
+  background: var(--activity-green);
+  color: var(--activity-white);
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.abs-feature-field input[type="file"]::file-selector-button:hover {
+  background: var(--activity-green-dark);
+}
+
+.abs-admin-file-preview,
+.abs-admin-current-media {
+  width: 100%;
+  margin-top: 10px;
+  overflow: hidden;
+  border: 1px solid var(--activity-border);
+  border-radius: 13px;
+  background: #f5f2e9;
+}
+
+.abs-admin-file-preview img,
+.abs-admin-current-media img {
+  display: block;
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.abs-admin-file-preview video,
+.abs-admin-current-media video {
+  display: block;
+  width: 100%;
+  max-height: 330px;
+  background: #071f18;
+}
+
+.abs-admin-file-preview p,
+.abs-admin-current-media p {
+  margin: 0;
+  padding: 11px 13px;
+  color: var(--activity-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   PUBLISH CHECKBOX
+========================================================= */
+
+.abs-feature-check {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 14px;
+  border: 1px solid var(--activity-border);
+  border-radius: 11px;
+  background: #faf9f4;
+  color: var(--activity-text);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.abs-feature-check input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--activity-green);
+  cursor: pointer;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.abs-feature-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 45px;
+  padding: 12px 18px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--activity-green);
+  color: var(--activity-white);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.abs-feature-button:hover:not(:disabled) {
+  background: var(--activity-green-dark);
+  box-shadow: 0 7px 18px rgba(11, 61, 46, 0.17);
+  transform: translateY(-2px);
+}
+
+.abs-feature-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.abs-feature-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.abs-feature-button.primary {
+  background: var(--activity-green);
+  color: var(--activity-white);
+}
+
+.abs-feature-button.secondary {
+  border-color: var(--activity-border);
+  background: #fffefa;
+  color: var(--activity-green);
+}
+
+.abs-feature-button.secondary:hover:not(:disabled) {
+  border-color: var(--activity-gold);
+  background: #faf6e9;
+}
+
+.abs-feature-button.danger {
+  background: var(--activity-danger);
+  color: white;
+}
+
+.abs-feature-button.danger:hover:not(:disabled) {
+  background: #862b25;
+}
+
+.abs-feature-button.gold {
+  background: var(--activity-gold);
+  color: var(--activity-green-deep);
+}
+
+.abs-feature-button.gold:hover:not(:disabled) {
+  background: var(--activity-gold-light);
+}
+
+.abs-feature-form > .abs-feature-button {
+  width: 100%;
+  min-height: 49px;
+  margin-top: 3px;
+}
+
+.abs-feature-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.abs-feature-form-actions .abs-feature-button {
+  flex: 1;
+}
+
+/* =========================================================
+   ADMIN ACTIVITY LIST
+========================================================= */
+
+.abs-admin-list-section {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.abs-admin-list-section > h2 {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--activity-border);
+}
+
+.abs-material-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.abs-material-toolbar input,
+.abs-material-toolbar select {
+  min-height: 40px;
+  padding: 9px 12px;
+  border: 1px solid var(--activity-border);
+  border-radius: 9px;
+  outline: none;
+  background: var(--activity-white);
+  color: var(--activity-text);
+  font-size: 12px;
+}
+
+.abs-material-toolbar input:focus,
+.abs-material-toolbar select:focus {
+  border-color: var(--activity-gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+}
+
+/* =========================================================
+   ACTIVITY ROWS
+========================================================= */
+
+.abs-admin-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.abs-admin-activity-row {
+  display: grid;
+  grid-template-columns: 105px minmax(0, 1fr);
+  gap: 15px;
+  align-items: center;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--activity-border);
+  border-radius: 14px;
+  background: #fffefa;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
+}
+
+.abs-admin-activity-row:hover {
+  border-color: rgba(201, 162, 39, 0.7);
+  box-shadow: 0 8px 22px rgba(16, 37, 29, 0.07);
+  transform: translateY(-2px);
+}
+
+.abs-admin-activity-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 105px;
+  height: 105px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: linear-gradient(
+    145deg,
+    var(--activity-green-dark),
+    var(--activity-green)
+  );
+  color: var(--activity-gold-light);
+}
+
+.abs-admin-activity-thumb img,
+.abs-admin-activity-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.abs-admin-activity-thumb svg,
+.abs-admin-activity-thumb .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.abs-admin-activity-info {
+  min-width: 0;
+}
+
+.abs-admin-activity-info h3 {
+  margin: 0 0 7px;
+  overflow-wrap: anywhere;
+  color: var(--activity-green-dark);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.abs-admin-activity-info p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--activity-muted);
+  font-size: 11px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.abs-admin-status-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.abs-feature-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  border-radius: 30px;
+  background: #edf4ef;
+  color: var(--activity-success);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.abs-feature-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.abs-feature-status.draft,
+.abs-feature-status.unpublished {
+  background: #fff5df;
+  color: #8b6418;
+}
+
+.abs-feature-status.archived {
+  background: #f0efed;
+  color: #77736d;
+}
+
+.abs-feature-status.published {
+  background: #eaf5ed;
+  color: var(--activity-success);
+}
+
+/* =========================================================
+   POST TYPE LABELS
+========================================================= */
+
+.abs-activity-type-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  padding: 5px 9px;
+  border: 1px solid #e7ddbd;
+  border-radius: 30px;
+  background: #faf6e9;
+  color: #80651d;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   ROW ACTIONS
+========================================================= */
+
+.abs-admin-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.abs-admin-row-actions button,
+.abs-admin-row-actions .abs-feature-button {
+  min-height: 33px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 10px;
+}
+
+.abs-admin-row-actions .edit-button {
+  border: 1px solid #d8c98e;
+  background: #fbf7e9;
+  color: #765c19;
+}
+
+.abs-admin-row-actions .edit-button:hover {
+  background: #f3e9c8;
+}
+
+.abs-admin-row-actions .delete-button {
+  border: 1px solid #edcfca;
+  background: #fff2ef;
+  color: var(--activity-danger);
+}
+
+.abs-admin-row-actions .delete-button:hover {
+  background: #ffe4df;
+}
+
+.abs-admin-row-actions .publish-button {
+  border: 1px solid #c9dfd0;
+  background: #edf6ef;
+  color: var(--activity-success);
+}
+
+.abs-admin-row-actions .publish-button:hover {
+  background: #dcefe1;
+}
+
+/* =========================================================
+   LOADING / EMPTY STATES
+========================================================= */
+
+.abs-admin-empty,
+.abs-admin-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 220px;
+  padding: 30px 20px;
+  border: 1px dashed #d8d2c1;
+  border-radius: 14px;
+  background: #faf9f4;
+  color: var(--activity-muted);
+  text-align: center;
+}
+
+.abs-admin-empty strong,
+.abs-admin-loading strong {
+  color: var(--activity-green);
+  font-size: 14px;
+}
+
+.abs-admin-empty p,
+.abs-admin-loading p {
+  max-width: 350px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.abs-admin-empty svg,
+.abs-admin-loading svg {
+  width: 30px;
+  height: 30px;
+  color: var(--activity-gold);
+}
+
+/* =========================================================
+   UPLOAD PROGRESS
+========================================================= */
+
+.abs-upload-progress {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #e9e5d9;
+}
+
+.abs-upload-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--activity-green),
+    var(--activity-gold)
+  );
+  transition: width 0.25s ease;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.abs-admin-activity-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.abs-admin-activity-list::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #c9c3b3;
+}
+
+.abs-admin-activity-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+  .abs-admin-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .abs-admin-panel {
+    position: static;
+  }
+
+  .abs-admin-list-section {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .abs-feature-page,
+  .abs-admin-feature-page {
+    padding: 20px 14px 45px;
+  }
+
+  .abs-feature-hero,
+  .abs-admin-hero {
+    padding: 30px 23px;
+    margin-bottom: 20px;
+    border-radius: 18px;
+  }
+
+  .abs-admin-hero h1,
+  .abs-feature-hero h1 {
+    font-size: 29px;
+  }
+
+  .abs-admin-hero p,
+  .abs-feature-hero p {
+    font-size: 13px;
+  }
+
+  .abs-admin-panel,
+  .abs-admin-list-section {
+    padding: 19px;
+    border-radius: 15px;
+  }
+
+  .abs-admin-panel-heading h2,
+  .abs-admin-list-section h2 {
+    font-size: 18px;
+  }
+
+  .abs-admin-activity-row {
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 11px;
+    padding: 10px;
+  }
+
+  .abs-admin-activity-thumb {
+    width: 78px;
+    height: 85px;
+  }
+
+  .abs-admin-activity-info h3 {
+    font-size: 12px;
+  }
+
+  .abs-admin-activity-info p {
+    font-size: 10px;
+  }
+
+  .abs-admin-row-actions {
+    gap: 6px;
+  }
+
+  .abs-admin-row-actions button,
+  .abs-admin-row-actions .abs-feature-button {
+    min-height: 31px;
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+  .abs-activity-type-selector {
+    gap: 6px;
+  }
+
+  .abs-activity-type {
+    min-height: 85px;
+    padding: 10px 5px;
+  }
+
+  .abs-activity-type strong {
+    font-size: 10px;
+  }
+
+  .abs-activity-type small {
+    font-size: 9px;
+  }
+
+  .abs-admin-activity-row {
+    grid-template-columns: 1fr;
+  }
+
+  .abs-admin-activity-thumb {
+    width: 100%;
+    height: 160px;
+  }
+
+  .abs-admin-activity-info h3 {
+    font-size: 14px;
+  }
+
+  .abs-admin-activity-info p {
+    font-size: 11px;
+  }
+
+  .abs-material-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .abs-material-toolbar input,
+  .abs-material-toolbar select {
+    width: 100%;
+  }
+
+  .abs-feature-form-actions {
+    flex-direction: column;
+  }
+
+  .abs-feature-form-actions .abs-feature-button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.abs-admin-feature-page button:focus-visible,
+.abs-admin-feature-page input:focus-visible,
+.abs-admin-feature-page select:focus-visible,
+.abs-admin-feature-page textarea:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.45);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-admin-feature-page *,
+  .abs-admin-feature-page *::before,
+  .abs-admin-feature-page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

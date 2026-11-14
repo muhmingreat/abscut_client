@@ -1,0 +1,529 @@
+
+/* =========================================================
+   ABS CUT — PARTY BOOKING CONFIRMATION
+   Luxury forest green · Gold · Warm cream
+   Responsive · Animated · Component scoped
+========================================================= */
+
+.party-booking-confirmation-page {
+  --pbc-primary: var(--primary, #0b3d2e);
+  --pbc-primary-dark: var(--primary-dark, #10251d);
+  --pbc-gold: var(--secondary, #c9a227);
+  --pbc-background: var(--background, #f8f5ed);
+  --pbc-white: #fff;
+  --pbc-text: var(--text, #1e2924);
+  --pbc-muted: var(--muted, #66736d);
+  --pbc-border: var(--border, #dedbd2);
+
+  width: 100%;
+  min-height: 100vh;
+  padding: 55px 6% 90px;
+  color: var(--pbc-text);
+  background:
+    radial-gradient(
+      circle at 8% 5%,
+      rgba(201, 162, 39, 0.09),
+      transparent 27%
+    ),
+    var(--pbc-background);
+  animation: pbcPageEnter 0.7s ease both;
+}
+
+.party-booking-confirmation-page *,
+.party-booking-confirmation-page *::before,
+.party-booking-confirmation-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.party-booking-confirmation-page .abs-feature-hero {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 55px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.25);
+  border-radius: 26px;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(201, 162, 39, 0.16),
+      transparent 32%
+    ),
+    linear-gradient(
+      130deg,
+      var(--pbc-primary-dark),
+      var(--pbc-primary)
+    );
+  box-shadow: 0 22px 55px rgba(16, 37, 29, 0.17);
+  animation: pbcHeroEnter 0.8s ease both;
+}
+
+.party-booking-confirmation-page .abs-feature-hero::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -90px;
+  width: 330px;
+  height: 330px;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 25px rgba(201, 162, 39, 0.035),
+    0 0 0 55px rgba(201, 162, 39, 0.025);
+  pointer-events: none;
+}
+
+.party-booking-confirmation-page .abs-feature-eyebrow {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--pbc-gold);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 2.3px;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   CONFIRMATION PANEL
+========================================================= */
+
+.party-booking-confirmation-page .abs-feature-empty {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  padding: 45px 38px;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 22px;
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      rgba(201, 162, 39, 0.09),
+      transparent 55%
+    ),
+    var(--pbc-white);
+  box-shadow: 0 15px 45px rgba(16, 37, 29, 0.12);
+  text-align: center;
+  animation: pbcPanelEnter 0.75s ease 0.12s both;
+}
+
+.party-booking-confirmation-page .abs-feature-empty-mark {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  margin-bottom: 25px;
+  border: 1px solid rgba(201, 162, 39, 0.6);
+  border-radius: 23px;
+  background: linear-gradient(
+    135deg,
+    var(--pbc-primary),
+    var(--pbc-primary-dark)
+  );
+  color: var(--pbc-gold);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  box-shadow: 0 12px 28px rgba(11, 61, 46, 0.2);
+  animation: pbcMarkFloat 4s ease-in-out infinite;
+}
+
+.party-booking-confirmation-page .abs-feature-empty h1 {
+  margin: 0 0 17px;
+  color: var(--pbc-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -1.2px;
+}
+
+.party-booking-confirmation-page .abs-feature-empty h1 em {
+  color: var(--pbc-gold);
+  font-weight: 500;
+}
+
+.party-booking-confirmation-page .abs-feature-empty > p {
+  max-width: 650px;
+  margin: 0 auto 30px;
+  color: var(--pbc-muted);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+/* =========================================================
+   BOOKING DETAILS GRID
+========================================================= */
+
+.party-booking-confirmation-page .abs-party-detail-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 8px 0 30px;
+  text-align: left;
+}
+
+.party-booking-confirmation-page .abs-party-detail-grid > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 9px;
+  padding: 19px;
+  border: 1px solid var(--pbc-border);
+  border-radius: 13px;
+  background: #fbfaf6;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.party-booking-confirmation-page .abs-party-detail-grid > div:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 162, 39, 0.55);
+  box-shadow: 0 9px 22px rgba(16, 37, 29, 0.06);
+}
+
+.party-booking-confirmation-page .abs-party-detail-grid small {
+  color: var(--pbc-muted);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.party-booking-confirmation-page .abs-party-detail-grid strong {
+  overflow-wrap: anywhere;
+  color: var(--pbc-primary-dark);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+/* =========================================================
+   NEXT STEPS PANEL
+========================================================= */
+
+.party-booking-confirmation-page .abs-party-action-panel {
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 25px;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: 15px;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(11, 61, 46, 0.045),
+      rgba(201, 162, 39, 0.07)
+    );
+  text-align: left;
+}
+
+.party-booking-confirmation-page .abs-party-action-panel h3 {
+  margin: 0 0 19px;
+  color: var(--pbc-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.4rem;
+  font-weight: 650;
+}
+
+.party-booking-confirmation-page .abs-party-action-panel p {
+  position: relative;
+  margin: 0;
+  padding: 12px 0 12px 22px;
+  border-bottom: 1px solid rgba(222, 219, 210, 0.8);
+  color: var(--pbc-muted);
+  font-size: 0.88rem;
+  line-height: 1.8;
+}
+
+.party-booking-confirmation-page .abs-party-action-panel p:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.party-booking-confirmation-page .abs-party-action-panel p::before {
+  content: "";
+  position: absolute;
+  top: 21px;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pbc-gold);
+  box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.12);
+}
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.party-booking-confirmation-page .abs-feature-actions {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 13px;
+}
+
+.party-booking-confirmation-page .abs-feature-button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 23px;
+  border: 1px solid var(--pbc-primary);
+  border-radius: 10px;
+  background: linear-gradient(
+    120deg,
+    var(--pbc-primary),
+    var(--pbc-primary-dark)
+  );
+  color: var(--pbc-white);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 750;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.party-booking-confirmation-page .abs-feature-button:hover {
+  transform: translateY(-3px);
+  border-color: var(--pbc-gold);
+  box-shadow: 0 10px 23px rgba(11, 61, 46, 0.17);
+}
+
+.party-booking-confirmation-page .abs-feature-button:active {
+  transform: translateY(-1px);
+}
+
+.party-booking-confirmation-page .abs-feature-button-secondary {
+  border-color: rgba(201, 162, 39, 0.6);
+  background: var(--pbc-white);
+  color: var(--pbc-primary);
+}
+
+.party-booking-confirmation-page .abs-feature-button-secondary:hover {
+  background: #fffaf0;
+  color: var(--pbc-primary-dark);
+}
+
+.party-booking-confirmation-page .abs-feature-button:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.65);
+  outline-offset: 4px;
+}
+
+/* =========================================================
+   UNAVAILABLE CONFIRMATION STATE
+========================================================= */
+
+.party-booking-confirmation-page:not(:has(.abs-feature-hero))
+.abs-feature-empty {
+  max-width: 650px;
+  min-height: 330px;
+  justify-content: center;
+  margin: 40px auto;
+  padding: 40px;
+  border: 1px solid var(--pbc-border);
+  background: var(--pbc-white);
+  box-shadow: 0 15px 40px rgba(16, 37, 29, 0.08);
+}
+
+.party-booking-confirmation-page:not(:has(.abs-feature-hero))
+.abs-feature-empty h2 {
+  margin: 0 0 12px;
+  color: var(--pbc-primary-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+
+.party-booking-confirmation-page:not(:has(.abs-feature-hero))
+.abs-feature-empty p {
+  margin-bottom: 25px;
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes pbcPageEnter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pbcHeroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pbcPanelEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pbcMarkFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+  .party-booking-confirmation-page {
+    padding-right: 4%;
+    padding-left: 4%;
+  }
+
+  .party-booking-confirmation-page .abs-feature-hero {
+    padding: 40px 30px;
+  }
+
+  .party-booking-confirmation-page .abs-feature-empty {
+    padding: 38px 27px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+  .party-booking-confirmation-page {
+    padding: 30px 17px 60px;
+  }
+
+  .party-booking-confirmation-page .abs-feature-hero {
+    padding: 30px 20px;
+    border-radius: 19px;
+  }
+
+  .party-booking-confirmation-page .abs-feature-empty {
+    padding: 32px 20px;
+    border-radius: 16px;
+  }
+
+  .party-booking-confirmation-page .abs-feature-empty h1 {
+    font-size: 2.25rem;
+  }
+
+  .party-booking-confirmation-page .abs-feature-empty > p {
+    font-size: 0.88rem;
+  }
+
+  .party-booking-confirmation-page .abs-party-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .party-booking-confirmation-page .abs-party-detail-grid > div {
+    padding: 15px;
+  }
+
+  .party-booking-confirmation-page .abs-party-action-panel {
+    padding: 20px;
+  }
+
+  .party-booking-confirmation-page .abs-feature-actions {
+    flex-direction: column;
+  }
+
+  .party-booking-confirmation-page .abs-feature-actions .abs-feature-button {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL PHONES
+========================================================= */
+
+@media (max-width: 430px) {
+  .party-booking-confirmation-page {
+    padding: 23px 12px 45px;
+  }
+
+  .party-booking-confirmation-page .abs-feature-hero {
+    padding: 25px 14px;
+  }
+
+  .party-booking-confirmation-page .abs-feature-empty {
+    padding: 27px 14px;
+  }
+
+  .party-booking-confirmation-page .abs-feature-empty h1 {
+    font-size: 1.9rem;
+  }
+
+  .party-booking-confirmation-page .abs-feature-empty-mark {
+    width: 65px;
+    height: 65px;
+    border-radius: 19px;
+  }
+
+  .party-booking-confirmation-page .abs-party-action-panel {
+    padding: 17px;
+  }
+
+  .party-booking-confirmation-page .abs-party-action-panel h3 {
+    font-size: 1.2rem;
+  }
+
+  .party-booking-confirmation-page .abs-party-action-panel p {
+    font-size: 0.82rem;
+  }
+
+  .party-booking-confirmation-page:not(:has(.abs-feature-hero))
+  .abs-feature-empty {
+    padding: 30px 18px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .party-booking-confirmation-page *,
+  .party-booking-confirmation-page *::before,
+  .party-booking-confirmation-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

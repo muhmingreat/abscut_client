@@ -154,7 +154,7 @@ function Footer() {
           </div>
 
           <span className="abs-footer-social-note">
-            CRAFTED WITH PURPOSE. WORN WITH CONFIDENCE.
+            CRAFTED WITH PURPOSE WORN WITH CONFIDENCE.
           </span>
         </div>
       </div>

@@ -1,0 +1,952 @@
+
+/* =========================================================
+   ABS CUT — ACTIVITY DETAILS PAGE
+   Full-width Luxury Botanical Green & Gold Design
+   File: ActivityDetails.css
+========================================================= */
+
+:root {
+  --ad-green: #0b3d2e;
+  --ad-green-dark: #10251d;
+  --ad-green-deep: #071f18;
+  --ad-gold: #c9a227;
+  --ad-gold-light: #e2c45e;
+  --ad-ivory: #f8f5ed;
+  --ad-white: #fffefa;
+  --ad-text: #1e2924;
+  --ad-muted: #66736d;
+  --ad-border: #dedbd2;
+  --ad-danger: #a83b32;
+  --ad-success: #26734d;
+  --ad-shadow: 0 14px 40px rgba(16, 37, 29, 0.08);
+  --ad-radius: 18px;
+}
+
+/* =========================================================
+   PAGE BACKGROUND
+========================================================= */
+
+.abs-activity-details-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  width: 100%;
+  padding: 42px 24px 85px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(201, 162, 39, 0.09),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 0% 55%,
+      rgba(11, 61, 46, 0.055),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 100% 55%,
+      rgba(11, 61, 46, 0.055),
+      transparent 25%
+    ),
+    var(--ad-ivory);
+  color: var(--ad-text);
+  box-sizing: border-box;
+}
+
+.abs-activity-details-page *,
+.abs-activity-details-page *::before,
+.abs-activity-details-page *::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   BOTANICAL FLORAL SIDE DECORATIONS
+   CSS-generated SVG artwork
+========================================================= */
+
+.abs-activity-details-page::before,
+.abs-activity-details-page::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 115px;
+  width: clamp(100px, 12vw, 190px);
+  height: 850px;
+  max-height: calc(100% - 180px);
+  min-height: 500px;
+  pointer-events: none;
+  opacity: 0.43;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: contain;
+  filter: drop-shadow(0 5px 12px rgba(11, 61, 46, 0.06));
+}
+
+.abs-activity-details-page::before {
+  left: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 850' fill='none'%3E%3Cg stroke='%23b18b28' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 850 C75 740 25 660 95 555 S35 365 105 260 S95 110 150 10'/%3E%3Cpath d='M58 730 C18 710 5 665 18 633 C54 639 72 672 58 730Z' fill='%23c9a227' fill-opacity='.10'/%3E%3Cpath d='M45 706 L18 633'/%3E%3Cpath d='M65 655 C105 651 125 617 119 585 C82 590 61 615 65 655Z' fill='%230b3d2e' fill-opacity='.08'/%3E%3Cpath d='M80 638 L119 585'/%3E%3Cpath d='M65 530 C25 507 20 467 37 440 C73 459 84 493 65 530Z' fill='%23c9a227' fill-opacity='.10'/%3E%3Cpath d='M65 530 L37 440'/%3E%3Cpath d='M88 435 C128 425 144 389 132 359 C98 370 80 398 88 435Z' fill='%230b3d2e' fill-opacity='.08'/%3E%3Cpath d='M105 410 L132 359'/%3E%3Cpath d='M85 295 C47 277 36 239 51 209 C86 226 101 260 85 295Z' fill='%23c9a227' fill-opacity='.10'/%3E%3Cpath d='M85 295 L51 209'/%3E%3Cpath d='M119 183 C154 169 166 135 152 108 C122 123 108 151 119 183Z' fill='%230b3d2e' fill-opacity='.08'/%3E%3Cpath d='M132 160 L152 108'/%3E%3C/g%3E%3Cg stroke='%23c9a227' stroke-width='1.5' fill='%23c9a227' fill-opacity='.12'%3E%3Ccircle cx='105' cy='265' r='13'/%3E%3Ccircle cx='105' cy='265' r='6'/%3E%3Cpath d='M105 241 C88 220 94 207 105 201 C116 207 122 220 105 241Z'/%3E%3Cpath d='M129 265 C150 248 163 254 168 265 C163 276 150 282 129 265Z'/%3E%3Cpath d='M105 289 C122 310 116 323 105 329 C94 323 88 310 105 289Z'/%3E%3Cpath d='M81 265 C60 282 47 276 42 265 C47 254 60 248 81 265Z'/%3E%3Ccircle cx='48' cy='475' r='8'/%3E%3Ccircle cx='48' cy='475' r='3'/%3E%3Ccircle cx='145' cy='125' r='8'/%3E%3Ccircle cx='145' cy='125' r='3'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.abs-activity-details-page::after {
+  right: 0;
+  transform: scaleX(-1);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 850' fill='none'%3E%3Cg stroke='%23b18b28' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 850 C75 740 25 660 95 555 S35 365 105 260 S95 110 150 10'/%3E%3Cpath d='M58 730 C18 710 5 665 18 633 C54 639 72 672 58 730Z' fill='%23c9a227' fill-opacity='.10'/%3E%3Cpath d='M45 706 L18 633'/%3E%3Cpath d='M65 655 C105 651 125 617 119 585 C82 590 61 615 65 655Z' fill='%230b3d2e' fill-opacity='.08'/%3E%3Cpath d='M80 638 L119 585'/%3E%3Cpath d='M65 530 C25 507 20 467 37 440 C73 459 84 493 65 530Z' fill='%23c9a227' fill-opacity='.10'/%3E%3Cpath d='M65 530 L37 440'/%3E%3Cpath d='M88 435 C128 425 144 389 132 359 C98 370 80 398 88 435Z' fill='%230b3d2e' fill-opacity='.08'/%3E%3Cpath d='M105 410 L132 359'/%3E%3Cpath d='M85 295 C47 277 36 239 51 209 C86 226 101 260 85 295Z' fill='%23c9a227' fill-opacity='.10'/%3E%3Cpath d='M85 295 L51 209'/%3E%3Cpath d='M119 183 C154 169 166 135 152 108 C122 123 108 151 119 183Z' fill='%230b3d2e' fill-opacity='.08'/%3E%3Cpath d='M132 160 L152 108'/%3E%3C/g%3E%3Cg stroke='%23c9a227' stroke-width='1.5' fill='%23c9a227' fill-opacity='.12'%3E%3Ccircle cx='105' cy='265' r='13'/%3E%3Ccircle cx='105' cy='265' r='6'/%3E%3Cpath d='M105 241 C88 220 94 207 105 201 C116 207 122 220 105 241Z'/%3E%3Cpath d='M129 265 C150 248 163 254 168 265 C163 276 150 282 129 265Z'/%3E%3Cpath d='M105 289 C122 310 116 323 105 329 C94 323 88 310 105 289Z'/%3E%3Cpath d='M81 265 C60 282 47 276 42 265 C47 254 60 248 81 265Z'/%3E%3Ccircle cx='48' cy='475' r='8'/%3E%3Ccircle cx='48' cy='475' r='3'/%3E%3Ccircle cx='145' cy='125' r='8'/%3E%3Ccircle cx='145' cy='125' r='3'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   MAIN CONTAINER — EXPANDED WIDTH
+========================================================= */
+
+.abs-activity-details-container {
+  position: relative;
+  z-index: 1;
+  width: min(1240px, 100%);
+  margin: 0 auto;
+}
+
+/* =========================================================
+   BACK NAVIGATION
+========================================================= */
+
+.abs-activity-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  padding: 11px 17px;
+  border: 1px solid var(--ad-border);
+  border-radius: 30px;
+  background: rgba(255, 254, 250, 0.94);
+  color: var(--ad-green);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.abs-activity-back-link:hover {
+  border-color: var(--ad-gold);
+  background: #faf6e9;
+  color: #8c6c18;
+  transform: translateX(-3px);
+  box-shadow: 0 6px 18px rgba(201, 162, 39, 0.1);
+}
+
+.abs-activity-back-link span {
+  color: var(--ad-gold);
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.abs-activity-details-page .abs-feature-alert {
+  margin-bottom: 20px;
+  padding: 14px 17px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.7;
+}
+
+.abs-activity-details-page .abs-feature-alert.is-error {
+  border-color: #efc9c3;
+  background: #fff0ed;
+  color: #94372f;
+}
+
+/* =========================================================
+   MAIN POST CARD
+========================================================= */
+
+.abs-activity-details-card {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(201, 162, 39, 0.25);
+  border-radius: 23px;
+  background: var(--ad-white);
+  box-shadow:
+    0 20px 55px rgba(16, 37, 29, 0.09),
+    0 2px 8px rgba(16, 37, 29, 0.03);
+  animation: adCardEnter 0.55s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+@keyframes adCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   POST MEDIA
+========================================================= */
+
+.abs-activity-details-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-height: 720px;
+  min-height: 220px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(201, 162, 39, 0.12),
+      transparent 60%
+    ),
+    var(--ad-green-deep);
+}
+
+.abs-activity-details-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-bottom: 1px solid rgba(201, 162, 39, 0.25);
+  background: linear-gradient(
+    180deg,
+    transparent 75%,
+    rgba(7, 31, 24, 0.12)
+  );
+}
+
+.abs-activity-details-media img {
+  display: block;
+  width: 100%;
+  max-height: 720px;
+  object-fit: contain;
+  background: var(--ad-green-deep);
+}
+
+.abs-activity-details-media video {
+  display: block;
+  width: 100%;
+  max-height: 720px;
+  object-fit: contain;
+  background: var(--ad-green-deep);
+}
+
+/* =========================================================
+   POST CONTENT
+========================================================= */
+
+.abs-activity-details-content {
+  padding: 43px clamp(25px, 5vw, 75px);
+}
+
+.abs-activity-details-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.abs-activity-details-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border: 1px solid #e7ddbd;
+  border-radius: 30px;
+  background: #faf6e9;
+  color: #80651d;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 1.2px;
+}
+
+.abs-activity-details-meta time {
+  color: var(--ad-muted);
+  font-size: 11px;
+  font-weight: 550;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.abs-activity-details-content > h1 {
+  margin: 0;
+  color: var(--ad-green-dark);
+  font-size: clamp(29px, 4vw, 45px);
+  font-weight: 850;
+  line-height: 1.23;
+  letter-spacing: -1.2px;
+  overflow-wrap: anywhere;
+}
+
+.abs-activity-details-content > h2 {
+  position: relative;
+  margin: 19px 0 0;
+  padding-left: 17px;
+  color: #98771e;
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.7;
+}
+
+.abs-activity-details-content > h2::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 0;
+  width: 3px;
+  border-radius: 5px;
+  background: var(--ad-gold);
+}
+
+/* =========================================================
+   FULL POST CONTENT
+========================================================= */
+
+.abs-activity-full-content {
+  max-width: 1050px;
+  margin-top: 29px;
+  color: #46544d;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 2.05;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.abs-activity-full-content a {
+  color: var(--ad-green);
+  font-weight: 700;
+  text-decoration-color: var(--ad-gold);
+  text-underline-offset: 3px;
+}
+
+.abs-activity-full-content a:hover {
+  color: #96751d;
+}
+
+/* =========================================================
+   SOCIAL ACTIONS
+========================================================= */
+
+.abs-activity-details-content .abs-activity-social-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 35px;
+  padding-top: 24px;
+  border-top: 1px solid #e9e5db;
+}
+
+.abs-activity-details-content .abs-activity-social-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 11px 18px;
+  border: 1px solid var(--ad-border);
+  border-radius: 30px;
+  background: var(--ad-white);
+  color: var(--ad-green);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.abs-activity-details-content .abs-activity-social-actions button:hover {
+  border-color: var(--ad-gold);
+  background: #faf6e9;
+  transform: translateY(-2px);
+}
+
+.abs-activity-details-content .abs-activity-social-actions button span {
+  color: var(--ad-gold);
+  font-size: 19px;
+  line-height: 1;
+}
+
+.abs-activity-details-content .abs-activity-social-actions .is-liked {
+  border-color: #e8c5bf;
+  background: #fff0ed;
+  color: var(--ad-danger);
+}
+
+.abs-activity-details-content .abs-activity-social-actions .is-liked span {
+  color: var(--ad-danger);
+}
+
+.abs-activity-comment-count {
+  color: var(--ad-muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+/* =========================================================
+   COMMENTS SECTION
+========================================================= */
+
+.abs-activity-details-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 28px;
+  padding: 35px clamp(20px, 4vw, 55px);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 20px;
+  background: rgba(255, 254, 250, 0.97);
+  box-shadow: 0 12px 35px rgba(16, 37, 29, 0.055);
+}
+
+/* =========================================================
+   COMMENTS HEADING
+========================================================= */
+
+.abs-activity-comments-heading {
+  padding-bottom: 19px;
+  border-bottom: 1px solid #e9e5db;
+}
+
+.abs-activity-comments-heading .abs-feature-eyebrow {
+  display: inline-flex;
+  margin-bottom: 9px;
+  color: #98771e;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 1.7px;
+}
+
+.abs-activity-comments-heading h2 {
+  margin: 0;
+  color: var(--ad-green-dark);
+  font-size: 24px;
+  font-weight: 850;
+  letter-spacing: -0.5px;
+}
+
+/* =========================================================
+   COMMENT FORM
+========================================================= */
+
+.abs-activity-details-comments .abs-activity-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e9e5db;
+}
+
+.abs-activity-details-comments .abs-activity-comment-form textarea,
+.abs-activity-comment-edit textarea {
+  width: 100%;
+  min-height: 105px;
+  padding: 15px 17px;
+  border: 1px solid var(--ad-border);
+  border-radius: 12px;
+  outline: none;
+  background: #fffefa;
+  color: var(--ad-text);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.7;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.abs-activity-details-comments .abs-activity-comment-form textarea::placeholder,
+.abs-activity-comment-edit textarea::placeholder {
+  color: #9a9f99;
+}
+
+.abs-activity-details-comments .abs-activity-comment-form textarea:focus,
+.abs-activity-comment-edit textarea:focus {
+  border-color: var(--ad-gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.13);
+}
+
+.abs-activity-details-comments .abs-activity-comment-form > button {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 22px;
+  border: 1px solid var(--ad-green);
+  border-radius: 10px;
+  background: var(--ad-green);
+  color: var(--ad-white);
+  font-size: 12px;
+  font-weight: 850;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.abs-activity-details-comments .abs-activity-comment-form > button:hover:not(:disabled) {
+  background: var(--ad-green-dark);
+  box-shadow: 0 7px 16px rgba(11, 61, 46, 0.15);
+  transform: translateY(-2px);
+}
+
+.abs-activity-details-comments .abs-activity-comment-form > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* =========================================================
+   REPLYING INDICATOR
+========================================================= */
+
+.abs-activity-replying {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 11px 13px;
+  border: 1px solid #e7ddbd;
+  border-radius: 9px;
+  background: #faf6e9;
+  color: var(--ad-muted);
+  font-size: 11px;
+}
+
+.abs-activity-replying strong {
+  color: var(--ad-green);
+}
+
+.abs-activity-replying button {
+  margin-left: auto;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ad-danger);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.abs-activity-replying button:hover {
+  background: #fff0ed;
+}
+
+/* =========================================================
+   COMMENT LIST
+========================================================= */
+
+.abs-activity-details-comments .abs-activity-comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  padding-top: 5px;
+}
+
+/* =========================================================
+   INDIVIDUAL COMMENT
+========================================================= */
+
+.abs-activity-comment {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-width: 0;
+}
+
+.abs-activity-comment-body {
+  min-width: 0;
+  padding: 17px 19px;
+  border: 1px solid #e9e5db;
+  border-radius: 13px;
+  background: #fcfbf7;
+}
+
+.abs-activity-comment-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.abs-activity-comment-heading strong {
+  color: var(--ad-green-dark);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.abs-activity-comment-heading time {
+  color: #8b928d;
+  font-size: 10px;
+}
+
+.abs-activity-comment-body > p {
+  margin: 0;
+  color: #526057;
+  font-size: 12px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   COMMENT ACTIONS
+========================================================= */
+
+.abs-activity-comment-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.abs-activity-comment-actions button {
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ad-green);
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.abs-activity-comment-actions button:hover {
+  color: #a17c16;
+}
+
+.abs-activity-comment-actions button.is-danger {
+  color: var(--ad-danger);
+}
+
+.abs-activity-comment-actions button.is-danger:hover {
+  color: #7e241f;
+}
+
+/* =========================================================
+   REPLIES
+========================================================= */
+
+.abs-activity-replies {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-left: 30px;
+  padding-left: 17px;
+  border-left: 2px solid #e5d6a7;
+}
+
+.abs-activity-comment.is-reply .abs-activity-comment-body {
+  background: #faf8f1;
+}
+
+/* =========================================================
+   COMMENT EDIT
+========================================================= */
+
+.abs-activity-comment-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.abs-activity-comment-edit > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.abs-activity-comment-edit button {
+  min-height: 32px;
+  padding: 7px 12px;
+  border: 1px solid var(--ad-green);
+  border-radius: 7px;
+  background: var(--ad-green);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.abs-activity-comment-edit button:last-child {
+  border-color: var(--ad-border);
+  background: white;
+  color: var(--ad-muted);
+}
+
+.abs-activity-comment-edit button:hover {
+  opacity: 0.85;
+}
+
+/* =========================================================
+   EMPTY COMMENTS
+========================================================= */
+
+.abs-activity-no-comments {
+  margin: 0;
+  padding: 28px 15px;
+  border: 1px dashed #d9d1bd;
+  border-radius: 11px;
+  background: #faf9f4;
+  color: var(--ad-muted);
+  font-size: 12px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* =========================================================
+   LOADING AND EMPTY STATES
+========================================================= */
+
+.abs-activity-details-page .abs-feature-state,
+.abs-activity-details-page .abs-feature-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 280px;
+  padding: 35px 20px;
+  border: 1px solid var(--ad-border);
+  border-radius: 17px;
+  background: var(--ad-white);
+  color: var(--ad-muted);
+  text-align: center;
+}
+
+.abs-activity-details-page .abs-feature-empty h2 {
+  margin: 0;
+  color: var(--ad-green);
+  font-size: 23px;
+  font-weight: 850;
+}
+
+.abs-activity-details-page .abs-feature-empty p {
+  max-width: 400px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.abs-activity-details-page .abs-feature-empty .abs-feature-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 12px 18px;
+  border-radius: 9px;
+  background: var(--ad-green);
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1500px) {
+  .abs-activity-details-container {
+    width: min(1320px, 100%);
+  }
+
+  .abs-activity-details-page {
+    padding-top: 50px;
+  }
+
+  .abs-activity-details-content {
+    padding-left: 85px;
+    padding-right: 85px;
+  }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+  .abs-activity-details-page::before,
+  .abs-activity-details-page::after {
+    width: 95px;
+    opacity: 0.23;
+  }
+
+  .abs-activity-details-page {
+    padding: 30px 18px 60px;
+  }
+
+  .abs-activity-details-content {
+    padding: 30px 27px;
+  }
+
+  .abs-activity-details-comments {
+    padding: 27px 24px;
+  }
+
+  .abs-activity-details-media,
+  .abs-activity-details-media img,
+  .abs-activity-details-media video {
+    max-height: 580px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .abs-activity-details-page {
+    padding: 20px 12px 45px;
+  }
+
+  .abs-activity-details-page::before,
+  .abs-activity-details-page::after {
+    top: 100px;
+    width: 65px;
+    opacity: 0.13;
+  }
+
+  .abs-activity-back-link {
+    margin-bottom: 17px;
+    font-size: 11px;
+  }
+
+  .abs-activity-details-card {
+    border-radius: 15px;
+  }
+
+  .abs-activity-details-media,
+  .abs-activity-details-media img,
+  .abs-activity-details-media video {
+    max-height: 430px;
+  }
+
+  .abs-activity-details-content {
+    padding: 23px 17px;
+  }
+
+  .abs-activity-details-content > h1 {
+    font-size: 26px;
+    letter-spacing: -0.5px;
+  }
+
+  .abs-activity-details-content > h2 {
+    font-size: 14px;
+  }
+
+  .abs-activity-full-content {
+    margin-top: 19px;
+    font-size: 13px;
+    line-height: 1.9;
+  }
+
+  .abs-activity-details-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .abs-activity-details-content .abs-activity-social-actions {
+    gap: 9px;
+    margin-top: 23px;
+    padding-top: 17px;
+  }
+
+  .abs-activity-details-content .abs-activity-social-actions button {
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+
+  .abs-activity-comment-count {
+    font-size: 11px;
+  }
+
+  .abs-activity-details-comments {
+    gap: 17px;
+    margin-top: 18px;
+    padding: 20px 15px;
+    border-radius: 14px;
+  }
+
+  .abs-activity-comments-heading h2 {
+    font-size: 19px;
+  }
+
+  .abs-activity-details-comments .abs-activity-comment-form > button {
+    width: 100%;
+  }
+
+  .abs-activity-comment-body {
+    padding: 13px;
+  }
+
+  .abs-activity-replies {
+    margin-left: 13px;
+    padding-left: 11px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+  .abs-activity-details-content > h1 {
+    font-size: 23px;
+  }
+
+  .abs-activity-details-content,
+  .abs-activity-details-comments {
+    padding: 17px 12px;
+  }
+
+  .abs-activity-comment-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .abs-activity-replies {
+    margin-left: 8px;
+    padding-left: 8px;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+.abs-activity-details-page button:focus-visible,
+.abs-activity-details-page a:focus-visible,
+.abs-activity-details-page textarea:focus-visible {
+  outline: 3px solid rgba(201, 162, 39, 0.45);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-activity-details-page *,
+  .abs-activity-details-page *::before,
+  .abs-activity-details-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

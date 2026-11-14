@@ -793,3 +793,450 @@
     height: 41px;
   }
 }
+
+
+/* ==========================================
+   ABS CUT USER PROFILE NAVBAR
+========================================== */
+
+.abs-navbar-user-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 10px 5px 5px;
+  border-radius: 50px;
+  text-decoration: none;
+  color: #f8f5ed;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.abs-navbar-user-profile:hover {
+  background: rgba(201, 162, 39, 0.12);
+  transform: translateY(-1px);
+}
+
+.abs-navbar-avatar,
+.abs-navbar-avatar-fallback {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  border: 2px solid #c9a227;
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.12);
+}
+
+.abs-navbar-avatar {
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  background: #10251d;
+}
+
+.abs-navbar-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #145640, #0b2d23);
+  /* color: #f4df91; */
+  font-size: 14px;
+}
+
+.abs-navbar-username {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* white-space: nowrap; */
+  font-size: 13px;
+  font-weight: 600;
+  color: green;
+}
+
+@media (max-width: 768px) {
+  .abs-navbar-user-profile {
+    gap: 7px;
+    padding: 4px;
+  }
+
+  .abs-navbar-avatar,
+  .abs-navbar-avatar-fallback {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .abs-navbar-username {
+    max-width: 110px;
+    font-size: 12px;
+    color:red
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-navbar-user-profile {
+    transition: none;
+  }
+}
+
+.abs-navbar-user-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: #f8f5ed;
+}
+
+.abs-navbar-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #c9a227;
+  display: block;
+  flex-shrink: 0;
+}
+
+.abs-navbar-avatar-fallback {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b3d2e;
+  color: #c9a227;
+  border: 2px solid #c9a227;
+  flex-shrink: 0;
+}
+
+.abs-navbar-username {
+  display: inline-block;
+  color: #f8f5ed;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+
+/* ==========================================
+   ABS CUT USER PROFILE NAVBAR
+========================================== */
+
+.abs-navbar-user-profile {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 10px 5px 5px;
+  border-radius: 50px;
+  text-decoration: none;
+  color: #f8f5ed;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.abs-navbar-user-profile:hover {
+  background: rgba(201, 162, 39, 0.12);
+  transform: translateY(-1px);
+}
+
+.abs-navbar-avatar,
+.abs-navbar-avatar-fallback {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  border: 2px solid #c9a227;
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.12);
+}
+
+.abs-navbar-avatar {
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  background: #10251d;
+}
+
+.abs-navbar-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #145640, #0b2d23);
+  color: #f4df91;
+  font-size: 14px;
+}
+
+.abs-navbar-username {
+  display: inline-block;
+  max-width: 150px;
+  overflow: hidden;
+  color: #c9a227 !important;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.abs-navbar-user-profile:hover .abs-navbar-username {
+  color: #0b3d2e !important;
+}
+
+@media (max-width: 768px) {
+  .abs-navbar-user-profile {
+    gap: 7px;
+    padding: 4px;
+  }
+
+  .abs-navbar-avatar,
+  .abs-navbar-avatar-fallback {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .abs-navbar-username {
+    max-width: 110px;
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   ABS CUT — COMPACT DROPDOWN NAVIGATION
+========================================== */
+
+.abs-navbar-links {
+  gap: clamp(12px, 1.5vw, 22px);
+}
+
+.abs-nav-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.abs-nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 9px;
+  border: none;
+  border-radius: 9px;
+  color: #526058;
+  background: transparent;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+
+.abs-nav-dropdown-trigger:hover,
+.abs-nav-dropdown.is-open > .abs-nav-dropdown-trigger {
+  color: #0b3d2e;
+  background: rgba(201, 162, 39, 0.1);
+}
+
+.abs-nav-chevron {
+  font-size: 10px;
+  transition: transform 0.25s ease;
+}
+
+.abs-nav-dropdown.is-open .abs-nav-chevron {
+  transform: rotate(180deg);
+}
+
+/* DROPDOWN PANEL */
+
+.abs-nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 205px;
+  padding: 9px;
+  border: 1px solid rgba(201, 162, 39, 0.25);
+  border-radius: 13px;
+  background: #fffefa;
+  box-shadow: 0 14px 35px rgba(16, 37, 29, 0.14);
+  animation: absDropdownEnter 0.2s ease both;
+}
+
+.abs-nav-dropdown-menu .abs-navbar-link {
+  display: flex;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: #35483e;
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.abs-nav-dropdown-menu .abs-navbar-link::after {
+  display: none;
+}
+
+.abs-nav-dropdown-menu .abs-navbar-link:hover,
+.abs-nav-dropdown-menu .abs-navbar-link.active {
+  color: #0b3d2e;
+  background: rgba(201, 162, 39, 0.12);
+}
+
+/* DROPDOWN LOGOUT */
+
+.abs-nav-dropdown-action {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 8px;
+  color: #9b3434;
+  background: transparent;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.abs-nav-dropdown-action:hover {
+  background: rgba(155, 52, 52, 0.08);
+}
+
+/* PROFILE DROPDOWN TRIGGER */
+
+.abs-navbar-auth .abs-nav-dropdown-trigger {
+  gap: 8px;
+  padding: 3px 9px 3px 4px;
+}
+
+.abs-navbar-avatar,
+.abs-navbar-avatar-fallback {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border: 2px solid #c9a227;
+  border-radius: 50%;
+}
+
+.abs-navbar-avatar {
+  display: block;
+  object-fit: cover;
+}
+
+.abs-navbar-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f4df91;
+  background: #0b3d2e;
+}
+
+.abs-navbar-username {
+  max-width: 125px;
+  overflow: hidden;
+  color: #0b3d2e !important;
+  font-size: 0.82rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* DROPDOWN ANIMATION */
+
+@keyframes absDropdownEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MOBILE DROPDOWNS */
+
+@media (max-width: 980px) {
+  .abs-navbar-links {
+    align-items: stretch;
+    gap: 5px;
+  }
+
+  .abs-nav-dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .abs-nav-dropdown-trigger {
+    justify-content: space-between;
+    width: 100%;
+    min-height: 46px;
+    padding: 0 12px;
+    font-size: 0.91rem;
+    text-align: left;
+  }
+
+  .abs-nav-dropdown-menu {
+    position: static;
+    min-width: 0;
+    width: 100%;
+    margin: 3px 0 8px;
+    padding: 7px;
+    border-radius: 10px;
+    background: rgba(11, 61, 46, 0.045);
+    box-shadow: none;
+    animation: none;
+  }
+
+  .abs-nav-dropdown-menu .abs-navbar-link {
+    padding-left: 20px;
+  }
+
+  .abs-navbar-auth .abs-nav-dropdown {
+    width: auto;
+  }
+
+  .abs-navbar-auth .abs-nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    width: 190px;
+    background: #fffefa;
+    box-shadow: 0 14px 35px rgba(16, 37, 29, 0.14);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-nav-dropdown-menu {
+    animation: none;
+  }
+}
+
+.abs-nav-dropdown-menu {
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #c9a227 #f8f5ed;
+}
+
+.abs-nav-dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.abs-nav-dropdown-menu::-webkit-scrollbar-thumb {
+  background: #c9a227;
+  border-radius: 10px;
+}

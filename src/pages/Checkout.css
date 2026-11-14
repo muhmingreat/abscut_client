@@ -1447,3 +1447,249 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+
+
+/* ==========================================
+   ABS CUT — PAYMENT MAINTENANCE MODAL
+   Luxury Green & Gold
+========================================== */
+
+.checkout-maintenance-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(9, 25, 18, 0.76);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  animation: checkoutMaintenanceFadeIn 0.25s ease both;
+}
+
+.checkout-maintenance-modal {
+  position: relative;
+  width: min(100%, 440px);
+  padding: 36px 30px 28px;
+  overflow: hidden;
+  text-align: center;
+  color: #1e2924;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(201, 162, 39, 0.12),
+      transparent 45%
+    ),
+    #fffdf7;
+  border: 1px solid rgba(201, 162, 39, 0.55);
+  border-radius: 22px;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.3);
+  animation: checkoutMaintenanceEnter 0.4s
+    cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.checkout-maintenance-icon {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 20px;
+  color: #c9a227;
+  background: rgba(11, 61, 46, 0.09);
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 50%;
+  font-size: 32px;
+}
+
+.checkout-maintenance-label {
+  margin: 0 0 10px;
+  color: #98751b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.checkout-maintenance-modal h2 {
+  margin: 0 0 14px;
+  color: #0b3d2e;
+  font-size: clamp(22px, 5vw, 28px);
+  line-height: 1.25;
+}
+
+.checkout-maintenance-modal > p:not(.checkout-maintenance-label) {
+  margin: 0 0 13px;
+  color: #66736d;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.checkout-maintenance-modal strong {
+  color: #0b3d2e;
+}
+
+.checkout-maintenance-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 24px;
+  padding: 14px 18px;
+  color: #fff;
+  background: linear-gradient(135deg, #0b3d2e, #174c39);
+  border: 1px solid #c9a227;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.checkout-maintenance-button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #174c39, #0b3d2e);
+  box-shadow: 0 10px 24px rgba(11, 61, 46, 0.22);
+}
+
+.checkout-maintenance-close {
+  margin-top: 14px;
+  padding: 8px 14px;
+  color: #66736d;
+  background: transparent;
+  border: 0;
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.checkout-maintenance-close:hover {
+  color: #0b3d2e;
+}
+
+@keyframes checkoutMaintenanceFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes checkoutMaintenanceEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-maintenance-modal {
+    padding: 30px 20px 24px;
+    border-radius: 18px;
+  }
+
+  .checkout-maintenance-button {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkout-maintenance-overlay,
+  .checkout-maintenance-modal {
+    animation: none;
+  }
+
+  .checkout-maintenance-button,
+  .checkout-maintenance-close {
+    transition: none;
+  }
+}
+
+.checkout-delivery-quote {
+  margin-top: 20px;
+}
+
+.checkout-quote-button {
+  width: 100%;
+  min-height: 48px;
+  padding: 13px 18px;
+  border: 1px solid #c9a227;
+  border-radius: 10px;
+  background: #0b3d2e;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.checkout-quote-button:hover:not(:disabled) {
+  background: #c9a227;
+  color: #10251d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(11, 61, 46, 0.16);
+}
+
+.checkout-quote-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.checkout-quote-success {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  border-radius: 12px;
+  background: #f8f5ed;
+  color: #10251d;
+}
+
+.checkout-quote-success strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #0b3d2e;
+}
+
+.checkout-quote-success p {
+  margin: 5px 0;
+  font-size: 0.92rem;
+}
+/* DELIVERY ZONE SELECTS */
+
+.checkout-form-group select {
+  width: 100%;
+  min-height: 50px;
+  padding: 13px 15px;
+  border: 1px solid #dedbd2;
+  border-radius: 10px;
+  outline: none;
+  background: #fff;
+  color: #1e2924;
+  font: inherit;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.checkout-form-group select:focus {
+  border-color: #c9a227;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.14);
+}
+
+.checkout-form-group select:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  background: #f8f5ed;
+}

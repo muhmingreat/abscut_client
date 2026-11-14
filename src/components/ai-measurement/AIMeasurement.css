@@ -1,0 +1,870 @@
+/* src/components/ai-measurement/AIMeasurement.css */
+
+.abs-ai-measurement {
+  --ai-green: #0b3d2e;
+  --ai-dark: #10251d;
+  --ai-gold: #c9a227;
+  --ai-cream: #f8f5ed;
+  --ai-muted: #66736d;
+
+  width: 100%;
+  max-width: 100%;
+  color: var(--ai-dark);
+  background: #fff;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 45px rgba(16, 37, 29, 0.07);
+  animation: absAiReveal 0.65s ease both;
+}
+
+@keyframes absAiReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.abs-ai-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 28px;
+  color: #fff;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(201, 162, 39, 0.22),
+      transparent 35%
+    ),
+    linear-gradient(125deg, #10251d, #0b3d2e);
+}
+
+.abs-ai-header-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  color: var(--ai-gold);
+  font-size: 28px;
+  border: 1px solid rgba(201, 162, 39, 0.45);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  animation: absAiIconFloat 3s ease-in-out infinite;
+}
+
+@keyframes absAiIconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.abs-ai-eyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--ai-gold);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.abs-ai-header h2 {
+  margin: 0 0 8px;
+  color: #fff;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 750;
+}
+
+.abs-ai-header p {
+  max-width: 650px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.abs-ai-form,
+.abs-ai-results {
+  padding: 26px;
+}
+
+.abs-ai-instructions {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 24px;
+  padding: 17px;
+  border: 1px solid rgba(201, 162, 39, 0.25);
+  border-radius: 12px;
+  background: var(--ai-cream);
+}
+
+.abs-ai-info-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 25px;
+  height: 25px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  border-radius: 50%;
+  background: var(--ai-green);
+}
+
+.abs-ai-instructions strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--ai-green);
+  font-size: 13px;
+}
+
+.abs-ai-instructions p {
+  margin: 0;
+  color: var(--ai-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.abs-ai-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.abs-ai-photo-card {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #e7e8e1;
+  border-radius: 15px;
+  background: #fff;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.abs-ai-photo-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 162, 39, 0.7);
+  box-shadow: 0 12px 28px rgba(16, 37, 29, 0.08);
+}
+
+.abs-ai-photo-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 13px;
+}
+
+.abs-ai-photo-heading > span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--ai-gold);
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 9px;
+  background: var(--ai-dark);
+}
+
+.abs-ai-photo-heading strong,
+.abs-ai-photo-heading small {
+  display: block;
+}
+
+.abs-ai-photo-heading strong {
+  color: var(--ai-green);
+  font-size: 13px;
+}
+
+.abs-ai-photo-heading small {
+  margin-top: 3px;
+  color: var(--ai-muted);
+  font-size: 11px;
+}
+
+.abs-ai-photo-upload {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 230px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px dashed #c9cfc6;
+  border-radius: 11px;
+  background:
+    linear-gradient(rgba(248, 245, 237, 0.55), rgba(248, 245, 237, 0.55)),
+    #fff;
+  transition: border-color 0.3s ease;
+}
+
+.abs-ai-photo-upload:hover {
+  border-color: var(--ai-gold);
+}
+
+.abs-ai-photo-upload > input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.abs-ai-photo-upload > img {
+  display: block;
+  width: 100%;
+  height: 260px;
+  object-fit: contain;
+  background: #f8f8f5;
+  animation: absAiPhotoIn 0.4s ease both;
+}
+
+@keyframes absAiPhotoIn {
+  from {
+    opacity: 0.5;
+    transform: scale(1.03);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.abs-ai-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 20px;
+  text-align: center;
+}
+
+.abs-ai-photo-placeholder > span {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  color: var(--ai-gold);
+  font-size: 24px;
+  border-radius: 50%;
+  background: var(--ai-green);
+}
+
+.abs-ai-photo-placeholder strong {
+  color: var(--ai-green);
+  font-size: 13px;
+}
+
+.abs-ai-photo-placeholder small {
+  color: var(--ai-muted);
+  font-size: 11px;
+}
+
+.abs-ai-file-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 11px;
+}
+
+.abs-ai-file-info > span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ai-muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.abs-ai-file-info button {
+  flex-shrink: 0;
+  padding: 5px 9px;
+  color: #a33b30;
+  font-size: 11px;
+  font-weight: 700;
+  border: 0;
+  border-radius: 6px;
+  background: #fff1ef;
+  cursor: pointer;
+}
+
+.abs-ai-height-section {
+  margin-top: 25px;
+}
+
+.abs-ai-height-section > label {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--ai-green);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.abs-ai-height-input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  border: 1px solid #dce1da;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.abs-ai-height-input:focus-within {
+  border-color: var(--ai-gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+}
+
+.abs-ai-height-input input,
+.abs-ai-height-input select {
+  min-width: 0;
+  padding: 14px;
+  color: var(--ai-dark);
+  font: inherit;
+  font-size: 13px;
+  border: 0;
+  outline: none;
+  background: #fff;
+}
+
+.abs-ai-height-input select {
+  border-left: 1px solid #e7e8e1;
+  cursor: pointer;
+}
+
+.abs-ai-height-section > small {
+  display: block;
+  margin-top: 7px;
+  color: var(--ai-muted);
+  font-size: 11px;
+}
+
+.abs-ai-primary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 23px;
+  padding: 13px 18px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+  border: 1px solid var(--ai-gold);
+  border-radius: 10px;
+  background: linear-gradient(110deg, #0b3d2e, #10251d);
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.abs-ai-primary-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  color: var(--ai-dark);
+  background: linear-gradient(110deg, #d7b64b, #c9a227);
+  box-shadow: 0 9px 24px rgba(201, 162, 39, 0.2);
+}
+
+.abs-ai-primary-button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.abs-ai-primary-button > span {
+  font-size: 18px;
+}
+
+.abs-ai-spinner {
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--ai-gold);
+  border-radius: 50%;
+  animation: absAiSpin 0.75s linear infinite;
+}
+
+@keyframes absAiSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.abs-ai-privacy-note {
+  margin: 12px 0 0;
+  color: var(--ai-muted);
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.abs-ai-error,
+.abs-ai-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 13px 15px;
+  font-size: 12px;
+  line-height: 1.6;
+  border-radius: 9px;
+}
+
+.abs-ai-error {
+  color: #a33b30;
+  border: 1px solid #f2d0cb;
+  background: #fff5f3;
+}
+
+.abs-ai-error > span,
+.abs-ai-success > span {
+  font-weight: 900;
+}
+
+.abs-ai-success {
+  color: var(--ai-green);
+  border: 1px solid #c9dfcf;
+  background: #f0f8f1;
+}
+
+/* RESULTS */
+
+.abs-ai-result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.abs-ai-result-heading h3 {
+  margin: 0 0 7px;
+  color: var(--ai-green);
+  font-size: 23px;
+}
+
+.abs-ai-result-heading p {
+  margin: 0;
+  color: var(--ai-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.abs-ai-result-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  color: var(--ai-green);
+  font-size: 19px;
+  font-weight: 900;
+  border: 1px solid #c9dfcf;
+  border-radius: 50%;
+  background: #f0f8f1;
+}
+
+.abs-ai-warning {
+  padding: 16px;
+  border: 1px solid #ead7a4;
+  border-radius: 11px;
+  background: #fff9e9;
+}
+
+.abs-ai-warning strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #775b12;
+  font-size: 12px;
+}
+
+.abs-ai-warning p {
+  margin: 0;
+  color: #796d4c;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.abs-ai-result-section {
+  margin-top: 23px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e9ebe5;
+}
+
+.abs-ai-result-section-heading h4 {
+  margin: 0 0 5px;
+  color: var(--ai-green);
+  font-size: 15px;
+}
+
+.abs-ai-result-section-heading p {
+  margin: 0 0 14px;
+  color: var(--ai-muted);
+  font-size: 11px;
+}
+
+.abs-ai-measurement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.abs-ai-measurement-field {
+  min-width: 0;
+}
+
+.abs-ai-measurement-field > span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ai-dark);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.abs-ai-measurement-field > div {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dce1da;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.abs-ai-measurement-field > div:focus-within {
+  border-color: var(--ai-gold);
+}
+
+.abs-ai-measurement-field input {
+  width: 100%;
+  min-width: 0;
+  padding: 11px;
+  color: var(--ai-green);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  border: 0;
+  outline: none;
+  background: #fff;
+}
+
+.abs-ai-measurement-field input[readonly] {
+  background: #f6f7f3;
+}
+
+.abs-ai-measurement-field small {
+  padding: 0 11px;
+  color: var(--ai-muted);
+  font-size: 11px;
+  background: #f6f7f3;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.abs-ai-result-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.abs-ai-result-actions .abs-ai-primary-button {
+  margin: 0;
+}
+
+.abs-ai-secondary-button,
+.abs-ai-cancel-button {
+  min-height: 48px;
+  padding: 12px;
+  color: var(--ai-green);
+  font-size: 11px;
+  font-weight: 800;
+  border: 1px solid #dce1da;
+  border-radius: 9px;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.abs-ai-secondary-button:hover,
+.abs-ai-cancel-button:hover {
+  border-color: var(--ai-gold);
+  background: var(--ai-cream);
+}
+
+.abs-ai-cancel-button {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+}
+
+@media (max-width: 650px) {
+  .abs-ai-header {
+    align-items: flex-start;
+    padding: 21px 17px;
+  }
+
+  .abs-ai-header-icon {
+    width: 43px;
+    height: 43px;
+    font-size: 23px;
+  }
+
+  .abs-ai-form,
+  .abs-ai-results {
+    padding: 17px;
+  }
+
+  .abs-ai-photo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .abs-ai-photo-upload {
+    min-height: 190px;
+  }
+
+  .abs-ai-photo-upload > img {
+    height: 240px;
+  }
+
+  .abs-ai-measurement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .abs-ai-result-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .abs-ai-result-heading h3 {
+    font-size: 19px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .abs-ai-measurement,
+  .abs-ai-header-icon,
+  .abs-ai-photo-upload > img,
+  .abs-ai-spinner {
+    animation: none !important;
+  }
+
+  .abs-ai-measurement *,
+  .abs-ai-measurement *::before,
+  .abs-ai-measurement *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+.abs-ai-unit-notice {
+  margin: 18px 0;
+  padding: 14px 16px;
+  background: #f8f5ed;
+  border: 1px solid #dedbd2;
+  border-left: 4px solid #c9a227;
+  border-radius: 10px;
+}
+
+.abs-ai-unit-notice strong {
+  display: block;
+  color: #0b3d2e;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.abs-ai-unit-notice p {
+  margin: 0;
+  color: #66736d;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   GARMENT SELECTOR
+===================================================== */
+
+.abs-ai-garment-section {
+  margin-bottom: 24px;
+}
+
+.abs-ai-garment-section > label {
+  display: block;
+  margin-bottom: 9px;
+  color: #0b3d2e;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.abs-ai-garment-section > select {
+  width: 100%;
+  min-height: 49px;
+  padding: 12px 14px;
+  color: #10251d;
+  font: inherit;
+  font-size: 13px;
+  border: 1px solid #dce1da;
+  border-radius: 10px;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.abs-ai-garment-section > select:focus {
+  border-color: #c9a227;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+}
+
+.abs-ai-garment-section > small {
+  display: block;
+  margin-top: 8px;
+  color: #66736d;
+  font-size: 11px;
+}
+
+/* =====================================================
+   CONVERTED MEASUREMENT VALUES
+===================================================== */
+
+.abs-ai-converted-value {
+  display: block;
+  margin-top: 7px;
+  color: #0b3d2e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.abs-ai-source {
+  display: inline-block;
+  margin-top: 6px;
+  color: #876817;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.abs-ai-source.is-confirmed {
+  color: #17633f;
+}
+
+.abs-ai-source.is-manual {
+  color: #66736d;
+}
+
+/* =====================================================
+   MANUAL GARMENT MEASUREMENTS
+===================================================== */
+
+.abs-ai-manual-section {
+  margin-top: 28px;
+  padding: 20px;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  border-radius: 14px;
+  background: #fbfaf6;
+}
+
+.abs-ai-manual-section .abs-ai-result-section-heading h4 {
+  color: #0b3d2e;
+}
+
+.abs-ai-manual-section .abs-ai-measurement-field input {
+  background: #fffefa;
+}
+
+.abs-ai-manual-section .abs-ai-measurement-field input:focus {
+  background: #fff;
+}
+
+.abs-ai-measurement-field input::placeholder {
+  color: #a1aaa4;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+@media (max-width: 650px) {
+  .abs-ai-manual-section {
+    padding: 14px;
+  }
+
+  .abs-ai-garment-section > select {
+    min-height: 46px;
+  }
+}
+
+/* =====================================================
+   ABS CUT — GARMENT SELECTOR VISIBILITY FIX
+===================================================== */
+
+section.abs-ai-measurement .abs-ai-form .abs-ai-garment-section {
+  display: block !important;
+  position: relative;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100%;
+  min-height: 90px;
+  margin: 0 0 24px !important;
+  padding: 18px !important;
+  overflow: visible !important;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: 12px;
+  background: #f8f5ed !important;
+  box-sizing: border-box;
+}
+
+section.abs-ai-measurement .abs-ai-form .abs-ai-garment-section > label {
+  display: block !important;
+  visibility: visible !important;
+  margin-bottom: 10px !important;
+  color: #0b3d2e !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+
+section.abs-ai-measurement .abs-ai-form .abs-ai-garment-section > select {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  width: 100% !important;
+  min-height: 50px !important;
+  padding: 12px 40px 12px 14px !important;
+  color: #10251d !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  border: 1px solid #c9a227 !important;
+  border-radius: 9px !important;
+  background-color: #fffefa !important;
+  appearance: auto !important;
+  -webkit-appearance: menulist !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  z-index: 2;
+}
+
+section.abs-ai-measurement .abs-ai-form .abs-ai-garment-section > select:focus {
+  outline: 2px solid rgba(201, 162, 39, 0.25) !important;
+  outline-offset: 2px;
+}
+
+section.abs-ai-measurement .abs-ai-form .abs-ai-garment-section > small {
+  display: block !important;
+  visibility: visible !important;
+  margin-top: 9px !important;
+  color: #66736d !important;
+  font-size: 11px !important;
+}
